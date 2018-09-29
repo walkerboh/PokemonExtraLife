@@ -32,7 +32,15 @@ namespace PokemonExtraLifeApi.EntityFramework
 
         public DisplayStatus GetDisplayStatus()
         {
-            return DisplayStatus.First();
+            var displayStatus = DisplayStatus.FirstOrDefault();
+
+            if (displayStatus == null)
+            {
+                displayStatus = new DisplayStatus();
+                SaveChanges();
+            }
+
+            return displayStatus;
         }
     }
 }

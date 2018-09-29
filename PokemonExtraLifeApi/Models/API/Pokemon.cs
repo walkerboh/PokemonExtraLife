@@ -9,7 +9,7 @@ namespace PokemonExtraLifeApi.Models.API
         public string Name { get; set; }
         public string Icon { get; set; }
         public double Health { get; set; }
-        public double Damage { get; set; } = 0;
+        public double Damage { get; set; }
 
         [JsonIgnore]
         public virtual ICollection<PokemonOrder> PokemonOrders { get; set; }
