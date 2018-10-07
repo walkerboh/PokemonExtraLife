@@ -10,6 +10,8 @@
         Psychic,
         Fire,
         Ground,
-        EliteFour
+        EliteFour,
+        TeamRocketAlpha,
+        TeamRocketBeta
     }
 }

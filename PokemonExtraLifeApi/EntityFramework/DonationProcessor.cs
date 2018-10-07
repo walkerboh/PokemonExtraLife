@@ -15,6 +15,10 @@ namespace PokemonExtraLifeApi.EntityFramework
                 if (nextDonation == null)
                     return (null, null, null, null);
 
+                var activeGroup = context.ActiveGroup;
+                
+                
+                
                 var pokemonOrders = context.PokemonOrders.Include("Pokemon").Include("Trainer").ToList();
 
                 var currentPo = pokemonOrders.First(po => !po.Done);
