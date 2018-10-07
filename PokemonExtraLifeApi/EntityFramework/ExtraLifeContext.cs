@@ -17,6 +17,8 @@ namespace PokemonExtraLifeApi.EntityFramework
         public DbSet<Pokemon> Pokemon { get; set; }
         public DbSet<PokemonOrder> PokemonOrders { get; set; }
         public DbSet<Trainer> Trainers { get; set; }
+        public DbSet<Group> Groups { get; set; }
+        public DbSet<GroupTrainer> GroupTrainers { get; set; }
         private DbSet<DisplayStatus> DisplayStatus { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

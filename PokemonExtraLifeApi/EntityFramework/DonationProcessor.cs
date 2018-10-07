@@ -6,14 +6,14 @@ namespace PokemonExtraLifeApi.EntityFramework
 {
     public static class DonationProcessor
     {
-        public static (Donation, Pokemon, Trainer) GetNextDonation()
+        public static (Donation, Pokemon, Trainer, Host) GetNextDonation()
         {
             using (var context = new ExtraLifeContext())
             {
                 var nextDonation = context.Donations.FirstOrDefault(d => !d.Processed);
 
                 if (nextDonation == null)
-                    return (null, null, null);
+                    return (null, null, null, null);
 
                 var pokemonOrders = context.PokemonOrders.Include("Pokemon").Include("Trainer").ToList();
 
@@ -25,6 +25,7 @@ namespace PokemonExtraLifeApi.EntityFramework
 
                 Pokemon nextPokemon = null;
                 Trainer nextTrainer = null;
+                Host nextHost = null;
                 
                 if (pokemon.Damage >= pokemon.Health)
                 {
@@ -35,13 +36,18 @@ namespace PokemonExtraLifeApi.EntityFramework
                         nextPokemon = nextPo.Pokemon;
                         nextTrainer = nextPo.Trainer.Id.Equals(trainer.Id) ? null : nextPo.Trainer;
                     }
+
+                    var displayStatus = context.GetDisplayStatus();
+                    displayStatus.CurrentHostId = (displayStatus.CurrentHostId + 1) % context.Hosts.Count();
+                    
+                    nextHost = context.Hosts.First(h => h.Id == displayStatus.CurrentHostId);
                 }
 
                 nextDonation.Processed = true;
 
                 context.SaveChanges();
                 
-                return (nextDonation, nextPokemon, nextTrainer);
+                return (nextDonation, nextPokemon, nextTrainer, nextHost);
             }
         }
     }
