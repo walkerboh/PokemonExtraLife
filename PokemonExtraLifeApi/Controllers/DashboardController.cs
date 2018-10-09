@@ -9,7 +9,7 @@ namespace PokemonExtraLifeApi.Controllers
     {
         public ActionResult Index()
         {
-            
+            return null;
         }
 
         private DashboardModel GetDashboardModel()

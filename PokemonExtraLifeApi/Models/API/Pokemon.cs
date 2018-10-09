@@ -8,8 +8,8 @@ namespace PokemonExtraLifeApi.Models.API
         public int Id { get; set; }
         public string Name { get; set; }
         public string Icon { get; set; }
-        public double Health { get; set; }
-        public double Damage { get; set; }
+        public decimal Health { get; set; }
+        public decimal Damage { get; set; }
 
         [JsonIgnore]
         public virtual ICollection<PokemonOrder> PokemonOrders { get; set; }

@@ -7,7 +7,7 @@ namespace PokemonExtraLifeApi.ExtraLife
     public class EFDonation
     {
         [JsonProperty("amount")]
-        public double Amount { get; set; }
+        public decimal Amount { get; set; }
 
         [JsonProperty("avatarImageURL")]
         public string AvatarImageUrl { get; set; }
