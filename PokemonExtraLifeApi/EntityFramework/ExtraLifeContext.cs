@@ -18,7 +18,6 @@ namespace PokemonExtraLifeApi.EntityFramework
         public DbSet<PokemonOrder> PokemonOrders { get; set; }
         public DbSet<Trainer> Trainers { get; set; }
         public DbSet<Group> Groups { get; set; }
-        public DbSet<GroupTrainer> GroupTrainers { get; set; }
         private DbSet<DisplayStatus> DisplayStatus { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -26,15 +25,15 @@ namespace PokemonExtraLifeApi.EntityFramework
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
         }
 
-        public Group ActiveGroup => Groups.Include(g => g.Trainers).FirstOrDefault(g => g.Started && !g.Done);
+        public Group ActiveGroup => Groups.Include(g => g.PokemonOrders).FirstOrDefault(g => g.Started && !g.Done);
 
         public Gym GetCurrentGym()
         {
             var group = ActiveGroup;
 
             if (group != null)
-                return group.Trainers.First().Gym;
-            
+                return group.Gym;
+
             var pos = PokemonOrders.Include(po => po.Pokemon).Include(po => po.Trainer).ToList();
             return pos.First(po => !po.Done).Trainer.Gym;
         }

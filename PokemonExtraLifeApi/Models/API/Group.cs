@@ -7,11 +7,12 @@ namespace PokemonExtraLifeApi.Models.API
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public Gym Gym { get; set; }
         public bool Started { get; set; }
         public bool ForceComplete { get; set; }
-        public bool TrainersComplete => Trainers.All(t => t.Done);
-        public bool Done => ForceComplete || TrainersComplete;
+        public bool PokemonComplete => PokemonOrders.All(po => po.Done);
+        public bool Done => ForceComplete || PokemonComplete;
         
-        public virtual ICollection<GroupTrainer> Trainers { get; set; }
+        public virtual ICollection<PokemonOrder> PokemonOrders { get; set; }
     }
 }

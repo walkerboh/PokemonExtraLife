@@ -14,14 +14,10 @@ namespace PokemonExtraLifeApi.EntityFramework
 
                 if (nextDonation == null)
                     return (null, null, null, null);
-
-                var activeGroup = context.ActiveGroup;
-                
-                
                 
                 var pokemonOrders = context.PokemonOrders.Include("Pokemon").Include("Trainer").ToList();
 
-                var currentPo = pokemonOrders.First(po => !po.Done);
+                var currentPo = pokemonOrders.First(po => po.Activated && !po.Done);
                 var pokemon = currentPo.Pokemon;
                 var trainer = currentPo.Trainer;
 
@@ -31,10 +27,34 @@ namespace PokemonExtraLifeApi.EntityFramework
                 Trainer nextTrainer = null;
                 Host nextHost = null;
                 
-                if (pokemon.Damage >= pokemon.Health)
+                var activeGroup = context.ActiveGroup;
+                
+                // Force new pokemon if current pokemon is not in newly activated group
+                if (pokemon.Damage >= pokemon.Health || (!currentPo.GroupId.HasValue && activeGroup != null))
                 {
-                    var nextPo = pokemonOrders.FirstOrDefault(po => po.Sequence == currentPo.Sequence + 1);
+                    PokemonOrder nextPo = null;
 
+                    if (activeGroup != null)
+                    {
+                        var currentPoInGroup = currentPo.GroupId.HasValue && currentPo.GroupId.Value.Equals(activeGroup.Id);
+                        nextPo = activeGroup.PokemonOrders.FirstOrDefault(po => po.Sequence == (currentPoInGroup ? currentPo.Sequence + 1 : 1));
+                    }
+                    
+                    // Won't be null if set by group. Will occur if group completes
+                    if(nextPo == null)
+                    {
+                        // Will only occur if group was active but is now complete
+                        if (activeGroup != null)
+                        {
+                            nextPo = pokemonOrders.FirstOrDefault(po => po.Sequence == context.PokemonOrders.Where(po1 => !po1.GroupId.HasValue && po1.Done).Max(po1 => po1.Sequence) + 1);
+                        }
+                        else
+                        {
+                            nextPo = pokemonOrders.FirstOrDefault(po => po.Sequence == currentPo.Sequence + 1);                            
+                        }
+                    }
+
+                    // If null, we are out of Pokemon
                     if (nextPo != null)
                     {
                         nextPokemon = nextPo.Pokemon;
