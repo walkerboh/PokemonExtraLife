@@ -195,6 +195,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\DonationsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
@@ -214,6 +215,9 @@
     <Compile Include="Models\API\Pokemon.cs" />
     <Compile Include="Models\API\PokemonOrder.cs" />
     <Compile Include="Models\API\Trainer.cs" />
+    <Compile Include="Models\Dashboard\DashboardModel.cs" />
+    <Compile Include="Models\Dashboard\GroupModel.cs" />
+    <Compile Include="Models\Dashboard\SummaryModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
