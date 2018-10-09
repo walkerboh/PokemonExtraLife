@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Web.Mvc;
 using PokemonExtraLifeApi.EntityFramework;
+using PokemonExtraLifeApi.Models.API;
 using PokemonExtraLifeApi.Models.Dashboard;
 
 namespace PokemonExtraLifeApi.Controllers
@@ -9,7 +10,21 @@ namespace PokemonExtraLifeApi.Controllers
     {
         public ActionResult Index()
         {
-            return null;
+            return View(GetDashboardModel());
+        }
+
+        [HttpPost]
+        [ActionName("Group")]
+        public ActionResult StartGroup(GroupModel model)
+        {
+            return PartialView("Group", GetGroupModel());
+        }
+
+        [HttpDelete]
+        [ActionName("Group")]
+        public ActionResult StopGroup()
+        {
+            return PartialView("Group", GetGroupModel());
         }
 
         private DashboardModel GetDashboardModel()

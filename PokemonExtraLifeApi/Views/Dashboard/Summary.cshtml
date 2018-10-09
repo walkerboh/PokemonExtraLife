@@ -1,0 +1,19 @@
+@model PokemonExtraLifeApi.Models.Dashboard.SummaryModel
+
+<div>
+    <h1>Stream Summary</h1>
+    <table>
+        <tr>
+            <th>Current Time</th>
+            <td>@DateTime.Now.ToString("MM/dd/yyyy hh:mm tt")</td>
+        </tr>
+        <tr>
+            <th>Number of Donations</th>
+            <td>@Model.TotalDonations</td>
+        </tr>
+        <tr>
+            <th>Total Raised</th>
+            <td>@string.Format("{0:c2}", Model.TotalDonationAmount)</td>
+        </tr>
+    </table>
+</div>

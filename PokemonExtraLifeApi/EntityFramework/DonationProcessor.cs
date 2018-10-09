@@ -30,7 +30,7 @@ namespace PokemonExtraLifeApi.EntityFramework
                 var activeGroup = context.ActiveGroup;
                 
                 // Force new pokemon if current pokemon is not in newly activated group
-                if (pokemon.Damage >= pokemon.Health || (!currentPo.GroupId.HasValue && activeGroup != null))
+                if (pokemon.Damage >= pokemon.Health || (!currentPo.GroupId.HasValue && activeGroup != null) || (currentPo.GroupId.HasValue && activeGroup == null))
                 {
                     PokemonOrder nextPo = null;
 
