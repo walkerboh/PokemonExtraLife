@@ -8,7 +8,10 @@
 </head>
 <body>
 <div>
-      
+    @{
+     Html.RenderPartial("Summary", Model.SummaryModel);
+        Html.RenderPartial("Group", Model.GroupModel);
+      }
 </div>
 </body>
 </html>

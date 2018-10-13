@@ -41,10 +41,11 @@ namespace PokemonExtraLifeApi.Controllers
             using (var context = new ExtraLifeContext())
             {
                 var donations = context.Donations.ToList();
+                var displayStatus = context.GetDisplayStatus();
 
-                var currentHost = context.Hosts.First(h => h.Id == context.GetDisplayStatus().CurrentHostId);
+                var currentHost = context.Hosts.First(h => h.Id == displayStatus.CurrentHostId);
 
-                var activePokemon = context.PokemonOrders.FirstOrDefault(po => po.Activated && !po.Done)?.Pokemon;
+                var activePokemon = context.PokemonOrders.ToList().FirstOrDefault(po => po.Activated && !po.Done)?.Pokemon;
 
                 return new SummaryModel
                 {

@@ -18,14 +18,14 @@ namespace PokemonExtraLifeApi.EntityFramework
         public DbSet<PokemonOrder> PokemonOrders { get; set; }
         public DbSet<Trainer> Trainers { get; set; }
         public DbSet<Group> Groups { get; set; }
-        private DbSet<DisplayStatus> DisplayStatus { get; set; }
+        public DbSet<DisplayStatus> DisplayStatus { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
         }
 
-        public Group ActiveGroup => Groups.Include(g => g.PokemonOrders).FirstOrDefault(g => g.Started && !g.Done);
+        public Group ActiveGroup => Groups.Include(g => g.PokemonOrders).ToList().FirstOrDefault(g => g.Started && !g.Done);
 
         public Gym GetCurrentGym()
         {

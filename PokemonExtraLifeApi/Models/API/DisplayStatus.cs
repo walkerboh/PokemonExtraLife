@@ -2,6 +2,8 @@ namespace PokemonExtraLifeApi.Models.API
 {
     public class DisplayStatus
     {
+        public int Id { get; set; }
+
         public int CurrentHostId { get; set; }
 
         public string CurrentGame { get; set; }

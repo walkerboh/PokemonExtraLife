@@ -187,6 +187,16 @@ namespace PokemonExtraLifeApi.EntityFramework
 
             context.Hosts.AddRange(hosts);
             context.SaveChanges();
+
+            context.DisplayStatus.Add(new DisplayStatus
+            {
+                CurrentHostId = 1,
+                CurrentGame = string.Empty,
+                DonationGoal = 0,
+                FollowingGame = string.Empty,
+                NextGame = string.Empty
+            });
+            context.SaveChanges();
         }
     }
 }
