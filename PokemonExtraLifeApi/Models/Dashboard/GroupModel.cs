@@ -19,6 +19,6 @@ namespace PokemonExtraLifeApi.Models.Dashboard
 
         public IEnumerable<Group> PreviouslyActiveGroups { get; set; }
 
-        public Group SelectedGroup { get; set; }
+        public int? SelectedGroup { get; set; }
     }
 }

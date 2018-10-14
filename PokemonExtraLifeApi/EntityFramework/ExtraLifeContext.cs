@@ -25,7 +25,7 @@ namespace PokemonExtraLifeApi.EntityFramework
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
         }
 
-        public Group ActiveGroup => Groups.Include(g => g.PokemonOrders).ToList().FirstOrDefault(g => g.Started && !g.Done);
+        public Group ActiveGroup => Groups.Include("PokemonOrders.Pokemon").ToList().FirstOrDefault(g => g.Started && !g.Done);
 
         public Gym GetCurrentGym()
         {

@@ -7,6 +7,13 @@ namespace PokemonExtraLifeApi.EntityFramework
     {
         protected override void Seed(ExtraLifeContext context)
         {
+            context.Groups.Add(new Group
+            {
+                Name = "Rocket 1",
+                Gym = Gym.TeamRocketAlpha
+            });
+            context.SaveChanges();
+            
             var pokemon = new List<Pokemon>
             {
                 new Pokemon
@@ -71,6 +78,11 @@ namespace PokemonExtraLifeApi.EntityFramework
                 {
                     Name = "I",
                     Health = 50
+                },
+                new Pokemon
+                {
+                    Name = "Meowth",
+                    Health = 50
                 }
             };
 
@@ -93,6 +105,11 @@ namespace PokemonExtraLifeApi.EntityFramework
                 {
                     Name = "T3",
                     Gym = Gym.Rock
+                },
+                new Trainer
+                {
+                    Name = "Rocket1",
+                    Gym = Gym.TeamRocketAlpha
                 }
             };
 
@@ -106,7 +123,8 @@ namespace PokemonExtraLifeApi.EntityFramework
                 {
                     PokemonId = 5,
                     TrainerId = 1,
-                    Sequence = 1
+                    Sequence = 1,
+                    Activated = true
                 },
                 new PokemonOrder
                 {
@@ -155,6 +173,13 @@ namespace PokemonExtraLifeApi.EntityFramework
                     PokemonId = 13,
                     TrainerId = 3,
                     Sequence = 8
+                },
+                new PokemonOrder
+                {
+                    PokemonId = 14,
+                    TrainerId = 4,
+                    Sequence = 1,
+                    GroupId = 1
                 }
             };
 

@@ -36,4 +36,13 @@
             <button type="submit" @(Model.ActiveGroup == null ? string.Empty : "disabled=\"disabled\"") >Start Selected Group</button>
         }
     </div>
+    <div>
+        <h3>Complete Groups</h3>
+        <ul>
+        @foreach (var group in Model.PreviouslyActiveGroups)
+        {
+            <li>@group.Name</li>
+        }
+        </ul>
+    </div>
 </div>

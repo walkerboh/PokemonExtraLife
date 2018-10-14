@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Data.Entity;
+using System.Linq;
 using Microsoft.Ajax.Utilities;
 using PokemonExtraLifeApi.Models.API;
 
@@ -34,6 +35,8 @@ namespace PokemonExtraLifeApi.EntityFramework
                 {
                     PokemonOrder nextPo = null;
 
+                    currentPo.ForceDone = true;
+                    
                     if (activeGroup != null)
                     {
                         var currentPoInGroup = currentPo.GroupId.HasValue && currentPo.GroupId.Value.Equals(activeGroup.Id);
@@ -44,25 +47,28 @@ namespace PokemonExtraLifeApi.EntityFramework
                     if(nextPo == null)
                     {
                         // Will only occur if group was active but is now complete
-                        if (activeGroup != null)
+                        if (currentPo.GroupId.HasValue)
                         {
-                            nextPo = pokemonOrders.FirstOrDefault(po => po.Sequence == context.PokemonOrders.Where(po1 => !po1.GroupId.HasValue && po1.Done).Max(po1 => po1.Sequence) + 1);
+                            nextPo = pokemonOrders.FirstOrDefault(po => po.Sequence == context.PokemonOrders.Include(po1=>po1.Pokemon).ToList().Where(po1 => !po1.GroupId.HasValue && po1.Done).Max(po1 => po1.Sequence) + 1);
                         }
                         else
                         {
-                            nextPo = pokemonOrders.FirstOrDefault(po => po.Sequence == currentPo.Sequence + 1);                            
+                            nextPo = pokemonOrders.FirstOrDefault(po => po.Sequence == currentPo.Sequence + 1 && !po.GroupId.HasValue);                            
                         }
                     }
 
                     // If null, we are out of Pokemon
                     if (nextPo != null)
                     {
+                        nextPo.Activated = true;
                         nextPokemon = nextPo.Pokemon;
                         nextTrainer = nextPo.Trainer.Id.Equals(trainer.Id) ? null : nextPo.Trainer;
                     }
 
                     var displayStatus = context.GetDisplayStatus();
-                    displayStatus.CurrentHostId = (displayStatus.CurrentHostId + 1) % context.Hosts.Count();
+                    displayStatus.CurrentHostId = (displayStatus.CurrentHostId + 1) % (context.Hosts.Count() + 1);
+
+                    displayStatus.CurrentHostId = displayStatus.CurrentHostId == 0 ? 1 : displayStatus.CurrentHostId;
                     
                     nextHost = context.Hosts.First(h => h.Id == displayStatus.CurrentHostId);
                 }

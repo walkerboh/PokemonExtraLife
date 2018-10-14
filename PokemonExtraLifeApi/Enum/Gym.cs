@@ -6,11 +6,12 @@
         Water,
         Electric,
         Grass,
-        Posion,
+        Poison,
         Psychic,
         Fire,
         Ground,
         EliteFour,
+        Blue,
         TeamRocketAlpha,
         TeamRocketBeta
     }

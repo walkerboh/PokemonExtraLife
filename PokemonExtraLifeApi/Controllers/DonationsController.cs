@@ -1,6 +1,7 @@
 ﻿using System.Data.Entity;
 using System.Linq;
 using System.Web.Http;
+using Newtonsoft.Json;
 using PokemonExtraLifeApi.EntityFramework;
 using PokemonExtraLifeApi.Models.API;
 
@@ -8,6 +9,11 @@ namespace PokemonExtraLifeApi.Controllers
 {
     public class DonationsController : ApiController
     {
+        private JsonSerializerSettings settings = new JsonSerializerSettings
+        {
+            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+        };
+        
         [HttpGet]
         public IHttpActionResult Donations()
         {
@@ -29,7 +35,7 @@ namespace PokemonExtraLifeApi.Controllers
         {
             (Donation donation, Pokemon nextPokemon, Trainer nextTrainer, Host nextHost) = DonationProcessor.GetNextDonation();
 
-            return Json(new {donation, nextPokemon, nextTrainer, nextHost});
+            return Json(new {donation, nextPokemon, nextTrainer, nextHost}, settings);
         }
     }
 }

@@ -1,3 +1,4 @@
+using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
 using PokemonExtraLifeApi.EntityFramework;
@@ -17,6 +18,11 @@ namespace PokemonExtraLifeApi.Controllers
         [ActionName("Group")]
         public ActionResult StartGroup(GroupModel model)
         {
+            if (!model.SelectedGroup.HasValue)
+                return PartialView("Group", GetGroupModel());
+
+            ActivateGroup(model.SelectedGroup.Value);
+            
             return PartialView("Group", GetGroupModel());
         }
 
@@ -24,6 +30,8 @@ namespace PokemonExtraLifeApi.Controllers
         [ActionName("Group")]
         public ActionResult StopGroup()
         {
+            ForceStopGroup();
+            
             return PartialView("Group", GetGroupModel());
         }
 
@@ -45,7 +53,7 @@ namespace PokemonExtraLifeApi.Controllers
 
                 var currentHost = context.Hosts.First(h => h.Id == displayStatus.CurrentHostId);
 
-                var activePokemon = context.PokemonOrders.ToList().FirstOrDefault(po => po.Activated && !po.Done)?.Pokemon;
+                var activePokemon = context.PokemonOrders.Include(po => po.Pokemon).ToList().FirstOrDefault(po => po.Activated && !po.Done)?.Pokemon;
 
                 return new SummaryModel
                 {
@@ -69,6 +77,33 @@ namespace PokemonExtraLifeApi.Controllers
                     PotentialGroups = groups.Where(g => !g.Started),
                     PreviouslyActiveGroups = groups.Where(g => g.Started && g.Done)
                 };
+            }
+        }
+        
+        private void ActivateGroup(int group)
+        {
+            using (var context = new ExtraLifeContext())
+            {
+                context.Groups.First(g => g.Id == group).Started = true;
+                context.SaveChanges();
+            }
+        }
+
+        private void ForceStopGroup()
+        {
+            using (var context = new ExtraLifeContext())
+            {
+                var groups = context.Groups.Where(g => g.Started);
+
+                foreach (var group in groups)
+                {
+                    if (!group.Done)
+                    {
+                        group.ForceComplete = true;
+                    }
+                }
+
+                context.SaveChanges();
             }
         }
     }
