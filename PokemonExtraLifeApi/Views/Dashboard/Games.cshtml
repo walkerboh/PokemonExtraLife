@@ -1,0 +1,23 @@
+@model PokemonExtraLifeApi.Models.Dashboard.GamesModel
+
+@Scripts.Render("~/bundles/js/Games")
+
+<div id="GamesSection">
+    @using (Ajax.BeginForm("UpdateGames", "Dashboard", new AjaxOptions
+    {
+        UpdateTargetId = "GamesSection",
+        HttpMethod = "POST",
+        InsertionMode = InsertionMode.Replace
+    }))
+    {
+        <h3>Games!</h3>
+        @Html.LabelFor(m=>m.CurrentGame)
+        @Html.TextBoxFor(m=>m.CurrentGame)
+        @Html.LabelFor(m=>m.NextGame)
+        @Html.TextBoxFor(m=>m.NextGame)
+        @Html.LabelFor(m=>m.FollowingGame)
+        @Html.TextBoxFor(m=>m.FollowingGame)
+        <button type="button" onclick="ShiftGames()">Shift Games "Up"</button>
+        <button type="submit">Update Games</button>
+    }
+</div>

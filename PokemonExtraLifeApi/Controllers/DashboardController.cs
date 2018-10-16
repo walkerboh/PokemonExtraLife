@@ -1,6 +1,7 @@
 using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
+using System.Web.UI.WebControls;
 using PokemonExtraLifeApi.EntityFramework;
 using PokemonExtraLifeApi.Models.API;
 using PokemonExtraLifeApi.Models.Dashboard;
@@ -35,12 +36,21 @@ namespace PokemonExtraLifeApi.Controllers
             return PartialView("Group", GetGroupModel());
         }
 
+        [HttpPost]
+        public ActionResult UpdateGames(GamesModel model)
+        {
+            UpdateGamesDb(model);
+
+            return PartialView("Games", GetGamesModel());
+        }
+
         private DashboardModel GetDashboardModel()
         {
             return new DashboardModel
             {
                 GroupModel = GetGroupModel(),
-                SummaryModel = GetSummaryModel()
+                SummaryModel = GetSummaryModel(),
+                GamesModel = GetGamesModel()
             };
         }
 
@@ -102,6 +112,35 @@ namespace PokemonExtraLifeApi.Controllers
                         group.ForceComplete = true;
                     }
                 }
+
+                context.SaveChanges();
+            }
+        }
+
+        private GamesModel GetGamesModel()
+        {
+            using (var context = new ExtraLifeContext())
+            {
+                var displayStatus = context.GetDisplayStatus();
+                
+                return new GamesModel
+                {
+                    CurrentGame = displayStatus.CurrentGame,
+                    NextGame = displayStatus.NextGame,
+                    FollowingGame = displayStatus.FollowingGame
+                };
+            }
+        }
+
+        private void UpdateGamesDb(GamesModel model)
+        {
+            using (var context = new ExtraLifeContext())
+            {
+                var displayStatus = context.GetDisplayStatus();
+
+                displayStatus.CurrentGame = model.CurrentGame;
+                displayStatus.NextGame = model.NextGame;
+                displayStatus.FollowingGame = model.FollowingGame;
 
                 context.SaveChanges();
             }
