@@ -37,5 +37,21 @@ namespace PokemonExtraLifeApi.Controllers
 
             return Json(new {donation, nextPokemon, nextTrainer, nextHost}, settings);
         }
+
+        [HttpGet]
+        public IHttpActionResult Games()
+        {
+            using (var context = new ExtraLifeContext())
+            {
+                var displayStatus = context.GetDisplayStatus();
+
+                return Json(new
+                {
+                    displayStatus.CurrentGame,
+                    displayStatus.NextGame,
+                    displayStatus.FollowingGame
+                });
+            }
+        }
     }
 }
