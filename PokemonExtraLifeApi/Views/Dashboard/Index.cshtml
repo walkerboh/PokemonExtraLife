@@ -4,9 +4,11 @@
 
 <html>
 <head>
+    @Scripts.Render("~/bundles/js/Dashboard")
     <title>2018 Extra Life Dashboard</title>
 </head>
 <body>
+<input type="checkbox" id="reloadToggle"/>
 <div>
     @{
         Html.RenderPartial("Summary", Model.SummaryModel);

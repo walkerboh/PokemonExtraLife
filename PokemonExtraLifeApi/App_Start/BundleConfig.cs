@@ -26,6 +26,7 @@ namespace PokemonExtraLifeApi
             bundles.Add(new ScriptBundle("~/bundles/ajaxUnobtrusive").Include(
                 "~/Scripts/jquery.unobtrusive-ajax.js"));
             
+            bundles.Add(new ScriptBundle("~/bundles/js/Dashboard").Include("~/Scripts/Views/Dashboard/Dashboard.js"));
             bundles.Add(new ScriptBundle("~/bundles/js/Games").Include("~/Scripts/Views/Dashboard/Games.js"));
         }
     }
