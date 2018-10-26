@@ -1,3 +1,5 @@
+using System.Security.Permissions;
+
 namespace PokemonExtraLifeApi.Models.Dashboard
 {
     public class DashboardModel
@@ -7,5 +9,7 @@ namespace PokemonExtraLifeApi.Models.Dashboard
         public SummaryModel SummaryModel { get; set; }
 
         public GamesModel GamesModel { get; set; }
+
+        public DonationsModel DonationsModel { get; set; }
     }
 }

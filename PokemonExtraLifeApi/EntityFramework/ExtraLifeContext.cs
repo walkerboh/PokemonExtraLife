@@ -1,10 +1,12 @@
-﻿using System.Data.Entity;
+﻿using System.CodeDom;
+using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Linq;
 using PokemonExtraLifeApi.Models.API;
 
 namespace PokemonExtraLifeApi.EntityFramework
 {
+    [DbConfigurationType(typeof(NpgSqlConfiguration))]
     public class ExtraLifeContext : DbContext
     {
         public ExtraLifeContext() : base("ExtraLifeContext")
@@ -23,6 +25,8 @@ namespace PokemonExtraLifeApi.EntityFramework
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+            modelBuilder.HasDefaultSchema("public");
+            base.OnModelCreating(modelBuilder);
         }
 
         public Group ActiveGroup => Groups.Include("PokemonOrders.Pokemon").ToList().FirstOrDefault(g => g.Started && !g.Done);
@@ -35,7 +39,9 @@ namespace PokemonExtraLifeApi.EntityFramework
                 return group.Gym;
 
             var pos = PokemonOrders.Include(po => po.Pokemon).Include(po => po.Trainer).ToList();
-            return pos.First(po => !po.Done).Trainer.Gym;
+            var order = pos.FirstOrDefault(po => po.Activated && !po.Done);
+
+            return order?.Trainer.Gym ?? Gym.Blue;
         }
 
         public DisplayStatus GetDisplayStatus()

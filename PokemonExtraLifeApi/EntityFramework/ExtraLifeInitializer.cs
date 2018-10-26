@@ -3,7 +3,7 @@ using PokemonExtraLifeApi.Models.API;
 
 namespace PokemonExtraLifeApi.EntityFramework
 {
-    public class ExtraLifeInitializer : System.Data.Entity.DropCreateDatabaseAlways<ExtraLifeContext>
+    public class ExtraLifeInitializer : System.Data.Entity.CreateDatabaseIfNotExists<ExtraLifeContext>
     {
         protected override void Seed(ExtraLifeContext context)
         {
@@ -19,12 +19,12 @@ namespace PokemonExtraLifeApi.EntityFramework
                 new Pokemon
                 {
                     Name = "Bulbasaur",
-                    Health = 0
+                    TotalHealth = 0
                 },
                 new Pokemon
                 {
                     Name = "Squirtle",
-                    Health = 0
+                    TotalHealth = 0
                 },
                 new Pokemon
                 {
@@ -37,52 +37,52 @@ namespace PokemonExtraLifeApi.EntityFramework
                 new Pokemon
                 {
                     Name = "A",
-                    Health = 10
+                    TotalHealth = 10
                 },
                 new Pokemon
                 {
                     Name = "B",
-                    Health = 10
+                    TotalHealth = 10
                 },
                 new Pokemon
                 {
                     Name = "C",
-                    Health = 20
+                    TotalHealth = 20
                 },
                 new Pokemon
                 {
                     Name = "D",
-                    Health = 15
+                    TotalHealth = 15
                 },
                 new Pokemon
                 {
                     Name = "E",
-                    Health = 15
+                    TotalHealth = 15
                 },
                 new Pokemon
                 {
                     Name = "F",
-                    Health = 30
+                    TotalHealth = 30
                 },
                 new Pokemon
                 {
                     Name = "G",
-                    Health = 20
+                    TotalHealth = 20
                 },
                 new Pokemon
                 {
                     Name = "H",
-                    Health = 20
+                    TotalHealth = 20
                 },
                 new Pokemon
                 {
                     Name = "I",
-                    Health = 50
+                    TotalHealth = 50
                 },
                 new Pokemon
                 {
                     Name = "Meowth",
-                    Health = 50
+                    TotalHealth = 50
                 }
             };
 
@@ -217,7 +217,7 @@ namespace PokemonExtraLifeApi.EntityFramework
             {
                 CurrentHostId = 1,
                 CurrentGame = string.Empty,
-                DonationGoal = 0,
+                DonationGoal = 2000,
                 FollowingGame = string.Empty,
                 NextGame = string.Empty
             });

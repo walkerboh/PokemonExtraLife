@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -11,8 +12,10 @@ namespace PokemonExtraLifeApi.Models.API
         public bool Started { get; set; }
         public bool ForceComplete { get; set; }
         public bool PokemonComplete => PokemonOrders.All(po => po.Done);
-        public bool Done => ForceComplete || PokemonComplete;
-        
+        public bool Done => ForceComplete || PokemonComplete || StartTime.AddMinutes(DurationMinutes) < DateTime.Now;
+        public int DurationMinutes { get; set; }
+        public DateTime StartTime { get; set; }
+
         public virtual ICollection<PokemonOrder> PokemonOrders { get; set; }
     }
 }

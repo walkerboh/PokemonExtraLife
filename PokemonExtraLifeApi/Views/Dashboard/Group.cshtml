@@ -1,6 +1,7 @@
 @model PokemonExtraLifeApi.Models.Dashboard.GroupModel
 
-<div id="GroupSection">
+<div id="GroupSection" class="row">
+    <div class="col-6">
     <div>
         <h3>Active Group</h3>
         <span>Active Group:</span>
@@ -11,37 +12,38 @@
             @if (Model.ActiveGroup != null)
             {
                 using (Ajax.BeginForm("Group", "Dashboard", new AjaxOptions
-                 {
-                     HttpMethod = "DELETE",
-                     InsertionMode = InsertionMode.Replace,
-                     UpdateTargetId = "GroupSection"
-                 }))
-                 {
-                     <button type="submit">Stop Group</button>
-                 }
+                {
+                    HttpMethod = "DELETE",
+                    InsertionMode = InsertionMode.Replace,
+                    UpdateTargetId = "GroupSection"
+                }))
+                {
+                    <button type="submit">Stop Group</button>
+                }
             }
         </div>
     </div>
-    <div>
-        <h3>Start a group</h3>
-        @using (Ajax.BeginForm("Group", "Dashboard", new AjaxOptions
-        {
-            HttpMethod = "POST",
-            InsertionMode = InsertionMode.Replace,
-            UpdateTargetId = "GroupSection"
-        }))
-        {
-            @Html.DropDownListFor(m => m.SelectedGroup, Model.PotentialGroupsList)
-            <button type="submit" @(Model.ActiveGroup == null ? string.Empty : "disabled=\"disabled\"") >Start Selected Group</button>
-        }
+        <div>
+            <h3>Start a group</h3>
+            @using (Ajax.BeginForm("Group", "Dashboard", new AjaxOptions
+            {
+                HttpMethod = "POST",
+                InsertionMode = InsertionMode.Replace,
+                UpdateTargetId = "GroupSection"
+            }))
+            {
+                @Html.DropDownListFor(m => m.SelectedGroup, Model.PotentialGroupsList)
+                <button type="submit" @(Model.ActiveGroup == null ? string.Empty : "disabled=\"disabled\"")>Start Selected Group</button>
+            }
+        </div>
     </div>
-    <div>
+    <div class="col-6">
         <h3>Complete Groups</h3>
         <ul>
-        @foreach (var group in Model.PreviouslyActiveGroups)
-        {
-            <li>@group.Name</li>
-        }
+            @foreach (var group in Model.PreviouslyActiveGroups)
+            {
+                <li>@group.Name</li>
+            }
         </ul>
     </div>
 </div>

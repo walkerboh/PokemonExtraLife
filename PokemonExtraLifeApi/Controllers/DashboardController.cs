@@ -1,3 +1,4 @@
+using System;
 using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
@@ -23,7 +24,7 @@ namespace PokemonExtraLifeApi.Controllers
                 return PartialView("Group", GetGroupModel());
 
             ActivateGroup(model.SelectedGroup.Value);
-            
+
             return PartialView("Group", GetGroupModel());
         }
 
@@ -32,7 +33,7 @@ namespace PokemonExtraLifeApi.Controllers
         public ActionResult StopGroup()
         {
             ForceStopGroup();
-            
+
             return PartialView("Group", GetGroupModel());
         }
 
@@ -50,7 +51,8 @@ namespace PokemonExtraLifeApi.Controllers
             {
                 GroupModel = GetGroupModel(),
                 SummaryModel = GetSummaryModel(),
-                GamesModel = GetGamesModel()
+                GamesModel = GetGamesModel(),
+                DonationsModel = GetDonationsModel()
             };
         }
 
@@ -70,7 +72,8 @@ namespace PokemonExtraLifeApi.Controllers
                     ActiveHost = currentHost,
                     ActivePokemon = activePokemon,
                     TotalDonations = donations.Count,
-                    TotalDonationAmount = donations.Sum(d => d.Amount)
+                    TotalDonationAmount = donations.Sum(d => d.Amount),
+                    DonationGoal = displayStatus.DonationGoal
                 };
             }
         }
@@ -89,12 +92,14 @@ namespace PokemonExtraLifeApi.Controllers
                 };
             }
         }
-        
-        private void ActivateGroup(int group)
+
+        private void ActivateGroup(int groupId)
         {
             using (var context = new ExtraLifeContext())
             {
-                context.Groups.First(g => g.Id == group).Started = true;
+                var group = context.Groups.First(g => g.Id == groupId);
+                group.Started = true;
+                group.StartTime = DateTime.Now;
                 context.SaveChanges();
             }
         }
@@ -122,7 +127,7 @@ namespace PokemonExtraLifeApi.Controllers
             using (var context = new ExtraLifeContext())
             {
                 var displayStatus = context.GetDisplayStatus();
-                
+
                 return new GamesModel
                 {
                     CurrentGame = displayStatus.CurrentGame,
@@ -143,6 +148,17 @@ namespace PokemonExtraLifeApi.Controllers
                 displayStatus.FollowingGame = model.FollowingGame;
 
                 context.SaveChanges();
+            }
+        }
+
+        private DonationsModel GetDonationsModel()
+        {
+            using (var context = new ExtraLifeContext())
+            {
+                return new DonationsModel
+                {
+                    Donations = context.Donations.OrderByDescending(d => d.Time).ToList()
+                };
             }
         }
     }

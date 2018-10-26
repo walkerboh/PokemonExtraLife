@@ -33,9 +33,9 @@ namespace PokemonExtraLifeApi.Controllers
         [HttpGet]
         public IHttpActionResult NextDonation()
         {
-            (Donation donation, Pokemon nextPokemon, Trainer nextTrainer, Host nextHost) = DonationProcessor.GetNextDonation();
+            (Donation donation, Pokemon currentPokemon, Pokemon nextPokemon, Trainer nextTrainer, Host nextHost) = DonationProcessor.GetNextDonation();
 
-            return Json(new {donation, nextPokemon, nextTrainer, nextHost}, settings);
+            return Json(new {donation, currentPokemon, nextPokemon, nextTrainer, nextHost}, settings);
         }
 
         [HttpGet]

@@ -1,20 +1,20 @@
 @model PokemonExtraLifeApi.Models.Dashboard.DashboardModel
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    @Scripts.Render("~/bundles/js/Dashboard")
-    <title>2018 Extra Life Dashboard</title>
-</head>
-<body>
-<input type="checkbox" id="reloadToggle"/>
-<div>
-    @{
-        Html.RenderPartial("Summary", Model.SummaryModel);
-        Html.RenderPartial("Group", Model.GroupModel);
-        Html.RenderPartial("Games", Model.GamesModel);
-    }
+<div class="row">
+    <div class="col-4">
+        @{ Html.RenderPartial("Donations", Model.DonationsModel); }
+    </div>
+    <div class="col-8">
+        <div class="row">
+            <div class="col-6">
+                @{ Html.RenderPartial("Summary", Model.SummaryModel); }
+            </div>
+            <div class="col-6">
+                @{ Html.RenderPartial("Group", Model.GroupModel); }
+            </div>
+            <div class="col-6">
+                @{ Html.RenderPartial("Games", Model.GamesModel); }
+            </div>
+        </div>
+    </div>
 </div>
-</body>
-</html>

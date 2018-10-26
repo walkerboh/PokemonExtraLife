@@ -1,7 +1,7 @@
 @model PokemonExtraLifeApi.Models.Dashboard.SummaryModel
 
 <div>
-    <h1>Stream Summary</h1>
+    <h2>Stream Summary</h2>
     <table>
         <tr>
             <th>Current Time</th>
@@ -14,6 +14,10 @@
         <tr>
             <th>Total Raised</th>
             <td>@string.Format("{0:c2}", Model.TotalDonationAmount)</td>
+        </tr>
+        <tr>
+            <th>Donation Goal</th>
+            <td>@Html.TextBoxFor(m=>m.DonationGoal)</td>
         </tr>
     </table>
 </div>

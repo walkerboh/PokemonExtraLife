@@ -11,5 +11,7 @@ namespace PokemonExtraLifeApi.Models.Dashboard
         public Pokemon ActivePokemon { get; set; }
         
         public Host ActiveHost { get; set; }
+
+        public decimal DonationGoal { get; set; }
     }
 }

@@ -53,14 +53,31 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="EntityFramework6.Npgsql, Version=3.2.0.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7">
+      <HintPath>..\packages\EntityFramework6.Npgsql.3.2.0\lib\net45\EntityFramework6.Npgsql.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="mscorlib" />
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="Npgsql, Version=4.0.2.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7">
+      <HintPath>..\packages\Npgsql.4.0.2\lib\net451\Npgsql.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.0\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.0\lib\netstandard2.0\System.Threading.Tasks.Extensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Transactions" />
     <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
       <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net461\System.ValueTuple.dll</HintPath>
       <Private>True</Private>
@@ -202,6 +219,7 @@
     <Compile Include="EntityFramework\DonationProcessor.cs" />
     <Compile Include="EntityFramework\ExtraLifeContext.cs" />
     <Compile Include="EntityFramework\ExtraLifeInitializer.cs" />
+    <Compile Include="EntityFramework\NpgSqlConfiguration.cs" />
     <Compile Include="Enum\Gym.cs" />
     <Compile Include="ExtraLife\EFDonation.cs" />
     <Compile Include="ExtraLife\EFRunner.cs" />
@@ -216,6 +234,7 @@
     <Compile Include="Models\API\PokemonOrder.cs" />
     <Compile Include="Models\API\Trainer.cs" />
     <Compile Include="Models\Dashboard\DashboardModel.cs" />
+    <Compile Include="Models\Dashboard\DonationsModel.cs" />
     <Compile Include="Models\Dashboard\GamesModel.cs" />
     <Compile Include="Models\Dashboard\GroupModel.cs" />
     <Compile Include="Models\Dashboard\SummaryModel.cs" />
@@ -298,6 +317,7 @@
     <Content Include="Scripts\umd\popper.min.js" />
     <Content Include="Scripts\Views\Dashboard\Dashboard.js" />
     <Content Include="Scripts\Views\Dashboard\Games.js" />
+    <Content Include="Views\Dashboard\Donations.cshtml" />
     <Content Include="Views\Dashboard\Games.cshtml" />
     <Content Include="Views\Dashboard\Group.cshtml" />
     <Content Include="Views\Dashboard\Index.cshtml" />

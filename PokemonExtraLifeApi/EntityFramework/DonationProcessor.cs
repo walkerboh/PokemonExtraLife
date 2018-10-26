@@ -1,29 +1,35 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using Microsoft.Ajax.Utilities;
 using PokemonExtraLifeApi.Models.API;
 
 namespace PokemonExtraLifeApi.EntityFramework
 {
     public static class DonationProcessor
     {
-        public static (Donation, Pokemon, Trainer, Host) GetNextDonation()
+        public static (Donation, Pokemon, Pokemon, Trainer, Host) GetNextDonation()
         {
             using (var context = new ExtraLifeContext())
             {
                 var nextDonation = context.Donations.FirstOrDefault(d => !d.Processed);
 
                 if (nextDonation == null)
-                    return (null, null, null, null);
+                    return (null, null, null, null, null);
 
                 var pokemonOrders = context.PokemonOrders.Include("Pokemon").Include("Trainer").ToList();
 
-                var currentPo = pokemonOrders.First(po => po.Activated && !po.Done);
+                var currentPo = pokemonOrders.FirstOrDefault(po => po.Activated && !po.Done);
+
+                if (currentPo == null)
+                {
+                    return (nextDonation, null, null, null, null);
+                }
+
                 var pokemon = currentPo.Pokemon;
                 var trainer = currentPo.Trainer;
 
-                var overkillRemainder = nextDonation.Amount - pokemon.Health + pokemon.Damage;
+                var overkillRemainder = nextDonation.Amount - pokemon.TotalHealth + pokemon.Damage;
                 pokemon.Damage += nextDonation.Amount;
 
                 Pokemon nextPokemon = null;
@@ -33,16 +39,22 @@ namespace PokemonExtraLifeApi.EntityFramework
                 var activeGroup = context.ActiveGroup;
 
                 // Force new pokemon if current pokemon is not in newly activated group
-                if (pokemon.Damage >= pokemon.Health || (!currentPo.GroupId.HasValue && activeGroup != null) || (currentPo.GroupId.HasValue && activeGroup == null))
+                if (pokemon.Damage >= pokemon.TotalHealth || (!currentPo.GroupId.HasValue && activeGroup != null) || (currentPo.GroupId.HasValue && activeGroup == null))
                 {
                     (nextPokemon, nextTrainer, nextHost) = GetNextItems(context, activeGroup, currentPo, trainer, pokemonOrders);
+                }
+
+                if (nextPokemon?.PokemonOrder?.Trainer != null && !nextPokemon.PokemonOrder.Trainer.Leader && overkillRemainder >= 10)
+                {
+                    var damage = Math.Floor(overkillRemainder / 2.5m);
+                    nextPokemon.Damage += Math.Min(damage, nextPokemon.TotalHealth - 1);
                 }
 
                 nextDonation.Processed = true;
 
                 context.SaveChanges();
 
-                return (nextDonation, nextPokemon, nextTrainer, nextHost);
+                return (nextDonation, pokemon, nextPokemon, nextTrainer, nextHost);
             }
         }
 

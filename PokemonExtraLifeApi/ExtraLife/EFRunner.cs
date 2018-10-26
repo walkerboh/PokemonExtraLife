@@ -32,13 +32,20 @@ namespace PokemonExtraLifeApi.ExtraLife
 
             using (var client = new HttpClient())
             {
-                client.BaseAddress = new Uri(ApiUrl);
-
-                var response = await client.GetAsync(ApiUrl);
-
-                if (response.IsSuccessStatusCode)
+                try
                 {
-                    json = await response.Content.ReadAsStringAsync();
+                    client.BaseAddress = new Uri(ApiUrl);
+
+                    var response = await client.GetAsync(ApiUrl);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        json = await response.Content.ReadAsStringAsync();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Bury it, don't care for now
                 }
             }
 
