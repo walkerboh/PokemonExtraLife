@@ -15,5 +15,7 @@ namespace PokemonExtraLifeApi.Models.API
         public decimal DonationGoal { get; set; }
 
         public bool TrackDonations { get; set; }
+
+        public decimal HealthMultiplier { get; set; }
     }
 }

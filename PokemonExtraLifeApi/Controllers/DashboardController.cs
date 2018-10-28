@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Web.Mvc;
+using Microsoft.Ajax.Utilities;
 using PokemonExtraLifeApi.EntityFramework;
 using PokemonExtraLifeApi.Models.API;
 using PokemonExtraLifeApi.Models.Dashboard;
@@ -83,7 +85,8 @@ namespace PokemonExtraLifeApi.Controllers
                     TotalDonations = donations.Count,
                     TotalDonationAmount = donations.Sum(d => d.Amount),
                     DonationGoal = displayStatus.DonationGoal,
-                    TrackDonations = displayStatus.TrackDonations
+                    TrackDonations = displayStatus.TrackDonations,
+                    HealthMultiplier = displayStatus.HealthMultiplier
                 };
             }
         }
@@ -96,6 +99,12 @@ namespace PokemonExtraLifeApi.Controllers
 
                 displayStatus.TrackDonations = model.TrackDonations;
                 displayStatus.DonationGoal = model.DonationGoal;
+
+                if (displayStatus.HealthMultiplier != model.HealthMultiplier)
+                {
+                    displayStatus.HealthMultiplier = model.HealthMultiplier;
+                    context.Pokemon.Include(p=>p.PokemonOrder).Where(p=>!p.PokemonOrder.Activated).ForEach(p=>p.HealthMultiplier = model.HealthMultiplier);
+                }
 
                 context.SaveChanges();
             }
@@ -122,7 +131,6 @@ namespace PokemonExtraLifeApi.Controllers
             {
                 Group group = context.Groups.First(g => g.Id == groupId);
                 group.Started = true;
-                group.StartTime = DateTime.Now;
                 context.SaveChanges();
             }
         }
@@ -131,7 +139,7 @@ namespace PokemonExtraLifeApi.Controllers
         {
             using (ExtraLifeContext context = new ExtraLifeContext())
             {
-                IQueryable<Group> groups = context.Groups.Where(g => g.Started);
+                IQueryable<Group> groups = context.Groups.Where(g => g.Started).Include("PokemonOrders.Pokemon");
 
                 foreach (Group group in groups)
                 {

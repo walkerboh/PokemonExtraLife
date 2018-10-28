@@ -7,8 +7,10 @@ namespace PokemonExtraLifeApi.Models.API
         public int Id { get; set; }
         public string Name { get; set; }
         public string Icon { get; set; }
-        public decimal TotalHealth { get; set; }
+        public decimal StartingHealth { get; set; }
         public decimal Damage { get; set; }
+        public decimal HealthMultiplier { get; set; } = 1;
+        public decimal TotalHealth => StartingHealth * HealthMultiplier;
         public decimal CurrentHealth => TotalHealth - Damage;
 
         [JsonIgnore]

@@ -17,7 +17,7 @@ namespace PokemonExtraLifeApi.EntityFramework
                 if (nextDonation == null)
                     return (null, null, null, null, null);
 
-                List<PokemonOrder> pokemonOrders = context.PokemonOrders.Include("Pokemon").Include("Trainer").ToList();
+                List<PokemonOrder> pokemonOrders = context.PokemonOrders.Include("Pokemon").Include("Trainer.PokemonOrders.Pokemon").ToList();
 
                 PokemonOrder currentPo = pokemonOrders.FirstOrDefault(po => po.Activated && !po.Done);
 
@@ -35,8 +35,11 @@ namespace PokemonExtraLifeApi.EntityFramework
 
                 Group activeGroup = context.ActiveGroup;
 
-                // Force new pokemon if current pokemon is not in newly activated group
-                if (pokemon.Damage >= pokemon.TotalHealth || !currentPo.GroupId.HasValue && activeGroup != null || currentPo.GroupId.HasValue && activeGroup == null) (nextPokemon, nextTrainer, nextHost) = GetNextItems(context, activeGroup, currentPo, trainer, pokemonOrders);
+                // New pokemon if KOed or group is ended and current PO is in a group
+                if (pokemon.Damage >= pokemon.TotalHealth || currentPo.GroupId.HasValue && activeGroup == null)
+                {
+                    (nextPokemon, nextTrainer, nextHost) = GetNextItems(context, activeGroup, currentPo, trainer, pokemonOrders);
+                }
 
                 if (nextPokemon?.PokemonOrder?.Trainer != null && !nextPokemon.PokemonOrder.Trainer.Leader && overkillRemainder >= 10)
                 {
@@ -60,20 +63,18 @@ namespace PokemonExtraLifeApi.EntityFramework
 
             currentPo.ForceDone = true;
 
-            if (activeGroup != null)
+            if (activeGroup != null && (currentPo.GroupId == activeGroup.Id || trainer.Done))
             {
-                bool currentPoInGroup = currentPo.GroupId.HasValue && currentPo.GroupId.Value.Equals(activeGroup.Id);
-                nextPo = activeGroup.PokemonOrders.FirstOrDefault(po => po.Sequence == (currentPoInGroup ? currentPo.Sequence + 1 : 1));
-            }
+                if (!activeGroup.StartTime.HasValue)
+                {
+                    activeGroup.StartTime = DateTime.Now;
+                }
 
-            // Won't be null if set by group. Will occur if group completes
-            if (nextPo == null)
+                nextPo = pokemonOrders.Where(po => po.GroupId == activeGroup.Id).OrderBy(po => po.Sequence).FirstOrDefault(po => !po.Activated);
+            }
+            else
             {
-                // Will only occur if group was active but is now complete
-                if (currentPo.GroupId.HasValue)
-                    nextPo = pokemonOrders.FirstOrDefault(po => po.Sequence == context.PokemonOrders.Include(po1 => po1.Pokemon).ToList().Where(po1 => !po1.GroupId.HasValue && po1.Done).Max(po1 => po1.Sequence) + 1);
-                else
-                    nextPo = pokemonOrders.FirstOrDefault(po => po.Sequence == currentPo.Sequence + 1 && !po.GroupId.HasValue);
+                nextPo = pokemonOrders.Where(po => !po.GroupId.HasValue).OrderBy(po => po.Sequence).FirstOrDefault(po => !po.Activated);
             }
 
             // If null, we are out of Pokemon

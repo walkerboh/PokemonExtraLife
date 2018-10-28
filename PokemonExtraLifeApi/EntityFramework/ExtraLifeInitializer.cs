@@ -20,12 +20,12 @@ namespace PokemonExtraLifeApi.EntityFramework
                 new Pokemon
                 {
                     Name = "Bulbasaur",
-                    TotalHealth = 0
+                    StartingHealth = 0
                 },
                 new Pokemon
                 {
                     Name = "Squirtle",
-                    TotalHealth = 0
+                    StartingHealth = 0
                 },
                 new Pokemon
                 {
@@ -38,52 +38,52 @@ namespace PokemonExtraLifeApi.EntityFramework
                 new Pokemon
                 {
                     Name = "A",
-                    TotalHealth = 10
+                    StartingHealth = 10
                 },
                 new Pokemon
                 {
                     Name = "B",
-                    TotalHealth = 10
+                    StartingHealth = 10
                 },
                 new Pokemon
                 {
                     Name = "C",
-                    TotalHealth = 20
+                    StartingHealth = 20
                 },
                 new Pokemon
                 {
                     Name = "D",
-                    TotalHealth = 15
+                    StartingHealth = 15
                 },
                 new Pokemon
                 {
                     Name = "E",
-                    TotalHealth = 15
+                    StartingHealth = 15
                 },
                 new Pokemon
                 {
                     Name = "F",
-                    TotalHealth = 30
+                    StartingHealth = 30
                 },
                 new Pokemon
                 {
                     Name = "G",
-                    TotalHealth = 20
+                    StartingHealth = 20
                 },
                 new Pokemon
                 {
                     Name = "H",
-                    TotalHealth = 20
+                    StartingHealth = 20
                 },
                 new Pokemon
                 {
                     Name = "I",
-                    TotalHealth = 50
+                    StartingHealth = 50
                 },
                 new Pokemon
                 {
                     Name = "Meowth",
-                    TotalHealth = 50
+                    StartingHealth = 50
                 }
             };
 
