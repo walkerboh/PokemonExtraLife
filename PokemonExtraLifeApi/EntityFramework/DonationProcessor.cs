@@ -13,7 +13,7 @@ namespace PokemonExtraLifeApi.EntityFramework
         {
             using (ExtraLifeContext context = new ExtraLifeContext())
             {
-                Donation nextDonation = context.Donations.FirstOrDefault(d => !d.Processed);
+                Donation nextDonation = context.Donations.OrderBy(d=>d.Time).FirstOrDefault(d => !d.Processed);
 
                 List<PokemonOrder> pokemonOrders = context.PokemonOrders.Include("Pokemon").Include("Trainer.PokemonOrders.Pokemon").ToList();
 
@@ -71,9 +71,7 @@ namespace PokemonExtraLifeApi.EntityFramework
         {
             Pokemon nextPokemon = null;
             Trainer nextTrainer = null;
-            PokemonOrder nextPo = null;
-
-            currentPo.ForceDone = true;
+            PokemonOrder nextPo;
 
             if (activeGroup != null && (currentPo.GroupId == activeGroup.Id || trainer.Done))
             {
