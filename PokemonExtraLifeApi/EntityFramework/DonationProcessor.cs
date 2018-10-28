@@ -10,43 +10,37 @@ namespace PokemonExtraLifeApi.EntityFramework
     {
         public static (Donation, Pokemon, Pokemon, Trainer, Host) GetNextDonation()
         {
-            using (var context = new ExtraLifeContext())
+            using (ExtraLifeContext context = new ExtraLifeContext())
             {
-                var nextDonation = context.Donations.FirstOrDefault(d => !d.Processed);
+                Donation nextDonation = context.Donations.FirstOrDefault(d => !d.Processed);
 
                 if (nextDonation == null)
                     return (null, null, null, null, null);
 
-                var pokemonOrders = context.PokemonOrders.Include("Pokemon").Include("Trainer").ToList();
+                List<PokemonOrder> pokemonOrders = context.PokemonOrders.Include("Pokemon").Include("Trainer").ToList();
 
-                var currentPo = pokemonOrders.FirstOrDefault(po => po.Activated && !po.Done);
+                PokemonOrder currentPo = pokemonOrders.FirstOrDefault(po => po.Activated && !po.Done);
 
-                if (currentPo == null)
-                {
-                    return (nextDonation, null, null, null, null);
-                }
+                if (currentPo == null) return (nextDonation, null, null, null, null);
 
-                var pokemon = currentPo.Pokemon;
-                var trainer = currentPo.Trainer;
+                Pokemon pokemon = currentPo.Pokemon;
+                Trainer trainer = currentPo.Trainer;
 
-                var overkillRemainder = nextDonation.Amount - pokemon.TotalHealth + pokemon.Damage;
+                decimal overkillRemainder = nextDonation.Amount - pokemon.TotalHealth + pokemon.Damage;
                 pokemon.Damage += nextDonation.Amount;
 
                 Pokemon nextPokemon = null;
                 Trainer nextTrainer = null;
                 Host nextHost = null;
 
-                var activeGroup = context.ActiveGroup;
+                Group activeGroup = context.ActiveGroup;
 
                 // Force new pokemon if current pokemon is not in newly activated group
-                if (pokemon.Damage >= pokemon.TotalHealth || (!currentPo.GroupId.HasValue && activeGroup != null) || (currentPo.GroupId.HasValue && activeGroup == null))
-                {
-                    (nextPokemon, nextTrainer, nextHost) = GetNextItems(context, activeGroup, currentPo, trainer, pokemonOrders);
-                }
+                if (pokemon.Damage >= pokemon.TotalHealth || !currentPo.GroupId.HasValue && activeGroup != null || currentPo.GroupId.HasValue && activeGroup == null) (nextPokemon, nextTrainer, nextHost) = GetNextItems(context, activeGroup, currentPo, trainer, pokemonOrders);
 
                 if (nextPokemon?.PokemonOrder?.Trainer != null && !nextPokemon.PokemonOrder.Trainer.Leader && overkillRemainder >= 10)
                 {
-                    var damage = Math.Floor(overkillRemainder / 2.5m);
+                    decimal damage = Math.Floor(overkillRemainder / 2.5m);
                     nextPokemon.Damage += Math.Min(damage, nextPokemon.TotalHealth - 1);
                 }
 
@@ -68,7 +62,7 @@ namespace PokemonExtraLifeApi.EntityFramework
 
             if (activeGroup != null)
             {
-                var currentPoInGroup = currentPo.GroupId.HasValue && currentPo.GroupId.Value.Equals(activeGroup.Id);
+                bool currentPoInGroup = currentPo.GroupId.HasValue && currentPo.GroupId.Value.Equals(activeGroup.Id);
                 nextPo = activeGroup.PokemonOrders.FirstOrDefault(po => po.Sequence == (currentPoInGroup ? currentPo.Sequence + 1 : 1));
             }
 
@@ -77,13 +71,9 @@ namespace PokemonExtraLifeApi.EntityFramework
             {
                 // Will only occur if group was active but is now complete
                 if (currentPo.GroupId.HasValue)
-                {
                     nextPo = pokemonOrders.FirstOrDefault(po => po.Sequence == context.PokemonOrders.Include(po1 => po1.Pokemon).ToList().Where(po1 => !po1.GroupId.HasValue && po1.Done).Max(po1 => po1.Sequence) + 1);
-                }
                 else
-                {
                     nextPo = pokemonOrders.FirstOrDefault(po => po.Sequence == currentPo.Sequence + 1 && !po.GroupId.HasValue);
-                }
             }
 
             // If null, we are out of Pokemon
@@ -94,7 +84,7 @@ namespace PokemonExtraLifeApi.EntityFramework
                 nextTrainer = nextPo.Trainer.Id.Equals(trainer.Id) ? null : nextPo.Trainer;
             }
 
-            var displayStatus = context.GetDisplayStatus();
+            DisplayStatus displayStatus = context.GetDisplayStatus();
             displayStatus.CurrentHostId = (displayStatus.CurrentHostId + 1) % (context.Hosts.Count() + 1);
 
             displayStatus.CurrentHostId = displayStatus.CurrentHostId == 0 ? 1 : displayStatus.CurrentHostId;

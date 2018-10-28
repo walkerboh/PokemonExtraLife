@@ -9,16 +9,18 @@ namespace PokemonExtraLifeApi.Controllers
 {
     public class DonationsController : ApiController
     {
-        private JsonSerializerSettings settings = new JsonSerializerSettings
+        private readonly JsonSerializerSettings settings = new JsonSerializerSettings
         {
             ReferenceLoopHandling = ReferenceLoopHandling.Ignore
         };
-        
+
         [HttpGet]
         public IHttpActionResult Donations()
         {
             using (ExtraLifeContext context = new ExtraLifeContext())
+            {
                 return Json(context.Donations.ToList());
+            }
         }
 
         [HttpGet]
@@ -41,9 +43,9 @@ namespace PokemonExtraLifeApi.Controllers
         [HttpGet]
         public IHttpActionResult Games()
         {
-            using (var context = new ExtraLifeContext())
+            using (ExtraLifeContext context = new ExtraLifeContext())
             {
-                var displayStatus = context.GetDisplayStatus();
+                DisplayStatus displayStatus = context.GetDisplayStatus();
 
                 return Json(new
                 {

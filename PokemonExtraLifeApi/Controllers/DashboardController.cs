@@ -1,8 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
-using System.Web.UI.WebControls;
 using PokemonExtraLifeApi.EntityFramework;
 using PokemonExtraLifeApi.Models.API;
 using PokemonExtraLifeApi.Models.Dashboard;
@@ -38,6 +38,14 @@ namespace PokemonExtraLifeApi.Controllers
         }
 
         [HttpPost]
+        public ActionResult UpdateSummary(SummaryModel model)
+        {
+            UpdateDisplayStatus(model);
+
+            return PartialView("Summary", GetSummaryModel());
+        }
+
+        [HttpPost]
         public ActionResult UpdateGames(GamesModel model)
         {
             UpdateGamesDb(model);
@@ -52,20 +60,21 @@ namespace PokemonExtraLifeApi.Controllers
                 GroupModel = GetGroupModel(),
                 SummaryModel = GetSummaryModel(),
                 GamesModel = GetGamesModel(),
-                DonationsModel = GetDonationsModel()
+                DonationsModel = GetDonationsModel(),
+                PokemonStatusModel = GetPokemonStatusModel()
             };
         }
 
         private SummaryModel GetSummaryModel()
         {
-            using (var context = new ExtraLifeContext())
+            using (ExtraLifeContext context = new ExtraLifeContext())
             {
-                var donations = context.Donations.ToList();
-                var displayStatus = context.GetDisplayStatus();
+                List<Donation> donations = context.Donations.ToList();
+                DisplayStatus displayStatus = context.GetDisplayStatus();
 
-                var currentHost = context.Hosts.First(h => h.Id == displayStatus.CurrentHostId);
+                Host currentHost = context.Hosts.First(h => h.Id == displayStatus.CurrentHostId);
 
-                var activePokemon = context.PokemonOrders.Include(po => po.Pokemon).ToList().FirstOrDefault(po => po.Activated && !po.Done)?.Pokemon;
+                Pokemon activePokemon = context.PokemonOrders.Include(po => po.Pokemon).ToList().FirstOrDefault(po => po.Activated && !po.Done)?.Pokemon;
 
                 return new SummaryModel
                 {
@@ -73,16 +82,30 @@ namespace PokemonExtraLifeApi.Controllers
                     ActivePokemon = activePokemon,
                     TotalDonations = donations.Count,
                     TotalDonationAmount = donations.Sum(d => d.Amount),
-                    DonationGoal = displayStatus.DonationGoal
+                    DonationGoal = displayStatus.DonationGoal,
+                    TrackDonations = displayStatus.TrackDonations
                 };
+            }
+        }
+
+        private void UpdateDisplayStatus(SummaryModel model)
+        {
+            using (ExtraLifeContext context = new ExtraLifeContext())
+            {
+                DisplayStatus displayStatus = context.GetDisplayStatus();
+
+                displayStatus.TrackDonations = model.TrackDonations;
+                displayStatus.DonationGoal = model.DonationGoal;
+
+                context.SaveChanges();
             }
         }
 
         private GroupModel GetGroupModel()
         {
-            using (var context = new ExtraLifeContext())
+            using (ExtraLifeContext context = new ExtraLifeContext())
             {
-                var groups = context.Groups.ToList();
+                List<Group> groups = context.Groups.ToList();
 
                 return new GroupModel
                 {
@@ -95,9 +118,9 @@ namespace PokemonExtraLifeApi.Controllers
 
         private void ActivateGroup(int groupId)
         {
-            using (var context = new ExtraLifeContext())
+            using (ExtraLifeContext context = new ExtraLifeContext())
             {
-                var group = context.Groups.First(g => g.Id == groupId);
+                Group group = context.Groups.First(g => g.Id == groupId);
                 group.Started = true;
                 group.StartTime = DateTime.Now;
                 context.SaveChanges();
@@ -106,16 +129,13 @@ namespace PokemonExtraLifeApi.Controllers
 
         private void ForceStopGroup()
         {
-            using (var context = new ExtraLifeContext())
+            using (ExtraLifeContext context = new ExtraLifeContext())
             {
-                var groups = context.Groups.Where(g => g.Started);
+                IQueryable<Group> groups = context.Groups.Where(g => g.Started);
 
-                foreach (var group in groups)
+                foreach (Group group in groups)
                 {
-                    if (!group.Done)
-                    {
-                        group.ForceComplete = true;
-                    }
+                    if (!group.Done) group.ForceComplete = true;
                 }
 
                 context.SaveChanges();
@@ -124,9 +144,9 @@ namespace PokemonExtraLifeApi.Controllers
 
         private GamesModel GetGamesModel()
         {
-            using (var context = new ExtraLifeContext())
+            using (ExtraLifeContext context = new ExtraLifeContext())
             {
-                var displayStatus = context.GetDisplayStatus();
+                DisplayStatus displayStatus = context.GetDisplayStatus();
 
                 return new GamesModel
                 {
@@ -139,9 +159,9 @@ namespace PokemonExtraLifeApi.Controllers
 
         private void UpdateGamesDb(GamesModel model)
         {
-            using (var context = new ExtraLifeContext())
+            using (ExtraLifeContext context = new ExtraLifeContext())
             {
-                var displayStatus = context.GetDisplayStatus();
+                DisplayStatus displayStatus = context.GetDisplayStatus();
 
                 displayStatus.CurrentGame = model.CurrentGame;
                 displayStatus.NextGame = model.NextGame;
@@ -153,12 +173,32 @@ namespace PokemonExtraLifeApi.Controllers
 
         private DonationsModel GetDonationsModel()
         {
-            using (var context = new ExtraLifeContext())
+            using (ExtraLifeContext context = new ExtraLifeContext())
             {
                 return new DonationsModel
                 {
                     Donations = context.Donations.OrderByDescending(d => d.Time).ToList()
                 };
+            }
+        }
+
+        private PokemonStatusModel GetPokemonStatusModel()
+        {
+            using (ExtraLifeContext context = new ExtraLifeContext())
+            {
+                PokemonOrder currentPo = context.PokemonOrders.Include("Pokemon").Include("Trainer").ToList().FirstOrDefault(po => po.Activated && !po.Done);
+
+                if (currentPo != null)
+                {
+                    return new PokemonStatusModel
+                    {
+                        CurrentPokemon = currentPo.Pokemon,
+                        CurrentTrainer = currentPo.Trainer,
+                        CurrentGym = currentPo.Trainer.Gym
+                    };
+                }
+
+                return new PokemonStatusModel();
             }
         }
     }

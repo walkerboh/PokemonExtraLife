@@ -1,23 +1,38 @@
 @model PokemonExtraLifeApi.Models.Dashboard.SummaryModel
 
-<div>
-    <h2>Stream Summary</h2>
-    <table>
-        <tr>
-            <th>Current Time</th>
-            <td>@DateTime.Now.ToString("MM/dd/yyyy hh:mm tt")</td>
-        </tr>
-        <tr>
-            <th>Number of Donations</th>
-            <td>@Model.TotalDonations</td>
-        </tr>
-        <tr>
-            <th>Total Raised</th>
-            <td>@string.Format("{0:c2}", Model.TotalDonationAmount)</td>
-        </tr>
-        <tr>
-            <th>Donation Goal</th>
-            <td>@Html.TextBoxFor(m=>m.DonationGoal)</td>
-        </tr>
-    </table>
+<div id="SummarySection">
+    @using (Ajax.BeginForm("UpdateSummary", "Dashboard", new AjaxOptions
+    {
+        UpdateTargetId = "SummarySection",
+        InsertionMode = InsertionMode.Replace,
+        HttpMethod = "POST"
+    }))
+    {
+        <h2>Stream Summary</h2>
+        <table>
+            <tr>
+                <th>Current Time</th>
+                <td>@DateTime.Now.ToString("MM/dd/yyyy hh:mm tt")</td>
+            </tr>
+            <tr>
+                <th>Number of Donations</th>
+                <td>@Model.TotalDonations</td>
+            </tr>
+            <tr>
+                <th>Total Raised</th>
+                <td>@($"{Model.TotalDonationAmount:c2}")</td>
+            </tr>
+            <tr>
+                <th>Donation Goal</th>
+                <td>@Html.TextBoxFor(m => m.DonationGoal)</td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(m => m.TrackDonations)
+                    @Html.CheckBoxFor(m => m.TrackDonations)
+                </td>
+            </tr>
+        </table>
+        <input type="submit"/>
+    }
 </div>

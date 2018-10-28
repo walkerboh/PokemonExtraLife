@@ -237,6 +237,7 @@
     <Compile Include="Models\Dashboard\DonationsModel.cs" />
     <Compile Include="Models\Dashboard\GamesModel.cs" />
     <Compile Include="Models\Dashboard\GroupModel.cs" />
+    <Compile Include="Models\Dashboard\PokemonStatusModel.cs" />
     <Compile Include="Models\Dashboard\SummaryModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -294,6 +295,7 @@
     <Content Include="Content\bootstrap-reboot.css.map" />
     <Content Include="Content\bootstrap-grid.min.css.map" />
     <Content Include="Content\bootstrap-grid.css.map" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -321,6 +323,7 @@
     <Content Include="Views\Dashboard\Games.cshtml" />
     <Content Include="Views\Dashboard\Group.cshtml" />
     <Content Include="Views\Dashboard\Index.cshtml" />
+    <Content Include="Views\Dashboard\PokemonStatus.cshtml" />
     <Content Include="Views\Dashboard\Summary.cshtml" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">

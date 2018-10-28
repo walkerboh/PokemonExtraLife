@@ -1,4 +1,4 @@
-﻿using System.CodeDom;
+﻿using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Linq;
@@ -22,6 +22,8 @@ namespace PokemonExtraLifeApi.EntityFramework
         public DbSet<Group> Groups { get; set; }
         public DbSet<DisplayStatus> DisplayStatus { get; set; }
 
+        public Group ActiveGroup => Groups.Include("PokemonOrders.Pokemon").ToList().FirstOrDefault(g => g.Started && !g.Done);
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
@@ -29,24 +31,22 @@ namespace PokemonExtraLifeApi.EntityFramework
             base.OnModelCreating(modelBuilder);
         }
 
-        public Group ActiveGroup => Groups.Include("PokemonOrders.Pokemon").ToList().FirstOrDefault(g => g.Started && !g.Done);
-
         public Gym GetCurrentGym()
         {
-            var group = ActiveGroup;
+            Group group = ActiveGroup;
 
             if (group != null)
                 return group.Gym;
 
-            var pos = PokemonOrders.Include(po => po.Pokemon).Include(po => po.Trainer).ToList();
-            var order = pos.FirstOrDefault(po => po.Activated && !po.Done);
+            List<PokemonOrder> pos = PokemonOrders.Include(po => po.Pokemon).Include(po => po.Trainer).ToList();
+            PokemonOrder order = pos.FirstOrDefault(po => po.Activated && !po.Done);
 
             return order?.Trainer.Gym ?? Gym.Blue;
         }
 
         public DisplayStatus GetDisplayStatus()
         {
-            var displayStatus = DisplayStatus.FirstOrDefault();
+            DisplayStatus displayStatus = DisplayStatus.FirstOrDefault();
 
             if (displayStatus == null)
             {

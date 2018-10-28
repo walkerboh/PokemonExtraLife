@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Data.Entity;
 using PokemonExtraLifeApi.Models.API;
 
 namespace PokemonExtraLifeApi.EntityFramework
 {
-    public class ExtraLifeInitializer : System.Data.Entity.CreateDatabaseIfNotExists<ExtraLifeContext>
+    public class ExtraLifeInitializer : CreateDatabaseIfNotExists<ExtraLifeContext>
     {
         protected override void Seed(ExtraLifeContext context)
         {
@@ -13,8 +14,8 @@ namespace PokemonExtraLifeApi.EntityFramework
                 Gym = Gym.TeamRocketAlpha
             });
             context.SaveChanges();
-            
-            var pokemon = new List<Pokemon>
+
+            List<Pokemon> pokemon = new List<Pokemon>
             {
                 new Pokemon
                 {
@@ -89,7 +90,7 @@ namespace PokemonExtraLifeApi.EntityFramework
             context.Pokemon.AddRange(pokemon);
             context.SaveChanges();
 
-            var trainers = new List<Trainer>
+            List<Trainer> trainers = new List<Trainer>
             {
                 new Trainer
                 {
@@ -117,7 +118,7 @@ namespace PokemonExtraLifeApi.EntityFramework
             context.SaveChanges();
 
 
-            var po = new List<PokemonOrder>
+            List<PokemonOrder> po = new List<PokemonOrder>
             {
                 new PokemonOrder
                 {
@@ -186,7 +187,7 @@ namespace PokemonExtraLifeApi.EntityFramework
             context.PokemonOrders.AddRange(po);
             context.SaveChanges();
 
-            var hosts = new List<Host>
+            List<Host> hosts = new List<Host>
             {
                 new Host
                 {
@@ -219,7 +220,8 @@ namespace PokemonExtraLifeApi.EntityFramework
                 CurrentGame = string.Empty,
                 DonationGoal = 2000,
                 FollowingGame = string.Empty,
-                NextGame = string.Empty
+                NextGame = string.Empty,
+                TrackDonations = true
             });
             context.SaveChanges();
         }

@@ -12,7 +12,7 @@ namespace PokemonExtraLifeApi.Models.API
         public bool Started { get; set; }
         public bool ForceComplete { get; set; }
         public bool PokemonComplete => PokemonOrders.All(po => po.Done);
-        public bool Done => ForceComplete || PokemonComplete || StartTime.AddMinutes(DurationMinutes) < DateTime.Now;
+        public bool Done => ForceComplete || PokemonComplete || DurationMinutes > 0 && StartTime.AddMinutes(DurationMinutes) < DateTime.Now;
         public int DurationMinutes { get; set; }
         public DateTime StartTime { get; set; }
 

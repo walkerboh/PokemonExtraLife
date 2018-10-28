@@ -11,6 +11,7 @@ namespace PokemonExtraLifeApi.Models.API
         public DateTime Time { get; set; }
         public string Message { get; set; }
         public Gym? Gym { get; set; }
+
         [JsonIgnore]
         public bool Processed { get; set; }
     }

@@ -12,19 +12,19 @@
     {
         <h3>Games!</h3>
         <div>
-            @Html.LabelFor(m=>m.CurrentGame)
-            @Html.TextBoxFor(m=>m.CurrentGame)
+            @Html.LabelFor(m => m.CurrentGame)
+            @Html.TextBoxFor(m => m.CurrentGame)
         </div>
         <div>
-            @Html.LabelFor(m=>m.NextGame)
-            @Html.TextBoxFor(m=>m.NextGame)
+            @Html.LabelFor(m => m.NextGame)
+            @Html.TextBoxFor(m => m.NextGame)
         </div>
         <div>
-            @Html.LabelFor(m=>m.FollowingGame)
-            @Html.TextBoxFor(m=>m.FollowingGame)
+            @Html.LabelFor(m => m.FollowingGame)
+            @Html.TextBoxFor(m => m.FollowingGame)
         </div>
         <div>
-        <button type="button" onclick="ShiftGames()">Shift Games "Up"</button>
+            <button type="button" onclick="ShiftGames()">Shift Games "Up"</button>
             <button type="submit">Update Games</button>
         </div>
     }

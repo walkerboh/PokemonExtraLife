@@ -14,7 +14,7 @@ namespace PokemonExtraLifeApi.Models.API
 
         public int PokemonLeft => PokemonOrders.Count(po => !po.Done);
         public bool Done => PokemonOrders.All(po => po.Done);
-        
+
         [JsonIgnore]
         public virtual ICollection<PokemonOrder> PokemonOrders { get; set; }
     }

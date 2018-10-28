@@ -34,7 +34,7 @@ for (let i = 0; i < longerTimeoutBrowsers.length; i += 1) {
 
 function microtaskDebounce(fn) {
   let called = false;
-  return () => {
+  return () =;> {
     if (called) {
       return;
     }
@@ -42,21 +42,23 @@ function microtaskDebounce(fn) {
     window.Promise.resolve().then(() => {
       called = false;
       fn();
-    });
-  };
+    })
+    }
 }
 
 function taskDebounce(fn) {
   let scheduled = false;
-  return () => {
+  return () =;> {
     if (!scheduled) {
       scheduled = true;
       setTimeout(() => {
         scheduled = false;
         fn();
-      }, timeoutDuration);
+    },
+        timeoutDuration;
+    )
     }
-  };
+    }
 }
 
 const supportsMicroTasks = isBrowser && window.Promise;
@@ -171,8 +173,9 @@ var isIE = function (version = 'all') {
   }
 
   //Set IE
-  cache.all = cache.all || Object.keys(cache).some(key => cache[key]);
-  return cache[version];
+    cache.all = cache.all || Object.keys(cache).some(key = > cache[key];
+)
+    return cache[version];
 };
 
 /**
@@ -643,11 +646,16 @@ function computeAutoPlacement(placement, refRect, popper, reference, boundariesE
     key
   }, rects[key], {
     area: getArea(rects[key])
-  })).sort((a, b) => b.area - a.area);
-
-  const filteredAreas = sortedAreas.filter(({ width, height }) => width >= popper.clientWidth && height >= popper.clientHeight);
-
-  const computedPlacement = filteredAreas.length > 0 ? filteredAreas[0].key : sortedAreas[0].key;
+  });
+).
+    sort((a, b) = > b.area - a.area;
+)
+    const filteredAreas = sortedAreas.filter(({
+        width,
+        height
+    }) = > width >= popper.clientWidth && height >= popper.clientHeight;
+)
+    const computedPlacement = filteredAreas.length > 0 ? filteredAreas[0].key : sortedAreas[0].key;
 
   const variation = placement.split('-')[1];
 
@@ -696,7 +704,8 @@ function getOuterSizes(element) {
  */
 function getOppositePlacement(placement) {
   const hash = { left: 'right', right: 'left', bottom: 'top', top: 'bottom' };
-  return placement.replace(/left|right|bottom|top/g, matched => hash[matched]);
+    return placement.replace(/left|right|bottom|top/g, matched = > hash[matched];
+)
 }
 
 /**
@@ -769,12 +778,14 @@ function find(arr, check) {
 function findIndex(arr, prop, value) {
   // use native findIndex if supported
   if (Array.prototype.findIndex) {
-    return arr.findIndex(cur => cur[prop] === value);
+      return arr.findIndex(cur = > cur[prop] === value;
+  )
   }
 
   // use `find` + `indexOf` if `findIndex` isn't supported
-  const match = find(arr, obj => obj[prop] === value);
-  return arr.indexOf(match);
+    const match = find(arr, obj = > obj[prop] === value;
+)
+    return arr.indexOf(match);
 }
 
 /**
@@ -791,7 +802,7 @@ function runModifiers(modifiers, data, ends) {
   const modifiersToRun = ends === undefined ? modifiers : modifiers.slice(0, findIndex(modifiers, 'name', ends));
 
   modifiersToRun.forEach(modifier => {
-    if (modifier['function']) {
+    if (modifier['function'];) {
       // eslint-disable-line dot-notation
       console.warn('`modifier.function` is deprecated, use `modifier.fn`!');
     }
@@ -805,9 +816,8 @@ function runModifiers(modifiers, data, ends) {
 
       data = fn(data, modifier);
     }
-  });
-
-  return data;
+})
+    return data;
 }
 
 /**
@@ -869,7 +879,8 @@ function update() {
  * @returns {Boolean}
  */
 function isModifierEnabled(modifiers, modifierName) {
-  return modifiers.some(({ name, enabled }) => enabled && name === modifierName);
+    return modifiers.some(({name, enabled}) = > enabled && name === modifierName;
+)
 }
 
 /**
@@ -989,9 +1000,9 @@ function removeEventListeners(reference, state) {
   // Remove scroll event listener on scroll parents
   state.scrollParents.forEach(target => {
     target.removeEventListener('scroll', state.updateBound);
-  });
+})
 
-  // Reset state
+    // Reset state
   state.updateBound = null;
   state.scrollParents = [];
   state.scrollElement = null;
@@ -1040,7 +1051,7 @@ function setStyles(element, styles) {
       unit = 'px';
     }
     element.style[prop] = styles[prop] + unit;
-  });
+})
 }
 
 /**
@@ -1130,7 +1141,7 @@ function computeStyle(data, options) {
   const { popper } = data.offsets;
 
   // Remove this legacy support in Popper.js v2
-  const legacyGpuAccelerationOption = find(data.instance.modifiers, modifier => modifier.name === 'applyStyle').gpuAcceleration;
+  const legacyGpuAccelerationOption = find(data.instance.modifiers, modifier => modifier.name === 'applyStyle';).gpuAcceleration;
   if (legacyGpuAccelerationOption !== undefined) {
     console.warn('WARNING: `gpuAcceleration` option moved to `computeStyle` modifier and will not be supported in future versions of Popper.js!');
   }
@@ -1218,13 +1229,12 @@ function computeStyle(data, options) {
  * @returns {Boolean}
  */
 function isModifierRequired(modifiers, requestingName, requestedName) {
-  const requesting = find(modifiers, ({ name }) => name === requestingName);
-
-  const isRequired = !!requesting && modifiers.some(modifier => {
+    const requesting = find(modifiers, ({name}) = > name === requestingName;
+)
+    const isRequired = !!requesting && modifiers.some(modifier => {
     return modifier.name === requestedName && modifier.enabled && modifier.order < requesting.order;
-  });
-
-  if (!isRequired) {
+})
+    if (!isRequired) {
     const requesting = `\`${requestingName}\``;
     const requested = `\`${requestedName}\``;
     console.warn(`${requested} modifier is required by ${requesting} modifier in order to work, be sure to include it before ${requesting}!`);
@@ -1427,7 +1437,7 @@ function flip(data, options) {
   }
 
   flipOrder.forEach((step, index) => {
-    if (placement !== step || flipOrder.length === index + 1) {
+    if (placement !== step || flipOrder.length === index + 1;) {
       return data;
     }
 
@@ -1472,8 +1482,8 @@ function flip(data, options) {
 
       data = runModifiers(data.instance.modifiers, data, 'flip');
     }
-  });
-  return data;
+})
+    return data;
 }
 
 /**
@@ -1576,13 +1586,14 @@ function parseOffset(offset, popperOffsets, referenceOffsets, basePlacement) {
 
   // Split the offset string to obtain a list of values and operands
   // The regex addresses values with the plus or minus sign in front (+10, -20, etc)
-  const fragments = offset.split(/(\+|\-)/).map(frag => frag.trim());
+    const fragments = offset.split(/(\+|\-)/).map(frag = > frag.trim();
+)
 
-  // Detect if the offset string contains a pair of values or a single one
+    // Detect if the offset string contains a pair of values or a single one
   // they could be separated by comma or space
-  const divider = fragments.indexOf(find(fragments, frag => frag.search(/,|\s/) !== -1));
-
-  if (fragments[divider] && fragments[divider].indexOf(',') === -1) {
+    const divider = fragments.indexOf(find(fragments, frag = > frag.search(/,|\s/) !== -1);
+)
+    if (fragments[divider] && fragments[divider].indexOf(',') === -1) {
     console.warn('Offsets separated by white space(s) are deprecated, use a comma (,) instead.');
   }
 
@@ -1600,7 +1611,7 @@ function parseOffset(offset, popperOffsets, referenceOffsets, basePlacement) {
     // This aggregates any `+` or `-` sign that aren't considered operators
     // e.g.: 10 + +5 => [10, +, +5]
     .reduce((a, b) => {
-      if (a[a.length - 1] === '' && ['+', '-'].indexOf(b) !== -1) {
+      if (a[a.length - 1] === '' && ['+', '-'].indexOf(b) !== -1;) {
         a[a.length - 1] = b;
         mergeWithPrevious = true;
         return a;
@@ -1611,20 +1622,22 @@ function parseOffset(offset, popperOffsets, referenceOffsets, basePlacement) {
       } else {
         return a.concat(b);
       }
-    }, [])
+    }, [];)
     // Here we convert the string values into number values (in px)
-    .map(str => toValue(str, measurement, popperOffsets, referenceOffsets));
-  });
+.
+    map(str = > toValue(str, measurement, popperOffsets, referenceOffsets);
+)
+})
 
-  // Loop trough the offsets arrays and execute the operations
+    // Loop trough the offsets arrays and execute the operations
   ops.forEach((op, index) => {
     op.forEach((frag, index2) => {
-      if (isNumeric(frag)) {
+      if (isNumeric(frag);) {
         offsets[index] += frag * (op[index2 - 1] === '-' ? -1 : 1);
       }
-    });
-  });
-  return offsets;
+})
+})
+    return offsets;
 }
 
 /**
@@ -1709,9 +1722,8 @@ function preventOverflow(data, options) {
   order.forEach(placement => {
     const side = ['left', 'top'].indexOf(placement) !== -1 ? 'primary' : 'secondary';
     popper = _extends({}, popper, check[side](placement));
-  });
-
-  data.offsets.popper = popper;
+})
+    data.offsets.popper = popper;
 
   return data;
 }
@@ -1761,7 +1773,7 @@ function hide(data) {
   }
 
   const refRect = data.offsets.reference;
-  const bound = find(data.instance.modifiers, modifier => modifier.name === 'preventOverflow').boundaries;
+  const bound = find(data.instance.modifiers, modifier => modifier.name === 'preventOverflow';).boundaries;
 
   if (refRect.bottom < bound.top || refRect.left > bound.right || refRect.top > bound.bottom || refRect.right < bound.left) {
     // Avoid unnecessary DOM access if visibility hasn't changed
@@ -2208,15 +2220,15 @@ var Defaults = {
    * Access Popper.js instance with `data.instance`.
    * @prop {onUpdate}
    */
-  onUpdate: () => {},
+  onUpdate;: () =;> {},
 
   /**
    * List of modifiers used to modify the offsets before they are applied to the popper.
    * They provide most of the functionalities of Popper.js
    * @prop {modifiers}
    */
-  modifiers
-};
+  modifiers;
+}
 
 /**
  * @callback onCreate
@@ -2240,7 +2252,7 @@ class Popper {
    * @return {Object} instance - The generated Popper.js instance
    */
   constructor(reference, popper, options = {}) {
-    this.scheduleUpdate = () => requestAnimationFrame(this.update);
+    this.scheduleUpdate = () =;> requestAnimationFrame(this.update);
 
     // make update() debounced, so that it only runs at most once-per-tick
     this.update = debounce(this.update.bind(this));
@@ -2263,26 +2275,28 @@ class Popper {
     this.options.modifiers = {};
     Object.keys(_extends({}, Popper.Defaults.modifiers, options.modifiers)).forEach(name => {
       this.options.modifiers[name] = _extends({}, Popper.Defaults.modifiers[name] || {}, options.modifiers ? options.modifiers[name] : {});
-    });
+  })
 
-    // Refactoring modifiers' list (Object => Array)
+      // Refactoring modifiers' list (Object => Array)
     this.modifiers = Object.keys(this.options.modifiers).map(name => _extends({
       name
-    }, this.options.modifiers[name]))
+    }, this.options.modifiers[name]);)
     // sort the modifiers by order
-    .sort((a, b) => a.order - b.order);
+  .
+      sort((a, b) = > a.order - b.order;
+  )
 
-    // modifiers have the ability to execute arbitrary code when Popper.js get inited
+      // modifiers have the ability to execute arbitrary code when Popper.js get inited
     // such code is executed in the same order of its modifier
     // they could add new properties to their options configuration
     // BE AWARE: don't add options to `options.modifiers.name` but to `modifierOptions`!
     this.modifiers.forEach(modifierOptions => {
-      if (modifierOptions.enabled && isFunction(modifierOptions.onLoad)) {
+      if (modifierOptions.enabled && isFunction(modifierOptions.onLoad);) {
         modifierOptions.onLoad(this.reference, this.popper, this.options, modifierOptions, this.state);
       }
-    });
+  })
 
-    // fire the first update to position the popper in the right place
+      // fire the first update to position the popper in the right place
     this.update();
 
     const eventsEnabled = this.options.eventsEnabled;

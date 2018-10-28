@@ -1,8 +1,9 @@
+@using PokemonExtraLifeApi.Models.API
 @model PokemonExtraLifeApi.Models.Dashboard.DonationsModel
 
 <h2>Donations</h2>
 <div style="height: 80vh; overflow: scroll">
-    @foreach (var donation in Model.Donations)
+    @foreach (Donation donation in Model.Donations)
     {
         <div style="border-bottom: 1px solid black">
             <div>@donation.Donor</div>

@@ -8,9 +8,9 @@ namespace PokemonExtraLifeApi.EntityFramework
         public NpgSqlConfiguration()
         {
             SetProviderFactory("Npgsql", NpgsqlFactory.Instance);
-            
+
             SetProviderServices("Npgsql", NpgsqlServices.Instance);
-            
+
             SetDefaultConnectionFactory(new NpgsqlConnectionFactory());
         }
     }

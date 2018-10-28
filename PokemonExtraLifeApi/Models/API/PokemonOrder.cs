@@ -6,8 +6,11 @@ namespace PokemonExtraLifeApi.Models.API
     public class PokemonOrder
     {
         public int Id { get; set; }
-        [Key, ForeignKey("Pokemon")]
+
+        [Key]
+        [ForeignKey("Pokemon")]
         public int PokemonId { get; set; }
+
         public int? TrainerId { get; set; }
         public int? GroupId { get; set; }
         public int Sequence { get; set; }
