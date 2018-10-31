@@ -19,7 +19,7 @@ namespace PokemonExtraLifeApi.ExtraLife
         public string DisplayName { get; set; }
 
         [JsonProperty("donorID")]
-        public Guid DonorId { get; set; }
+        public string DonorId { get; set; }
 
         [JsonProperty("message")]
         public string Message { get; set; }

@@ -1,8 +1,5 @@
-﻿using System.Data.Entity;
-using System.Linq;
-using System.Net;
+﻿using System.Linq;
 using System.Web.Http;
-using System.Web.Mvc;
 using Microsoft.Ajax.Utilities;
 using Newtonsoft.Json;
 using PokemonExtraLifeApi.EntityFramework;
@@ -17,7 +14,7 @@ namespace PokemonExtraLifeApi.Controllers
             ReferenceLoopHandling = ReferenceLoopHandling.Ignore
         };
 
-        [System.Web.Http.HttpGet]
+        [HttpGet]
         public IHttpActionResult NextDonation()
         {
             (Donation donation, Pokemon currentPokemon, Pokemon nextPokemon, Trainer currentTrainer, Trainer nextTrainer, Host currentHost, Host nextHost) = DonationProcessor.GetNextDonation();
@@ -25,7 +22,7 @@ namespace PokemonExtraLifeApi.Controllers
             return Json(new {donation, currentPokemon, nextPokemon, currentTrainer, nextTrainer, currentHost, nextHost}, settings);
         }
 
-        [System.Web.Http.HttpGet]
+        [HttpGet]
         public IHttpActionResult Games()
         {
             using (ExtraLifeContext context = new ExtraLifeContext())
@@ -41,7 +38,23 @@ namespace PokemonExtraLifeApi.Controllers
             }
         }
 
-        [System.Web.Http.HttpGet]
+        [HttpGet]
+        public IHttpActionResult Summary()
+        {
+            using (var context = new ExtraLifeContext())
+            {
+                var displayStatus = context.GetDisplayStatus();
+                
+                return Json(new
+                {
+                    numberOfDonations = context.Donations.Count(),
+                    totalDonationAmount = context.Donations.Sum(d => d.Amount),
+                    donationGoal = displayStatus.DonationGoal
+                });
+            }
+        }
+
+        [HttpGet]
         public IHttpActionResult Reset()
         {
             using (var context = new ExtraLifeContext())
