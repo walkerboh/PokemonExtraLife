@@ -38,24 +38,41 @@ namespace PokemonExtraLifeApi.EntityFramework
                 Trainer nextTrainer = null;
                 Host nextHost = null;
                 Host currentHost = context.Hosts.First(h => h.Id == displayStatus.CurrentHostId);
+                PokemonOrder nextPo = null;
                 
                 if (nextDonation != null)
                 {
-                    decimal overkillRemainder = nextDonation.Amount - pokemon.TotalHealth + pokemon.Damage;
+                    decimal overkillDamage = (nextDonation.Amount - pokemon.CurrentHealth) / 2m;
                     pokemon.Damage += nextDonation.Amount;
 
+                    context.SaveChanges();
+                    
                     Group activeGroup = context.ActiveGroup;
 
                     // New pokemon if KOed or group is ended and current PO is in a group
                     if (pokemon.Damage >= pokemon.TotalHealth || currentPo.GroupId.HasValue && activeGroup == null)
                     {
-                        (nextPokemon, nextTrainer, nextHost) = GetNextItems(context, activeGroup, currentPo, trainer, pokemonOrders, displayStatus);
+                        (nextPokemon, nextTrainer, nextHost, nextPo) = GetNextItems(context, currentPo, trainer, displayStatus);
                     }
 
-                    if (nextPokemon?.PokemonOrder?.Trainer != null && !nextPokemon.PokemonOrder.Trainer.Leader && overkillRemainder >= 10)
+                    if (nextPokemon?.PokemonOrder?.Trainer != null && !nextPokemon.PokemonOrder.Trainer.Leader && overkillDamage > 0)
                     {
-                        decimal damage = Math.Floor(overkillRemainder / 2.5m);
-                        nextPokemon.Damage += Math.Min(damage, nextPokemon.TotalHealth - 1);
+                        while (overkillDamage > 0)
+                        {
+                            // If there is less overkill damage than next pokemon's health, add damage and set overkill to 0 to break loop
+                            // Else, damage the pokemon fully, subtract the damage from the 
+                            if (overkillDamage < nextPokemon.CurrentHealth)
+                            {
+                                nextPokemon.Damage += overkillDamage;
+                                overkillDamage = 0;
+                            }
+                            else
+                            {
+                                overkillDamage -= nextPokemon.CurrentHealth;
+                                nextPokemon.Damage = nextPokemon.CurrentHealth;
+                                (nextPokemon, nextTrainer, _, nextPo) = GetNextItems(context, nextPo, trainer, displayStatus);
+                            }
+                        }
                     }
 
                     nextDonation.Processed = true;
@@ -67,8 +84,10 @@ namespace PokemonExtraLifeApi.EntityFramework
             }
         }
 
-        private static (Pokemon, Trainer, Host) GetNextItems(ExtraLifeContext context, Group activeGroup, PokemonOrder currentPo, Trainer trainer, IEnumerable<PokemonOrder> pokemonOrders, DisplayStatus displayStatus)
+        private static (Pokemon, Trainer, Host, PokemonOrder) GetNextItems(ExtraLifeContext context, PokemonOrder currentPo, Trainer trainer, DisplayStatus displayStatus)
         {
+            List<PokemonOrder> pokemonOrders = context.PokemonOrders.Include("Pokemon").Include("Trainer.PokemonOrders.Pokemon").ToList();
+            Group activeGroup = context.ActiveGroup;
             Pokemon nextPokemon = null;
             Trainer nextTrainer = null;
             PokemonOrder nextPo;
@@ -101,7 +120,9 @@ namespace PokemonExtraLifeApi.EntityFramework
 
             Host nextHost = context.Hosts.First(h => h.Id == displayStatus.CurrentHostId);
 
-            return (nextPokemon, nextTrainer, nextHost);
+            context.SaveChanges();
+
+            return (nextPokemon, nextTrainer, nextHost, nextPo);
         }
     }
 }

@@ -11,8 +11,8 @@
         Fire,
         Ground,
         EliteFour,
-        Blue,
-        TeamRocketAlpha,
-        TeamRocketBeta
+        TeamRocket,
+        TeamRocketRematch,
+        Lavender
     }
 }

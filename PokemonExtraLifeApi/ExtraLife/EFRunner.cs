@@ -22,7 +22,7 @@ namespace PokemonExtraLifeApi.ExtraLife
         {
             timer = new Timer();
             timer.Elapsed += GetDonations;
-            timer.Interval = 60000;
+            timer.Interval = 20000;
             timer.Enabled = true;
 
             GetDonations(null, null);
@@ -67,7 +67,7 @@ namespace PokemonExtraLifeApi.ExtraLife
 
                 if (displayStatus.TrackDonations)
                 {
-                    Gym currentGym = context.GetCurrentGym();
+                    Gym? currentGym = context.GetCurrentGym();
                     dbDonations = donations.Select(d => d.ToDbDonation(currentGym)).ToList();
                 }
                 else

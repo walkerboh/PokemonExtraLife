@@ -219,6 +219,9 @@
     <Compile Include="EntityFramework\DonationProcessor.cs" />
     <Compile Include="EntityFramework\ExtraLifeContext.cs" />
     <Compile Include="EntityFramework\ExtraLifeInitializer.cs" />
+    <Compile Include="EntityFramework\Initialization\PokemonInitialization.cs" />
+    <Compile Include="EntityFramework\Initialization\PokemonOrderInitialization.cs" />
+    <Compile Include="EntityFramework\Initialization\TrainerInitialization.cs" />
     <Compile Include="EntityFramework\NpgSqlConfiguration.cs" />
     <Compile Include="Enum\Gym.cs" />
     <Compile Include="ExtraLife\EFDonation.cs" />

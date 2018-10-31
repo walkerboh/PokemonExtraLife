@@ -1,5 +1,7 @@
 @model PokemonExtraLifeApi.Models.Dashboard.DashboardModel
 
+@Scripts.Render("~/bundles/js/Dashboard")
+
 <div class="row">
     <div class="col-4">
         @{ Html.RenderPartial("Donations", Model.DonationsModel); }

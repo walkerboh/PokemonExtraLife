@@ -31,7 +31,7 @@ namespace PokemonExtraLifeApi.EntityFramework
             base.OnModelCreating(modelBuilder);
         }
 
-        public Gym GetCurrentGym()
+        public Gym? GetCurrentGym()
         {
             Group group = ActiveGroup;
 
@@ -41,7 +41,7 @@ namespace PokemonExtraLifeApi.EntityFramework
             List<PokemonOrder> pos = PokemonOrders.Include(po => po.Pokemon).Include(po => po.Trainer).ToList();
             PokemonOrder order = pos.FirstOrDefault(po => po.Activated && !po.Done);
 
-            return order?.Trainer.Gym ?? Gym.Blue;
+            return order?.Trainer.Gym;
         }
 
         public DisplayStatus GetDisplayStatus()

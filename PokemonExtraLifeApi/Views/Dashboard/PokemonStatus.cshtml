@@ -2,16 +2,19 @@
 
 <div>
     <h2>Pokemon Status</h2>
-    <div>
-        Pokemon: @Model.CurrentPokemon.Name
-    </div>
-    <div>
-        Health: @Model.CurrentPokemon.CurrentHealth / @Model.CurrentPokemon.TotalHealth
-    </div>
-    <div>
-        Trainer: @Model.CurrentTrainer.Name
-    </div>
-    <div>
-        Gym: @Model.CurrentGym
-    </div>
+    @if (Model.CurrentPokemon != null)
+    {
+        <div>
+            Pokemon: @Model.CurrentPokemon.Name
+        </div>
+        <div>
+            Health: @Model.CurrentPokemon.CurrentHealth / @Model.CurrentPokemon.TotalHealth
+        </div>
+        <div>
+            Trainer: @Model.CurrentTrainer.Name
+        </div>
+        <div>
+            Gym: @Model.CurrentGym
+        </div>
+    }
 </div>
