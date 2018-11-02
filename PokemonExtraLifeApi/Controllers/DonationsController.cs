@@ -1,5 +1,7 @@
 ﻿using System.Linq;
+using System.Web;
 using System.Web.Http;
+using System.Web.Mvc.Html;
 using Microsoft.Ajax.Utilities;
 using Newtonsoft.Json;
 using PokemonExtraLifeApi.EntityFramework;
@@ -19,7 +21,7 @@ namespace PokemonExtraLifeApi.Controllers
         {
             (Donation donation, Pokemon currentPokemon, Pokemon nextPokemon, Trainer currentTrainer, Trainer nextTrainer, Host currentHost, Host nextHost) = DonationProcessor.GetNextDonation();
 
-            return Json(new {donation, currentPokemon, nextPokemon, currentTrainer, nextTrainer, currentHost, nextHost}, settings);
+            return Json(new { donation, currentPokemon, nextPokemon, currentTrainer, nextTrainer, currentHost, nextHost }, settings);
         }
 
         [HttpGet]
@@ -67,6 +69,31 @@ namespace PokemonExtraLifeApi.Controllers
                 {
                     giveaway
                 });
+            }
+        }
+
+        [HttpGet]
+        public IHttpActionResult GymStatus()
+        {
+            var activeGyms = new[] { Gym.Rock, Gym.Water, Gym.Electric, Gym.Grass, Gym.Poison, Gym.Psychic, Gym.Fire, Gym.Ground };
+            
+            using (var context = new ExtraLifeContext())
+            {
+                var trainers = context.Trainers.Include("PokemonOrders.Pokemon").ToList();
+
+                var gyms = from trainer in trainers
+                           where activeGyms.Contains(trainer.Gym) 
+                           group trainer by trainer.Gym
+                           into grp
+                           select new
+                           {
+                               gym = grp.Key,
+                               gymName = grp.Key.ToString(),
+                               started = grp.Any(t => t.PokemonOrders.Any(po => po.Activated)),
+                               done = grp.All(t => t.PokemonOrders.All(po => po.Done))
+                           };
+
+                return Json(new { grouped = gyms });
             }
         }
 
