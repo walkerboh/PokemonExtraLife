@@ -21,7 +21,14 @@ namespace PokemonExtraLifeApi.Controllers
         {
             (Donation donation, Pokemon currentPokemon, Pokemon nextPokemon, Trainer currentTrainer, Trainer nextTrainer, Host currentHost, Host nextHost) = DonationProcessor.GetNextDonation();
 
-            return Json(new { donation, currentPokemon, nextPokemon, currentTrainer, nextTrainer, currentHost, nextHost }, settings);
+            bool done;
+            
+            using (var context = new ExtraLifeContext())
+            {
+                done = context.Trainers.Include("PokemonOrders.Pokemon").ToList().All(t => t.PokemonOrders.All(po => po.Done));
+            }
+
+            return Json(new { donation, currentPokemon, nextPokemon, currentTrainer, nextTrainer, currentHost, nextHost, done }, settings);
         }
 
         [HttpGet]
