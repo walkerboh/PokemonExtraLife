@@ -231,6 +231,7 @@
     </Compile>
     <Compile Include="Models\API\DisplayStatus.cs" />
     <Compile Include="Models\API\Donation.cs" />
+    <Compile Include="Models\API\Giveaway.cs" />
     <Compile Include="Models\API\Group.cs" />
     <Compile Include="Models\API\Host.cs" />
     <Compile Include="Models\API\Pokemon.cs" />

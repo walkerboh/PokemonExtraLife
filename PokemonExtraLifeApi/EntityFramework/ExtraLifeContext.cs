@@ -21,6 +21,7 @@ namespace PokemonExtraLifeApi.EntityFramework
         public DbSet<Trainer> Trainers { get; set; }
         public DbSet<Group> Groups { get; set; }
         public DbSet<DisplayStatus> DisplayStatus { get; set; }
+        public DbSet<Giveaway> Giveaways { get; set; }
 
         public Group ActiveGroup => Groups.Include("PokemonOrders.Pokemon").ToList().FirstOrDefault(g => g.Started && !g.Done);
 

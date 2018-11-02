@@ -44,12 +44,28 @@ namespace PokemonExtraLifeApi.Controllers
             using (var context = new ExtraLifeContext())
             {
                 var displayStatus = context.GetDisplayStatus();
-                
+
                 return Json(new
                 {
                     numberOfDonations = context.Donations.Count(),
                     totalDonationAmount = context.Donations.Sum(d => d.Amount),
                     donationGoal = displayStatus.DonationGoal
+                });
+            }
+        }
+
+        [HttpGet]
+        public IHttpActionResult Giveaways()
+        {
+            using (var context = new ExtraLifeContext())
+            {
+                var currentGym = context.GetCurrentGym();
+
+                Giveaway giveaway = currentGym.HasValue ? context.Giveaways.ToList().Single(g => g.Gym.Equals(currentGym.Value)) : null;
+
+                return Json(new
+                {
+                    giveaway
                 });
             }
         }

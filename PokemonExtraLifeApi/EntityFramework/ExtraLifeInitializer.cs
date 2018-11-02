@@ -102,6 +102,85 @@ namespace PokemonExtraLifeApi.EntityFramework
                 TrackDonations = true
             });
             context.SaveChanges();
+
+            var giveaways = new List<Giveaway>
+            {
+                new Giveaway
+                {
+                    Gym = Gym.Rock,
+                    PrizeName = "Peepachu Plush - Anubis Studios",
+                    Url = "https://i.imgur.com/mQVyS7E.png"
+                },
+                new Giveaway
+                {
+                    Gym = Gym.Water,
+                    PrizeName = "Misty Art Print - Yueko",
+                    Url = "https://i.imgur.com/1viKfEj.png"
+                },
+                new Giveaway
+                {
+                    Gym = Gym.Electric,
+                    PrizeName = "????",
+                    Url = ""
+                },
+                new Giveaway
+                {
+                    Gym = Gym.Grass,
+                    PrizeName = "Legend of Zelda Art Print + Korok Plush - Pixel Noise Studios + Bubble Rhapsody Design",
+                    Url = "https://i.imgur.com/xay4dfS.png"
+                },
+                new Giveaway
+                {
+                    Gym = Gym.Poison,
+                    PrizeName = "Fat Chocobo Mug + Chocobo Charm",
+                    Url = "https://i.imgur.com/Qoo63Dv.png"
+                },
+                new Giveaway
+                {
+                    Gym = Gym.Psychic,
+                    PrizeName = "???",
+                    Url = ""
+                },
+                new Giveaway
+                {
+                    Gym = Gym.Fire,
+                    PrizeName = "????",
+                    Url = ""
+                },
+                new Giveaway
+                {
+                    Gym = Gym.Ground,
+                    PrizeName = "????",
+                    Url = ""
+                },
+                new Giveaway
+                {
+                    Gym = Gym.EliteFour,
+                    PrizeName = "?????",
+                    Url = ""
+                },
+                new Giveaway
+                {
+                    Gym = Gym.TeamRocket,
+                    PrizeName = "???",
+                    Url = ""
+                },
+                new Giveaway
+                {
+                    Gym = Gym.TeamRocketRematch,
+                    PrizeName = "???",
+                    Url = ""
+                },
+                new Giveaway
+                {
+                    Gym = Gym.Lavender,
+                    PrizeName = "?????",
+                    Url = ""
+                }
+            };
+
+            context.Giveaways.AddRange(giveaways);
+            context.SaveChanges();
         }
     }
 }
