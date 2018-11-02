@@ -40,200 +40,53 @@ namespace PokemonExtraLifeApi.EntityFramework
             context.PokemonOrders.AddRange(PokemonOrderInitialization.PokemonOrders);
             context.SaveChanges();
 
-//            List<Pokemon> pokemon = new List<Pokemon>
-//            {
-//                new Pokemon
-//                {
-//                    Name = "Bulbasaur",
-//                    StartingHealth = 0
-//                },
-//                new Pokemon
-//                {
-//                    Name = "Squirtle",
-//                    StartingHealth = 0
-//                },
-//                new Pokemon
-//                {
-//                    Name = "Charmander"
-//                },
-//                new Pokemon
-//                {
-//                    Name = "Oddish"
-//                },
-//                new Pokemon
-//                {
-//                    Name = "A",
-//                    StartingHealth = 10
-//                },
-//                new Pokemon
-//                {
-//                    Name = "B",
-//                    StartingHealth = 10
-//                },
-//                new Pokemon
-//                {
-//                    Name = "C",
-//                    StartingHealth = 20
-//                },
-//                new Pokemon
-//                {
-//                    Name = "D",
-//                    StartingHealth = 15
-//                },
-//                new Pokemon
-//                {
-//                    Name = "E",
-//                    StartingHealth = 15
-//                },
-//                new Pokemon
-//                {
-//                    Name = "F",
-//                    StartingHealth = 30
-//                },
-//                new Pokemon
-//                {
-//                    Name = "G",
-//                    StartingHealth = 20
-//                },
-//                new Pokemon
-//                {
-//                    Name = "H",
-//                    StartingHealth = 20
-//                },
-//                new Pokemon
-//                {
-//                    Name = "I",
-//                    StartingHealth = 50
-//                },
-//                new Pokemon
-//                {
-//                    Name = "Meowth",
-//                    StartingHealth = 50
-//                }
-//            };
-//
-//            context.Pokemon.AddRange(pokemon);
-//            context.SaveChanges();
-//
-//            List<Trainer> trainers = new List<Trainer>
-//            {
-//                new Trainer
-//                {
-//                    Name = "T1",
-//                    Gym = Gym.Rock
-//                },
-//                new Trainer
-//                {
-//                    Name = "T2",
-//                    Gym = Gym.Rock
-//                },
-//                new Trainer
-//                {
-//                    Name = "T3",
-//                    Gym = Gym.Rock
-//                },
-//                new Trainer
-//                {
-//                    Name = "Rocket1",
-//                    Gym = Gym.TeamRocketAlpha
-//                }
-//            };
-//
-//            context.Trainers.AddRange(trainers);
-//            context.SaveChanges();
-//
-//
-//            List<PokemonOrder> po = new List<PokemonOrder>
-//            {
-//                new PokemonOrder
-//                {
-//                    PokemonId = 5,
-//                    TrainerId = 1,
-//                    Sequence = 1,
-//                    Activated = true
-//                },
-//                new PokemonOrder
-//                {
-//                    PokemonId = 6,
-//                    TrainerId = 1,
-//                    Sequence = 2
-//                },
-//                new PokemonOrder
-//                {
-//                    PokemonId = 7,
-//                    TrainerId = 1,
-//                    Sequence = 3
-//                },
-//                new PokemonOrder
-//                {
-//                    PokemonId = 8,
-//                    TrainerId = 2,
-//                    Sequence = 4
-//                },
-//                new PokemonOrder
-//                {
-//                    PokemonId = 9,
-//                    TrainerId = 2,
-//                    Sequence = 4
-//                },
-//                new PokemonOrder
-//                {
-//                    PokemonId = 10,
-//                    TrainerId = 2,
-//                    Sequence = 5
-//                },
-//                new PokemonOrder
-//                {
-//                    PokemonId = 11,
-//                    TrainerId = 3,
-//                    Sequence = 6
-//                },
-//                new PokemonOrder
-//                {
-//                    PokemonId = 12,
-//                    TrainerId = 3,
-//                    Sequence = 7
-//                },
-//                new PokemonOrder
-//                {
-//                    PokemonId = 13,
-//                    TrainerId = 3,
-//                    Sequence = 8
-//                },
-//                new PokemonOrder
-//                {
-//                    PokemonId = 14,
-//                    TrainerId = 4,
-//                    Sequence = 1,
-//                    GroupId = 1
-//                }
-//            };
-//
-//            context.PokemonOrders.AddRange(po);
-//            context.SaveChanges();
-
             List<Host> hosts = new List<Host>
             {
                 new Host
                 {
                     Name = "Chase",
-                    PokemonId = 1
+                    Pokemon = "Gengar"
                 },
                 new Host
                 {
-                    Name = "Chrissy",
-                    PokemonId = 2
+                    Name = "Chrissie",
+                    Pokemon = "Altaria"
+                },
+                new Host
+                {
+                    Name = "Nick",
+                    Pokemon = "Dratini"
+                },
+                new Host
+                {
+                    Name = "Joe",
+                    Pokemon = "Arcanine"
+                },
+                new Host
+                {
+                    Name = "Tim",
+                    Pokemon = "Mimikyu"
                 },
                 new Host
                 {
                     Name = "Evan",
-                    PokemonId = 3
+                    Pokemon = "Torchic"
                 },
                 new Host
                 {
                     Name = "Brandi",
-                    PokemonId = 4
-                }
+                    Pokemon = "Cubone"
+                },
+                new Host
+                {
+                    Name = "Mikey",
+                    Pokemon = "Jolteon"
+                },
+                new Host
+                {
+                    Name = "Ethan",
+                    Pokemon = "Caracosta"
+                },
             };
 
             context.Hosts.AddRange(hosts);

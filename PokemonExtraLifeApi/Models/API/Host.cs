@@ -4,8 +4,6 @@
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public int PokemonId { get; set; }
-
-        public virtual Pokemon Pokemon { get; set; }
+        public string Pokemon { get; set; }
     }
 }
