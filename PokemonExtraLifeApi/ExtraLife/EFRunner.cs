@@ -32,7 +32,7 @@ namespace PokemonExtraLifeApi.ExtraLife
         {
             string json = string.Empty;
 
-            using (HttpClient client = new HttpClient())
+            using (var client = new HttpClient())
             {
                 try
                 {
@@ -53,7 +53,7 @@ namespace PokemonExtraLifeApi.ExtraLife
             if (donations == null)
                 return;
 
-            using (ExtraLifeContext context = new ExtraLifeContext())
+            using (var context = new ExtraLifeContext())
             {
                 DateTime mostRecentDonation = DateTime.MinValue;
 

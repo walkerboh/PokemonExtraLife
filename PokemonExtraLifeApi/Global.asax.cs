@@ -17,7 +17,7 @@ namespace PokemonExtraLifeApi
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-            EFRunner runner = new EFRunner();
+            var runner = new EFRunner();
         }
     }
 }

@@ -1419,7 +1419,7 @@ namespace PokemonExtraLifeApi.EntityFramework.Initialization
                 TrainerId = 47,
                 Sequence = 16,
                 GroupId = 3
-            },
+            }
         };
     }
 }

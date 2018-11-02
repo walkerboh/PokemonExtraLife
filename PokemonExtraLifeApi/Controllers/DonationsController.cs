@@ -25,7 +25,7 @@ namespace PokemonExtraLifeApi.Controllers
         [HttpGet]
         public IHttpActionResult Games()
         {
-            using (ExtraLifeContext context = new ExtraLifeContext())
+            using (var context = new ExtraLifeContext())
             {
                 DisplayStatus displayStatus = context.GetDisplayStatus();
 
@@ -43,7 +43,7 @@ namespace PokemonExtraLifeApi.Controllers
         {
             using (var context = new ExtraLifeContext())
             {
-                var displayStatus = context.GetDisplayStatus();
+                DisplayStatus displayStatus = context.GetDisplayStatus();
 
                 return Json(new
                 {
@@ -59,7 +59,7 @@ namespace PokemonExtraLifeApi.Controllers
         {
             using (var context = new ExtraLifeContext())
             {
-                var currentGym = context.GetCurrentGym();
+                Gym? currentGym = context.GetCurrentGym();
 
                 Giveaway giveaway = currentGym.HasValue ? context.Giveaways.ToList().Single(g => g.Gym.Equals(currentGym.Value)) : null;
 

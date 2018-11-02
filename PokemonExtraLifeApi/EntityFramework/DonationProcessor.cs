@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
-using System.Runtime.InteropServices;
 using PokemonExtraLifeApi.Models.API;
 
 namespace PokemonExtraLifeApi.EntityFramework
@@ -11,25 +9,19 @@ namespace PokemonExtraLifeApi.EntityFramework
     {
         public static (Donation, Pokemon, Pokemon, Trainer, Trainer, Host, Host) GetNextDonation()
         {
-            using (ExtraLifeContext context = new ExtraLifeContext())
+            using (var context = new ExtraLifeContext())
             {
-                Donation nextDonation = context.Donations.OrderBy(d=>d.Time).FirstOrDefault(d => !d.Processed);
+                Donation nextDonation = context.Donations.OrderBy(d => d.Time).FirstOrDefault(d => !d.Processed);
 
                 List<PokemonOrder> pokemonOrders = context.PokemonOrders.Include("Pokemon").Include("Trainer.PokemonOrders.Pokemon").ToList();
 
                 PokemonOrder currentPo = pokemonOrders.FirstOrDefault(po => po.Activated && !po.Done);
 
                 // If we don't have an active PO (first or some weird case) try to find one not in a group and pick it
-                if(currentPo == null && pokemonOrders.Any(po=>!po.GroupId.HasValue && !po.Activated))
-                {
-                    currentPo = pokemonOrders.FirstOrDefault(po => !po.GroupId.HasValue && !po.Activated);
-                }
-                
+                if (currentPo == null && pokemonOrders.Any(po => !po.GroupId.HasValue && !po.Activated)) currentPo = pokemonOrders.FirstOrDefault(po => !po.GroupId.HasValue && !po.Activated);
+
                 // if we still don't have a PO, just return the donation
-                if (currentPo == null)
-                {
-                    return (nextDonation, null, null, null, null, null, null);
-                }
+                if (currentPo == null) return (nextDonation, null, null, null, null, null, null);
 
                 DisplayStatus displayStatus = context.GetDisplayStatus();
                 Pokemon pokemon = currentPo.Pokemon;
@@ -39,21 +31,18 @@ namespace PokemonExtraLifeApi.EntityFramework
                 Host nextHost = null;
                 Host currentHost = context.Hosts.First(h => h.Id == displayStatus.CurrentHostId);
                 PokemonOrder nextPo = null;
-                
+
                 if (nextDonation != null)
                 {
                     decimal overkillDamage = (nextDonation.Amount - pokemon.CurrentHealth) / 2m;
                     pokemon.Damage += nextDonation.Amount;
 
                     context.SaveChanges();
-                    
+
                     Group activeGroup = context.ActiveGroup;
 
                     // New pokemon if KOed or group is ended and current PO is in a group
-                    if (pokemon.Damage >= pokemon.TotalHealth || currentPo.GroupId.HasValue && activeGroup == null)
-                    {
-                        (nextPokemon, nextTrainer, nextHost, nextPo) = GetNextItems(context, currentPo, trainer, displayStatus);
-                    }
+                    if (pokemon.Damage >= pokemon.TotalHealth || currentPo.GroupId.HasValue && activeGroup == null) (nextPokemon, nextTrainer, nextHost, nextPo) = GetNextItems(context, currentPo, trainer, displayStatus);
 
                     if (nextPokemon?.PokemonOrder?.Trainer != null && !nextPokemon.PokemonOrder.Trainer.Leader && overkillDamage > 0)
                     {
@@ -94,17 +83,12 @@ namespace PokemonExtraLifeApi.EntityFramework
 
             if (activeGroup != null && (currentPo.GroupId == activeGroup.Id || trainer.Done))
             {
-                if (!activeGroup.StartTime.HasValue)
-                {
-                    activeGroup.StartTime = DateTime.Now;
-                }
+                if (!activeGroup.StartTime.HasValue) activeGroup.StartTime = DateTime.Now;
 
                 nextPo = pokemonOrders.Where(po => po.GroupId == activeGroup.Id).OrderBy(po => po.Sequence).FirstOrDefault(po => !po.Activated);
             }
             else
-            {
                 nextPo = pokemonOrders.Where(po => !po.GroupId.HasValue).OrderBy(po => po.Sequence).FirstOrDefault(po => !po.Activated);
-            }
 
             // If null, we are out of Pokemon
             if (nextPo != null)

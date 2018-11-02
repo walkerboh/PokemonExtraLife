@@ -1,8 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Web.Mvc;
 using Microsoft.Ajax.Utilities;
 using PokemonExtraLifeApi.EntityFramework;
@@ -69,7 +67,7 @@ namespace PokemonExtraLifeApi.Controllers
 
         private SummaryModel GetSummaryModel()
         {
-            using (ExtraLifeContext context = new ExtraLifeContext())
+            using (var context = new ExtraLifeContext())
             {
                 List<Donation> donations = context.Donations.ToList();
                 DisplayStatus displayStatus = context.GetDisplayStatus();
@@ -93,7 +91,7 @@ namespace PokemonExtraLifeApi.Controllers
 
         private void UpdateDisplayStatus(SummaryModel model)
         {
-            using (ExtraLifeContext context = new ExtraLifeContext())
+            using (var context = new ExtraLifeContext())
             {
                 DisplayStatus displayStatus = context.GetDisplayStatus();
 
@@ -103,7 +101,7 @@ namespace PokemonExtraLifeApi.Controllers
                 if (displayStatus.HealthMultiplier != model.HealthMultiplier)
                 {
                     displayStatus.HealthMultiplier = model.HealthMultiplier;
-                    context.Pokemon.Include(p=>p.PokemonOrder).Where(p=>!p.PokemonOrder.Activated).ForEach(p=>p.HealthMultiplier = model.HealthMultiplier);
+                    context.Pokemon.Include(p => p.PokemonOrder).Where(p => !p.PokemonOrder.Activated).ForEach(p => p.HealthMultiplier = model.HealthMultiplier);
                 }
 
                 context.SaveChanges();
@@ -112,7 +110,7 @@ namespace PokemonExtraLifeApi.Controllers
 
         private GroupModel GetGroupModel()
         {
-            using (ExtraLifeContext context = new ExtraLifeContext())
+            using (var context = new ExtraLifeContext())
             {
                 List<Group> groups = context.Groups.ToList();
 
@@ -127,7 +125,7 @@ namespace PokemonExtraLifeApi.Controllers
 
         private void ActivateGroup(int groupId)
         {
-            using (ExtraLifeContext context = new ExtraLifeContext())
+            using (var context = new ExtraLifeContext())
             {
                 Group group = context.Groups.First(g => g.Id == groupId);
                 group.Started = true;
@@ -137,13 +135,14 @@ namespace PokemonExtraLifeApi.Controllers
 
         private void ForceStopGroup()
         {
-            using (ExtraLifeContext context = new ExtraLifeContext())
+            using (var context = new ExtraLifeContext())
             {
                 IQueryable<Group> groups = context.Groups.Where(g => g.Started).Include("PokemonOrders.Pokemon");
 
                 foreach (Group group in groups)
                 {
-                    if (!group.Done) group.ForceComplete = true;
+                    if (!group.Done)
+                        group.ForceComplete = true;
                 }
 
                 context.SaveChanges();
@@ -152,7 +151,7 @@ namespace PokemonExtraLifeApi.Controllers
 
         private GamesModel GetGamesModel()
         {
-            using (ExtraLifeContext context = new ExtraLifeContext())
+            using (var context = new ExtraLifeContext())
             {
                 DisplayStatus displayStatus = context.GetDisplayStatus();
 
@@ -167,7 +166,7 @@ namespace PokemonExtraLifeApi.Controllers
 
         private void UpdateGamesDb(GamesModel model)
         {
-            using (ExtraLifeContext context = new ExtraLifeContext())
+            using (var context = new ExtraLifeContext())
             {
                 DisplayStatus displayStatus = context.GetDisplayStatus();
 
@@ -181,7 +180,7 @@ namespace PokemonExtraLifeApi.Controllers
 
         private DonationsModel GetDonationsModel()
         {
-            using (ExtraLifeContext context = new ExtraLifeContext())
+            using (var context = new ExtraLifeContext())
             {
                 return new DonationsModel
                 {
@@ -192,7 +191,7 @@ namespace PokemonExtraLifeApi.Controllers
 
         private PokemonStatusModel GetPokemonStatusModel()
         {
-            using (ExtraLifeContext context = new ExtraLifeContext())
+            using (var context = new ExtraLifeContext())
             {
                 PokemonOrder currentPo = context.PokemonOrders.Include("Pokemon").Include("Trainer").ToList().FirstOrDefault(po => po.Activated && !po.Done);
 

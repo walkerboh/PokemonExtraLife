@@ -9,7 +9,7 @@ namespace PokemonExtraLifeApi.EntityFramework
     {
         protected override void Seed(ExtraLifeContext context)
         {
-            var groups = new List<Group>
+            List<Group> groups = new List<Group>
             {
                 new Group
                 {
@@ -86,7 +86,7 @@ namespace PokemonExtraLifeApi.EntityFramework
                 {
                     Name = "Ethan",
                     Pokemon = "Caracosta"
-                },
+                }
             };
 
             context.Hosts.AddRange(hosts);
@@ -103,7 +103,7 @@ namespace PokemonExtraLifeApi.EntityFramework
             });
             context.SaveChanges();
 
-            var giveaways = new List<Giveaway>
+            List<Giveaway> giveaways = new List<Giveaway>
             {
                 new Giveaway
                 {

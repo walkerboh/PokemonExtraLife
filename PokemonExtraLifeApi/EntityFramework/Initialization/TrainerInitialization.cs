@@ -288,7 +288,7 @@ namespace PokemonExtraLifeApi.EntityFramework.Initialization
                 Id = 47,
                 Name = "Hex Maniac Sylvia",
                 Gym = Gym.Lavender
-            },
+            }
         };
     }
 }
