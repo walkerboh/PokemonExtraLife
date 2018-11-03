@@ -99,7 +99,8 @@ namespace PokemonExtraLifeApi.EntityFramework
                 DonationGoal = 2000,
                 FollowingGame = string.Empty,
                 NextGame = string.Empty,
-                TrackDonations = true
+                TrackDonations = true,
+                HealthMultiplier = 1
             });
             context.SaveChanges();
 
@@ -108,73 +109,85 @@ namespace PokemonExtraLifeApi.EntityFramework
                 new Giveaway
                 {
                     Gym = Gym.Rock,
-                    PrizeName = "Peepachu Plush - Anubis Studios",
+                    PrizeName = "Peepachu Plush",
+                    Contributor = "Anubis Studios",
                     Url = "https://i.imgur.com/mQVyS7E.png"
                 },
                 new Giveaway
                 {
                     Gym = Gym.Water,
-                    PrizeName = "Misty Art Print - Yueko",
+                    PrizeName = "Misty Art Print",
+                    Contributor = "Yueko",
                     Url = "https://i.imgur.com/1viKfEj.png"
                 },
                 new Giveaway
                 {
                     Gym = Gym.Electric,
                     PrizeName = "????",
+                    Contributor = "",
                     Url = ""
                 },
                 new Giveaway
                 {
                     Gym = Gym.Grass,
-                    PrizeName = "Legend of Zelda Art Print + Korok Plush - Pixel Noise Studios + Bubble Rhapsody Design",
+                    PrizeName = "Legend of Zelda Art Print + Korok Plush",
+                    Contributor = "Pixel Noise Studios + Bubble Rhapsody Design",
                     Url = "https://i.imgur.com/xay4dfS.png"
                 },
                 new Giveaway
                 {
                     Gym = Gym.Poison,
                     PrizeName = "Fat Chocobo Mug + Chocobo Charm",
+                    Contributor = "",
                     Url = "https://i.imgur.com/Qoo63Dv.png"
                 },
                 new Giveaway
                 {
                     Gym = Gym.Psychic,
                     PrizeName = "???",
+                    Contributor = "",
                     Url = ""
                 },
                 new Giveaway
                 {
                     Gym = Gym.Fire,
                     PrizeName = "????",
+                    Contributor = "",
                     Url = ""
                 },
                 new Giveaway
                 {
                     Gym = Gym.Ground,
                     PrizeName = "????",
+                    Contributor = "",
                     Url = ""
                 },
                 new Giveaway
                 {
                     Gym = Gym.EliteFour,
                     PrizeName = "?????",
+                    Contributor = "",
                     Url = ""
                 },
                 new Giveaway
                 {
                     Gym = Gym.TeamRocket,
                     PrizeName = "???",
+                    Contributor = "",
                     Url = ""
                 },
                 new Giveaway
                 {
                     Gym = Gym.TeamRocketRematch,
                     PrizeName = "???",
+                    Contributor = "",
                     Url = ""
                 },
                 new Giveaway
                 {
                     Gym = Gym.Lavender,
                     PrizeName = "?????",
+                    Contributor = "",
                     Url = ""
                 }
             };

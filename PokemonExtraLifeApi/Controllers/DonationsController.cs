@@ -1,14 +1,17 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc.Html;
 using Microsoft.Ajax.Utilities;
 using Newtonsoft.Json;
+using PokemonExtraLifeApi.Common;
 using PokemonExtraLifeApi.EntityFramework;
 using PokemonExtraLifeApi.Models.API;
 
 namespace PokemonExtraLifeApi.Controllers
 {
+    [AllowCrossSite]
     public class DonationsController : ApiController
     {
         private readonly JsonSerializerSettings settings = new JsonSerializerSettings
@@ -29,6 +32,21 @@ namespace PokemonExtraLifeApi.Controllers
             }
 
             return Json(new { donation, currentPokemon, nextPokemon, currentTrainer, nextTrainer, currentHost, nextHost, done }, settings);
+        }
+
+        [HttpGet]
+        public IHttpActionResult CurrentStatus()
+        {
+            using (var context = new ExtraLifeContext())
+            {
+                List<PokemonOrder> pokemonOrders = context.PokemonOrders.Include("Pokemon").Include("Trainer").ToList();
+                
+                PokemonOrder currentPo = pokemonOrders.FirstOrDefault(po => po.Activated && !po.Done);
+
+                bool done = pokemonOrders.All(po => po.Done);
+
+                return Json(new { currentPo?.Trainer, currentPo?.Pokemon, done });
+            }
         }
 
         [HttpGet]
@@ -82,14 +100,14 @@ namespace PokemonExtraLifeApi.Controllers
         [HttpGet]
         public IHttpActionResult GymStatus()
         {
-            var activeGyms = new[] { Gym.Rock, Gym.Water, Gym.Electric, Gym.Grass, Gym.Poison, Gym.Psychic, Gym.Fire, Gym.Ground };
+            var activeGyms = new List<Gym> { Gym.Rock, Gym.Water, Gym.Electric, Gym.Grass, Gym.Poison, Gym.Psychic, Gym.Fire, Gym.Ground };
             
             using (var context = new ExtraLifeContext())
             {
-                var trainers = context.Trainers.Include("PokemonOrders.Pokemon").ToList();
+                var trainers = context.Trainers.Include("PokemonOrders.Pokemon").Where(t => t.Gym.HasValue).ToList();
 
                 var gyms = from trainer in trainers
-                           where activeGyms.Contains(trainer.Gym) 
+                           where activeGyms.Contains(trainer.Gym.Value) 
                            group trainer by trainer.Gym
                            into grp
                            select new

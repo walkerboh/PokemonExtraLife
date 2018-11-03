@@ -663,7 +663,7 @@ namespace PokemonExtraLifeApi.EntityFramework.Initialization
             new Pokemon
             {
                 Id = 94,
-                Name = "Mr. Mime",
+                Name = "Mr Mime",
                 StartingHealth = 20,
                 HealthMultiplier = 1
             },

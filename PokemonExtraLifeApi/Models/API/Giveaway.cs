@@ -8,6 +8,7 @@ namespace PokemonExtraLifeApi.Models.API
         public int Id { get; set; }
 
         public string PrizeName { get; set; }
+        public string Contributor { get; set; }
         public string Url { get; set; }
 
         [JsonIgnore]
