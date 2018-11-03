@@ -99,7 +99,7 @@ namespace PokemonExtraLifeApi.EntityFramework
                 DonationGoal = 2000,
                 FollowingGame = string.Empty,
                 NextGame = string.Empty,
-                TrackDonations = true,
+                TrackDonations = false,
                 HealthMultiplier = 1
             });
             context.SaveChanges();

@@ -1380,6 +1380,20 @@ namespace PokemonExtraLifeApi.EntityFramework.Initialization
                 Name = "Mimikyu",
                 StartingHealth = 8,
                 HealthMultiplier = 1
+            },
+            new Pokemon
+            {
+                Id = 197,
+                Name = "Mewtwo",
+                StartingHealth = 500,
+                HealthMultiplier = 1
+            },
+            new Pokemon
+            {
+                Id = 198,
+                Name = "MissingNo",
+                StartingHealth = int.MaxValue,
+                HealthMultiplier = 1
             }
         };
     }

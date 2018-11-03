@@ -1419,6 +1419,20 @@ namespace PokemonExtraLifeApi.EntityFramework.Initialization
                 TrainerId = 47,
                 Sequence = 16,
                 GroupId = 3
+            },
+            new PokemonOrder
+            {
+                Id = 197,
+                PokemonId = 197,
+                TrainerId = 48,
+                Sequence = 157
+            },
+            new PokemonOrder
+            {
+                Id = 198,
+                PokemonId = 198,
+                TrainerId = 48,
+                Sequence = 158
             }
         };
     }

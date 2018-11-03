@@ -76,7 +76,7 @@ namespace PokemonExtraLifeApi.EntityFramework.Initialization
             new Trainer
             {
                 Id = 12,
-                Name = "Leader Lt. Surge",
+                Name = "Leader Lt Surge",
                 Gym = Gym.Electric
             },
             new Trainer
@@ -288,6 +288,11 @@ namespace PokemonExtraLifeApi.EntityFramework.Initialization
                 Id = 47,
                 Name = "Hex Maniac Sylvia",
                 Gym = Gym.Lavender
+            },
+            new Trainer
+            {
+                Id = 48,
+                Name = "Game Freak Morimoto"
             }
         };
     }
