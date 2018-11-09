@@ -14,12 +14,14 @@ namespace PokemonExtraLifeApi.EntityFramework
                 new Group
                 {
                     Name = "Team Rocket",
-                    Gym = Gym.TeamRocket
+                    Gym = Gym.TeamRocket,
+                    DurationMinutes = 60
                 },
                 new Group
                 {
                     Name = "Team Rocket Rematch",
-                    Gym = Gym.TeamRocketRematch
+                    Gym = Gym.TeamRocketRematch,
+                    DurationMinutes = 60
                 },
                 new Group
                 {
@@ -111,84 +113,84 @@ namespace PokemonExtraLifeApi.EntityFramework
                     Gym = Gym.Rock,
                     PrizeName = "Peepachu Plush",
                     Contributor = "Anubis Studios",
-                    Url = "https://i.imgur.com/mQVyS7E.png"
+                    Url = "BrockPrize"
                 },
                 new Giveaway
                 {
                     Gym = Gym.Water,
                     PrizeName = "Misty Art Print",
                     Contributor = "Yueko",
-                    Url = "https://i.imgur.com/1viKfEj.png"
+                    Url = "MistyPrize"
                 },
                 new Giveaway
                 {
                     Gym = Gym.Electric,
-                    PrizeName = "????",
-                    Contributor = "",
-                    Url = ""
+                    PrizeName = "D.VA Lootbox + D.VA Pokewatch Charm",
+                    Contributor = "Aesthetic Cosplay + Orotea",
+                    Url = "SurgePrize"
                 },
                 new Giveaway
                 {
                     Gym = Gym.Grass,
                     PrizeName = "Legend of Zelda Art Print + Korok Plush",
                     Contributor = "Pixel Noise Studios + Bubble Rhapsody Design",
-                    Url = "https://i.imgur.com/xay4dfS.png"
+                    Url = "ErikaPrize"
                 },
                 new Giveaway
                 {
                     Gym = Gym.Poison,
                     PrizeName = "Fat Chocobo Mug + Chocobo Charm",
-                    Contributor = "",
-                    Url = "https://i.imgur.com/Qoo63Dv.png"
+                    Contributor = "Animus Rhythm + Hideaway Melon",
+                    Url = "KogaPrize"
                 },
                 new Giveaway
                 {
                     Gym = Gym.Psychic,
-                    PrizeName = "???",
-                    Contributor = "",
-                    Url = ""
+                    PrizeName = "Dark Souls Art Print",
+                    Contributor = "Crowsmack",
+                    Url = "SabrinaPrize"
                 },
                 new Giveaway
                 {
                     Gym = Gym.Fire,
-                    PrizeName = "????",
-                    Contributor = "",
-                    Url = ""
+                    PrizeName = "Vulpix Plush",
+                    Contributor = "Toreba",
+                    Url = "BlainePrize"
                 },
                 new Giveaway
                 {
                     Gym = Gym.Ground,
-                    PrizeName = "????",
-                    Contributor = "",
-                    Url = ""
+                    PrizeName = "Boss Pikachu + Lanyard",
+                    Contributor = "Pokemon Center Official",
+                    Url = "GiovanniPrize"
                 },
                 new Giveaway
                 {
                     Gym = Gym.EliteFour,
-                    PrizeName = "?????",
-                    Contributor = "",
-                    Url = ""
+                    PrizeName = "Mewtwo Figure",
+                    Contributor = "Pokemon Center Official",
+                    Url = "LeaguePrize"
                 },
                 new Giveaway
                 {
                     Gym = Gym.TeamRocket,
-                    PrizeName = "???",
-                    Contributor = "",
-                    Url = ""
+                    PrizeName = "$20 Gamestop Giftcard",
+                    Contributor = "Gamestop",
+                    Url = "Rocket1Prize"
                 },
                 new Giveaway
                 {
                     Gym = Gym.TeamRocketRematch,
-                    PrizeName = "???",
-                    Contributor = "",
-                    Url = ""
+                    PrizeName = "Napstablook Plush + Annoying Dog Pig",
+                    Contributor = "Mad Hatter Plushies + Fifthshroom",
+                    Url = "Rocket2Prize"
                 },
                 new Giveaway
                 {
                     Gym = Gym.Lavender,
-                    PrizeName = "?????",
-                    Contributor = "",
-                    Url = ""
+                    PrizeName = "Mimikyu Clock + K'nex Set",
+                    Contributor = "Toreba + K'nex",
+                    Url = "LavenderPrize"
                 }
             };
 

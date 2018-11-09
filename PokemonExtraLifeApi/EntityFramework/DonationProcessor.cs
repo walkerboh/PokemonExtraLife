@@ -34,7 +34,7 @@ namespace PokemonExtraLifeApi.EntityFramework
 
                 if (nextDonation != null)
                 {
-                    decimal overkillDamage = (nextDonation.Amount - pokemon.CurrentHealth) / 2m;
+                    decimal overkillDamage = (nextDonation.Amount - pokemon.CurrentHealth);
                     pokemon.Damage += nextDonation.Amount;
 
                     context.SaveChanges();
