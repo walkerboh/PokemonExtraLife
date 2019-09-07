@@ -36,7 +36,7 @@ namespace PokemonExtraLifeApi.EntityFramework
         {
             Group group = ActiveGroup;
 
-            if (group != null)
+            if (@group?.StartTime != null)
                 return group.Gym;
 
             List<PokemonOrder> pos = PokemonOrders.Include(po => po.Pokemon).Include(po => po.Trainer).ToList();
