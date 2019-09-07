@@ -1,0 +1,15 @@
+@using PokemonExtraLifeApiCore.Models.API
+@model PokemonExtraLifeApiCore.Models.Dashboard.DonationsModel
+
+<h2>Donations</h2>
+<div style="height: 80vh; overflow: scroll">
+    @foreach (Donation donation in Model.Donations)
+    {
+        <div style="border-bottom: 1px solid black">
+            <div>@donation.Donor</div>
+            <div>@($"{donation.Amount:c2}")</div>
+            <div>@donation.Message</div>
+            <div>@donation.Gym</div>
+        </div>
+    }
+</div>

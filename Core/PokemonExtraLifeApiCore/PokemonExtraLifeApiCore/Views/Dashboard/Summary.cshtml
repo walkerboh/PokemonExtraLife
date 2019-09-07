@@ -1,0 +1,35 @@
+@model PokemonExtraLifeApiCore.Models.Dashboard.SummaryModel
+
+<div id="SummarySection">
+    <form method="post" asp-controller="Dashboard" asp-action="UpdateSummary" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="SummarySection">
+        <h2>Stream Summary</h2>
+        <table>
+            <tr>
+                <th>Current Time</th>
+                <td>@DateTime.Now.ToString("MM/dd/yyyy hh:mm tt")</td>
+            </tr>
+            <tr>
+                <th>Number of Donations</th>
+                <td>@Model.TotalDonations</td>
+            </tr>
+            <tr>
+                <th>Total Raised</th>
+                <td>@($"{Model.TotalDonationAmount:c2}")</td>
+            </tr>
+            <tr>
+                <th>Donation Goal</th>
+                @*<td>@Html.TextBoxFor(m => m.DonationGoal)</td>*@
+                <td><input asp-for="DonationGoal"/></td>
+            </tr>
+            <tr>
+                <td>Health Multiplier</td>
+                <td>@Html.TextBoxFor(m => m.HealthMultiplier)</td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(m => m.TrackDonations)</td>
+                <td>@Html.CheckBoxFor(m => m.TrackDonations)</td>
+            </tr>
+        </table>
+        <input type="submit" />
+    </form>
+</div>
