@@ -1,41 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Timers;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using PokemonExtraLifeApiCore.Common;
 using PokemonExtraLifeApiCore.EntityFramework;
 using PokemonExtraLifeApiCore.Enum;
 using PokemonExtraLifeApiCore.Models.API;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace PokemonExtraLifeApiCore.ExtraLife
 {
-    public class EFRunner
+    internal interface IScopedProcessingService
     {
-        //private const string ApiUrl = @"https://www.extra-life.org/api/participants/318475/donations";
-        //private const string ApiUrl = @"http://localhost:57363/api/donor";
-        private readonly string ApiUrl;
-        private readonly Timer timer;
+        Task DoWork();
+    }
 
-        private readonly ExtraLifeContext context;
+    public class ExtraLifeScopedService : IScopedProcessingService
+    {
+        private readonly ExtraLifeApiSettings _settings;
+        private readonly ExtraLifeContext _context;
 
-        public EFRunner(DbContextOptions<ExtraLifeContext> options, IOptions<ExtraLifeApiSettings> extraLifeApiSettings)
+        public ExtraLifeScopedService(IOptions<ExtraLifeApiSettings> settings, ExtraLifeContext context)
         {
-            context = new ExtraLifeContext(options);
-            ApiUrl = extraLifeApiSettings.Value.DonationUrl;
-
-            timer = new Timer();
-            timer.Elapsed += GetDonations;
-            timer.Interval = 20000;
-            timer.Enabled = true;
-
-            GetDonations(null, null);
+            _settings = settings.Value;
+            _context = context;
         }
 
-        private async void GetDonations(object source, ElapsedEventArgs e)
+        public async Task DoWork()
         {
             string json = string.Empty;
 
@@ -43,9 +36,9 @@ namespace PokemonExtraLifeApiCore.ExtraLife
             {
                 try
                 {
-                    client.BaseAddress = new Uri(ApiUrl);
+                    client.BaseAddress = new Uri(_settings.DonationUrl);
 
-                    HttpResponseMessage response = await client.GetAsync(ApiUrl);
+                    HttpResponseMessage response = await client.GetAsync(_settings.DonationUrl);
 
                     if (response.IsSuccessStatusCode) json = await response.Content.ReadAsStringAsync();
                 }
@@ -62,17 +55,17 @@ namespace PokemonExtraLifeApiCore.ExtraLife
 
             DateTime mostRecentDonation = DateTime.MinValue;
 
-            if (context.Donations.Any()) mostRecentDonation = context.Donations.Max(d => d.Time);
+            if (_context.Donations.Any()) mostRecentDonation = _context.Donations.Max(d => d.Time);
 
             donations = donations.Where(d => d.CreatedDateUtc > mostRecentDonation).ToList();
 
-            DisplayStatus displayStatus = context.GetDisplayStatus();
+            DisplayStatus displayStatus = _context.GetDisplayStatus();
 
             IEnumerable<Donation> dbDonations;
 
             if (displayStatus.TrackDonations)
             {
-                Gym? currentGym = context.GetCurrentGym();
+                Gym? currentGym = _context.GetCurrentGym();
                 dbDonations = donations.Select(d => d.ToDbDonation(currentGym)).ToList();
             }
             else
@@ -84,9 +77,9 @@ namespace PokemonExtraLifeApiCore.ExtraLife
                 }
             }
 
-            context.Donations.AddRange(dbDonations);
+            _context.Donations.AddRange(dbDonations);
 
-            context.SaveChanges();
+            _context.SaveChanges();
         }
     }
 }

@@ -10,10 +10,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using PokemonExtraLifeApiCore.Common;
 using PokemonExtraLifeApiCore.EntityFramework;
 using PokemonExtraLifeApiCore.EntityFramework.Initialization;
+using PokemonExtraLifeApiCore.ExtraLife;
 using PokemonExtraLifeApiCore.Models.API;
+using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
 namespace PokemonExtraLifeApiCore
 {
@@ -42,6 +45,9 @@ namespace PokemonExtraLifeApiCore
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.Configure<ExtraLifeApiSettings>(Configuration.GetSection("ExtraLifeSettings"));
+
+            services.AddTransient<IScopedProcessingService, ExtraLifeScopedService>();
+            services.AddSingleton<IHostedService, ExtraLifeService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
