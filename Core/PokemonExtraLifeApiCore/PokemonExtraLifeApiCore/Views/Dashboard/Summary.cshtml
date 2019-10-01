@@ -18,16 +18,11 @@
             </tr>
             <tr>
                 <th>Donation Goal</th>
-                @*<td>@Html.TextBoxFor(m => m.DonationGoal)</td>*@
                 <td><input asp-for="DonationGoal"/></td>
             </tr>
             <tr>
-                <td>Health Multiplier</td>
-                <td>@Html.TextBoxFor(m => m.HealthMultiplier)</td>
-            </tr>
-            <tr>
-                <td>@Html.LabelFor(m => m.TrackDonations)</td>
-                <td>@Html.CheckBoxFor(m => m.TrackDonations)</td>
+                <td><label asp-for="TrackDonations"></label></td>
+                <td><input asp-for="TrackDonations"/></td>
             </tr>
         </table>
         <input type="submit" />

@@ -36,5 +36,12 @@ namespace PokemonExtraLifeApiCore.ExtraLife
                 Gym = gym
             };
         }
+
+        public void RoundCreatedTime()
+        {
+            var ticks = CreatedDateUtc.Ticks;
+            var roundedTickets = ticks - (ticks % 10);
+            CreatedDateUtc = new DateTime(roundedTickets, DateTimeKind.Utc);
+        }
     }
 }

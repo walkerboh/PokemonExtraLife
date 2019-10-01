@@ -46,6 +46,7 @@ namespace PokemonExtraLifeApiCore
 
             services.Configure<ExtraLifeApiSettings>(Configuration.GetSection("ExtraLifeSettings"));
 
+            services.AddTransient<DonationProcessor>();
             services.AddTransient<IScopedProcessingService, ExtraLifeScopedService>();
             services.AddSingleton<IHostedService, ExtraLifeService>();
         }

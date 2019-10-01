@@ -53,9 +53,11 @@ namespace PokemonExtraLifeApiCore.ExtraLife
             if (donations == null)
                 return;
 
+            donations.ForEach(d => d.RoundCreatedTime());
+
             DateTime mostRecentDonation = DateTime.MinValue;
 
-            if (_context.Donations.Any()) mostRecentDonation = _context.Donations.Max(d => d.Time);
+            if (_context.Donations.Any()) mostRecentDonation = DateTime.SpecifyKind(_context.Donations.Max(d => d.Time), DateTimeKind.Utc);
 
             donations = donations.Where(d => d.CreatedDateUtc > mostRecentDonation).ToList();
 

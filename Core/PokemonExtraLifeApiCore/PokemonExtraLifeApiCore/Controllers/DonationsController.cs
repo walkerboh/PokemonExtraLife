@@ -31,16 +31,18 @@ namespace PokemonExtraLifeApiCore.Controllers
         }
 
         [HttpGet]
+        [Route("nextdonation")]
         public ActionResult NextDonation()
         {
             (Donation donation, Pokemon currentPokemon, Pokemon nextPokemon, Trainer currentTrainer, Trainer nextTrainer, Host currentHost, Host nextHost) = _donationProcessor.GetNextDonation();
 
             var done = _context.Trainers.Include("PokemonOrders.Pokemon").ToList().All(t => t.PokemonOrders.All(po => po.Done));
 
-            return Json((donation, currentPokemon, nextPokemon, currentTrainer, nextTrainer, currentHost, nextHost, done), settings);
+            return Json(new {donation, currentPokemon, nextPokemon, currentTrainer, nextTrainer, currentHost, nextHost, done}, settings);
         }
 
         [HttpGet]
+        [Route("currentstatus")]
         public ActionResult CurrentStatus()
         {
             List<PokemonOrder> pokemonOrders = _context.PokemonOrders.Include("Pokemon").Include("Trainer").ToList();
@@ -53,6 +55,7 @@ namespace PokemonExtraLifeApiCore.Controllers
         }
 
         [HttpGet]
+        [Route("games")]
         public ActionResult Games()
         {
             DisplayStatus displayStatus = _context.GetDisplayStatus();
@@ -66,6 +69,7 @@ namespace PokemonExtraLifeApiCore.Controllers
         }
 
         [HttpGet]
+        [Route("summary")]
         public ActionResult Summary()
         {
             DisplayStatus displayStatus = _context.GetDisplayStatus();
@@ -79,6 +83,7 @@ namespace PokemonExtraLifeApiCore.Controllers
         }
 
         [HttpGet]
+        [Route("giveaways")]
         public ActionResult Giveaways()
         {
             Gym? currentGym = _context.GetCurrentGym();
@@ -92,6 +97,7 @@ namespace PokemonExtraLifeApiCore.Controllers
         }
 
         [HttpGet]
+        [Route("gymstatus")]
         public ActionResult GymStatus()
         {
             var activeGyms = new List<Gym> { Gym.Rock, Gym.Water, Gym.Electric, Gym.Grass, Gym.Poison, Gym.Psychic, Gym.Fire, Gym.Ground };
@@ -114,6 +120,7 @@ namespace PokemonExtraLifeApiCore.Controllers
         }
 
         [HttpGet]
+        [Route("reset")]
         public async Task<ActionResult> Reset()
         {
             await _context.Donations.ForEachAsync(d => d.Processed = false);
