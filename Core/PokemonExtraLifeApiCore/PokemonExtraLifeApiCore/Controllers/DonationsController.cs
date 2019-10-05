@@ -100,7 +100,7 @@ namespace PokemonExtraLifeApiCore.Controllers
         [Route("gymstatus")]
         public ActionResult GymStatus()
         {
-            var activeGyms = new List<Gym> { Gym.Rock, Gym.Water, Gym.Electric, Gym.Grass, Gym.Poison, Gym.Psychic, Gym.Fire, Gym.Ground };
+            var activeGyms = new List<Gym> { Gym.Flying, Gym.Bug, Gym.Normal, Gym.Ghost, Gym.Fighting, Gym.Steel, Gym.Ice, Gym.Dragon};
 
             var trainers = _context.Trainers.Include("PokemonOrders.Pokemon").Where(t => t.Gym.HasValue).ToList();
 
@@ -133,6 +133,11 @@ namespace PokemonExtraLifeApiCore.Controllers
             _context.GetDisplayStatus().CurrentHostId = 1;
             await _context.PokemonOrders.ForEachAsync(po => po.Activated = false);
             _context.PokemonOrders.First().Activated = true;
+            await _context.Prizes.ForEachAsync(p =>
+            {
+                p.StartTime = null;
+                p.Duration = null;
+            });
 
             _context.SaveChanges();
 

@@ -1,0 +1,41 @@
+﻿@model PokemonExtraLifeApiCore.Models.Dashboard.PrizesModel
+
+<div id="PrizeSection" clas="row">
+    <div class="col-6">
+        <div>
+            <h3>Active Extra Prize</h3>
+            <span>Active Prize:</span>
+            <span>
+                @(Model.ActivePrizeId.HasValue ? Model.ActivePrize.Name : "No Active Prize")
+            </span>
+            <div>
+                @if (Model.ActivePrize != null)
+                {
+                    <span>Remaining time for prize: @((Model.ActivePrize.StartTime.Value.AddMinutes(Model.ActivePrize.Duration.Value) - DateTime.UtcNow).Minutes) minutes</span>
+                }
+            </div>
+        </div>
+        <div>
+            <h3>Start a prize</h3>
+            <form method="post" data-ajax="true" data-ajax-url="/dashboard/startprize" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#PrizeSection">
+                <select name="prizeId">
+                    @foreach(var item in Model.PrizesListItems)
+                    {
+                        <option value="@item.Value">@item.Text</option>
+                    }
+                </select>
+                <input name="duration" type="number"/>
+                <button type="submit" @(Model.ActivePrize == null ? string.Empty : "disabled=\"disabled\"")>Start Selected Prize</button>
+            </form>
+        </div>
+    </div>
+    <div class="col-6">
+        <h3>Completed Prizes</h3>
+        <ul>
+            @foreach (var prize in Model.Prizes.Where(p => p.StartTime.HasValue && !p.Active()))
+            {
+                <li>@prize.Name</li>
+            }
+        </ul>
+    </div>
+</div>

@@ -20,6 +20,7 @@ namespace PokemonExtraLifeApiCore.EntityFramework
         public DbSet<Group> Groups { get; set; }
         public DbSet<DisplayStatus> DisplayStatus { get; set; }
         public DbSet<Giveaway> Giveaways { get; set; }
+        public DbSet<PopupPrize> Prizes { get; set; }
 
         public Group ActiveGroup => Groups.Include("PokemonOrders.Pokemon").ToList().FirstOrDefault(g => g.Started && !g.Done);
 
@@ -40,6 +41,11 @@ namespace PokemonExtraLifeApiCore.EntityFramework
             PokemonOrder order = pos.FirstOrDefault(po => po.Activated && !po.Done);
 
             return order?.Trainer.Gym;
+        }
+
+        public int? GetCurrentPrizeId()
+        {
+            return Prizes.SingleOrDefault(p => p.Active())?.Id;
         }
 
         public DisplayStatus GetDisplayStatus()

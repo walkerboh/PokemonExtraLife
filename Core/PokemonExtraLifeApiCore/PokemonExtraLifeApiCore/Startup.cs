@@ -113,6 +113,13 @@ namespace PokemonExtraLifeApiCore
             }
 
             context.SaveChanges();
+
+            foreach(var prize in PrizeInitialization.Prizes.Where(p => context.Prizes.Find(p.Id) == null))
+            {
+                context.Prizes.Add(prize);
+            }
+
+            context.SaveChanges();
         }
     }
 }

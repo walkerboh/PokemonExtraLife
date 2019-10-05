@@ -69,6 +69,11 @@ namespace PokemonExtraLifeApiCore.ExtraLife
             {
                 Gym? currentGym = _context.GetCurrentGym();
                 dbDonations = donations.Select(d => d.ToDbDonation(currentGym)).ToList();
+                var prizeId = _context.GetCurrentPrizeId();
+                foreach(var d in dbDonations)
+                {
+                    d.PrizeId = prizeId;
+                }
             }
             else
             {

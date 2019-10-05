@@ -2,17 +2,20 @@
 {
     public enum Gym
     {
-        Rock,
-        Water,
-        Electric,
-        Grass,
-        Poison,
-        Psychic,
-        Fire,
-        Ground,
-        EliteFour,
-        TeamRocket,
-        TeamRocketRematch,
-        Lavender
+        Flying,
+        Bug,
+        Normal,
+        Ghost,
+        Fighting,
+        Steel,
+        Ice,
+        Dragon,
+        EliteFourWill,
+        EliteFourKoga,
+        EliteFourBruno,
+        EliteFourKaren,
+        EliteFourLance,
+        EliteFourRed,
+        TeamRocket
     }
 }

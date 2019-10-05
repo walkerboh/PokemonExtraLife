@@ -13,7 +13,7 @@ namespace PokemonExtraLifeApiCore.Models.Dashboard
 
         public IEnumerable<SelectListItem> PotentialGroupsList
         {
-            get { return PotentialGroups.Select(g => new SelectListItem {Text = g.Name, Value = g.Id.ToString()}); }
+            get { return PotentialGroups?.Select(g => new SelectListItem {Text = g.Name, Value = g.Id.ToString()}); }
         }
 
         public IEnumerable<Group> PreviouslyActiveGroups { get; set; }

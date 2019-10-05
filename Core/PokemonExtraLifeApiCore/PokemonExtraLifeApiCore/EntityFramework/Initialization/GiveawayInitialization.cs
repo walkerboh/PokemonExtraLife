@@ -14,7 +14,7 @@ namespace PokemonExtraLifeApiCore.EntityFramework.Initialization
                 PrizeName = "Giveaway 1",
                 Contributor = "Contributor 1",
                 Url = "Url 1",
-                Gym = Gym.Rock
+                Gym = Gym.Flying
             },
             new Giveaway
             {
@@ -22,7 +22,7 @@ namespace PokemonExtraLifeApiCore.EntityFramework.Initialization
                 PrizeName = "Giveaway 2",
                 Contributor = "Contributor 2",
                 Url = "Url 2",
-                Gym = Gym.Water
+                Gym = Gym.Bug
             },
             new Giveaway
             {
@@ -30,7 +30,7 @@ namespace PokemonExtraLifeApiCore.EntityFramework.Initialization
                 PrizeName = "Giveaway 1",
                 Contributor = "Contributor 1",
                 Url = "Url 1",
-                Gym = Gym.Electric
+                Gym = Gym.Normal
             },
             new Giveaway
             {
@@ -38,7 +38,7 @@ namespace PokemonExtraLifeApiCore.EntityFramework.Initialization
                 PrizeName = "Giveaway 1",
                 Contributor = "Contributor 1",
                 Url = "Url 1",
-                Gym = Gym.Grass
+                Gym = Gym.Ghost
             },
             new Giveaway
             {
@@ -46,7 +46,7 @@ namespace PokemonExtraLifeApiCore.EntityFramework.Initialization
                 PrizeName = "Giveaway 1",
                 Contributor = "Contributor 1",
                 Url = "Url 1",
-                Gym = Gym.Poison
+                Gym = Gym.Fighting
             },
             new Giveaway
             {
@@ -54,7 +54,7 @@ namespace PokemonExtraLifeApiCore.EntityFramework.Initialization
                 PrizeName = "Giveaway 1",
                 Contributor = "Contributor 1",
                 Url = "Url 1",
-                Gym = Gym.Psychic
+                Gym = Gym.Steel
             },
             new Giveaway
             {
@@ -62,7 +62,7 @@ namespace PokemonExtraLifeApiCore.EntityFramework.Initialization
                 PrizeName = "Giveaway 1",
                 Contributor = "Contributor 1",
                 Url = "Url 1",
-                Gym = Gym.Fire
+                Gym = Gym.Ice
             },
             new Giveaway
             {
@@ -70,7 +70,7 @@ namespace PokemonExtraLifeApiCore.EntityFramework.Initialization
                 PrizeName = "Giveaway 1",
                 Contributor = "Contributor 1",
                 Url = "Url 1",
-                Gym = Gym.Ground
+                Gym = Gym.Dragon
             },
             new Giveaway
             {
@@ -78,7 +78,7 @@ namespace PokemonExtraLifeApiCore.EntityFramework.Initialization
                 PrizeName = "Giveaway 1",
                 Contributor = "Contributor 1",
                 Url = "Url 1",
-                Gym = Gym.EliteFour
+                Gym = Gym.EliteFourWill
             },
             new Giveaway
             {
@@ -86,7 +86,7 @@ namespace PokemonExtraLifeApiCore.EntityFramework.Initialization
                 PrizeName = "Giveaway 1",
                 Contributor = "Contributor 1",
                 Url = "Url 1",
-                Gym = Gym.TeamRocket
+                Gym = Gym.EliteFourKoga
             },
             new Giveaway
             {
@@ -94,7 +94,7 @@ namespace PokemonExtraLifeApiCore.EntityFramework.Initialization
                 PrizeName = "Giveaway 1",
                 Contributor = "Contributor 1",
                 Url = "Url 1",
-                Gym = Gym.TeamRocketRematch
+                Gym = Gym.EliteFourBruno
             },
             new Giveaway
             {
@@ -102,8 +102,32 @@ namespace PokemonExtraLifeApiCore.EntityFramework.Initialization
                 PrizeName = "Giveaway 1",
                 Contributor = "Contributor 1",
                 Url = "Url 1",
-                Gym = Gym.Lavender
+                Gym = Gym.EliteFourKaren
             },
+            new Giveaway
+            {
+                Id= 13,
+                PrizeName = "Giveaway 1",
+                Contributor = "Contributor 1",
+                Url = "Url 1",
+                Gym = Gym.EliteFourLance
+            },
+            new Giveaway
+            {
+                Id= 14,
+                PrizeName = "Giveaway 1",
+                Contributor = "Contributor 1",
+                Url = "Url 1",
+                Gym = Gym.EliteFourRed
+            },
+            new Giveaway
+            {
+                Id= 15,
+                PrizeName = "Giveaway 1",
+                Contributor = "Contributor 1",
+                Url = "Url 1",
+                Gym = Gym.TeamRocket
+            }
         };
     }
 }

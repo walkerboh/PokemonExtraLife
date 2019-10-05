@@ -1,7 +1,6 @@
 @model PokemonExtraLifeApiCore.Models.Dashboard.DashboardModel
 
-
-<script src="~/js/Dashboard/Dashboard.js"></script>
+<script src="~/js/site.js"></script>
 
 <div class="row">
     <div class="col-4">
@@ -17,6 +16,9 @@
             </div>
             <div class="col-6">
                 <partial name="Games" for="GamesModel" />
+            </div>
+            <div class="col-6">
+                <partial name="Prizes" for="PrizesModel"/>
             </div>
             <div class="col-6">
                 <partial name="PokemonStatus" for="PokemonStatusModel" />

@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PokemonExtraLifeApiCore.EntityFramework;
@@ -54,7 +56,19 @@ namespace PokemonExtraLifeApiCore.Controllers
         {
             UpdateGamesDb(gamesModel);
 
+            //return View("Index", GetDashboardModel());
             return PartialView("Games", GetGamesModel());
+        }
+
+        [HttpPost]
+        public ActionResult StartPrize(int prizeId, int duration)
+        {
+            if (context.GetCurrentPrizeId() != null || duration < 1)
+                return PartialView("Prizes", GetPrizesModel());
+
+            ActivatePrize(prizeId, duration);
+
+            return PartialView("Prizes", GetPrizesModel());
         }
 
         private DashboardModel GetDashboardModel()
@@ -65,7 +79,8 @@ namespace PokemonExtraLifeApiCore.Controllers
                 SummaryModel = GetSummaryModel(),
                 GamesModel = GetGamesModel(),
                 DonationsModel = GetDonationsModel(),
-                PokemonStatusModel = GetPokemonStatusModel()
+                PokemonStatusModel = GetPokemonStatusModel(),
+                PrizesModel = GetPrizesModel()
             };
         }
 
@@ -76,7 +91,8 @@ namespace PokemonExtraLifeApiCore.Controllers
 
             Host currentHost = context.Hosts.First(h => h.Id == displayStatus.CurrentHostId);
 
-            Pokemon activePokemon = context.PokemonOrders.Include(po => po.Pokemon).ToList().FirstOrDefault(po => po.Activated && !po.Done)?.Pokemon;
+            Pokemon activePokemon = context.PokemonOrders.Include(po => po.Pokemon).ToList()
+                .FirstOrDefault(po => po.Activated && !po.Done)?.Pokemon;
 
             return new SummaryModel
             {
@@ -142,6 +158,14 @@ namespace PokemonExtraLifeApiCore.Controllers
             context.SaveChanges();
         }
 
+        private void ActivatePrize(int prizeId, int duration)
+        {
+            var prize = context.Prizes.Find(prizeId);
+            prize.StartTime = DateTime.UtcNow;
+            prize.Duration = duration;
+            context.SaveChanges();
+        }
+
         private GamesModel GetGamesModel()
         {
             DisplayStatus displayStatus = context.GetDisplayStatus();
@@ -175,7 +199,8 @@ namespace PokemonExtraLifeApiCore.Controllers
 
         private PokemonStatusModel GetPokemonStatusModel()
         {
-            PokemonOrder currentPo = context.PokemonOrders.Include("Pokemon").Include("Trainer").ToList().FirstOrDefault(po => po.Activated && !po.Done);
+            PokemonOrder currentPo = context.PokemonOrders.Include("Pokemon").Include("Trainer").ToList()
+                .FirstOrDefault(po => po.Activated && !po.Done);
 
             if (currentPo != null)
             {
@@ -188,6 +213,15 @@ namespace PokemonExtraLifeApiCore.Controllers
             }
 
             return new PokemonStatusModel();
+        }
+
+        private PrizesModel GetPrizesModel()
+        {
+            return new PrizesModel
+            {
+                Prizes = context.Prizes.OrderBy(p => p.Id).ToList(),
+                ActivePrizeId = context.GetCurrentPrizeId()
+            };
         }
     }
 }
