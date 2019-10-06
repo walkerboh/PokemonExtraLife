@@ -12,7 +12,8 @@ namespace PokemonExtraLifeApiCore.EntityFramework.Initialization
                 Id = 1,
                 PokemonId = 1,
                 TrainerId = 1,
-                Sequence = 1
+                Sequence = 1,
+                Activated = true
             },
             new PokemonOrder
             {

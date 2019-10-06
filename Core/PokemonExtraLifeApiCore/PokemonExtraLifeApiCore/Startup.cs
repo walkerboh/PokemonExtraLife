@@ -49,6 +49,7 @@ namespace PokemonExtraLifeApiCore
             services.AddTransient<DonationProcessor>();
             services.AddTransient<IScopedProcessingService, ExtraLifeScopedService>();
             services.AddSingleton<IHostedService, ExtraLifeService>();
+            services.AddTransient<Random>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

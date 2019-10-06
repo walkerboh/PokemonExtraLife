@@ -174,8 +174,6 @@ namespace PokemonExtraLifeApiCore.Migrations
 
                     b.Property<string>("Contributor");
 
-                    b.Property<int?>("DonationId");
-
                     b.Property<int?>("Duration");
 
                     b.Property<string>("Name");
@@ -183,6 +181,8 @@ namespace PokemonExtraLifeApiCore.Migrations
                     b.Property<DateTime?>("StartTime");
 
                     b.Property<string>("Url");
+
+                    b.Property<string>("WiningDonor");
 
                     b.HasKey("Id");
 

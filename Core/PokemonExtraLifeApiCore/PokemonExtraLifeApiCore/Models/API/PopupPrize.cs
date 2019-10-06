@@ -13,7 +13,7 @@ namespace PokemonExtraLifeApiCore.Models.API
         public string Url { get; set; }
         public DateTime? StartTime { get; set; }
         public int? Duration { get; set; }
-        public int? DonationId { get; set; }
+        public string WiningDonor { get; set; }
 
         public bool Active()
         {
@@ -23,6 +23,12 @@ namespace PokemonExtraLifeApiCore.Models.API
             }
 
             return false;
+        }
+
+        public bool Complete()
+        {
+            return StartTime.HasValue && Duration.HasValue &&
+                   StartTime.Value.AddMinutes(Duration.Value) < DateTime.UtcNow;
         }
     }
 }

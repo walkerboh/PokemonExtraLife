@@ -13,10 +13,12 @@ namespace PokemonExtraLifeApiCore.Controllers
     public class DashboardController : Controller
     {
         private readonly ExtraLifeContext context;
+        private readonly Random _random;
 
-        public DashboardController(ExtraLifeContext context)
+        public DashboardController(ExtraLifeContext context, Random random)
         {
             this.context = context;
+            this._random = random;
         }
 
         public ActionResult Index()
@@ -67,6 +69,14 @@ namespace PokemonExtraLifeApiCore.Controllers
                 return PartialView("Prizes", GetPrizesModel());
 
             ActivatePrize(prizeId, duration);
+
+            return PartialView("Prizes", GetPrizesModel());
+        }
+
+        [HttpPost]
+        public ActionResult PickWinner(int prizeId)
+        {
+            UpdateWinner(prizeId);
 
             return PartialView("Prizes", GetPrizesModel());
         }
@@ -217,11 +227,33 @@ namespace PokemonExtraLifeApiCore.Controllers
 
         private PrizesModel GetPrizesModel()
         {
-            return new PrizesModel
+            var model = new PrizesModel
             {
                 Prizes = context.Prizes.OrderBy(p => p.Id).ToList(),
                 ActivePrizeId = context.GetCurrentPrizeId()
             };
+
+            if (model.ActivePrizeId.HasValue)
+            {
+                model.ActivePrizeDonations = context.Donations.Count(d => d.PrizeId.Equals(model.ActivePrizeId));
+            }
+
+            return model;
+        }
+
+        private void UpdateWinner(int prizeId)
+        {
+            var prize = context.Prizes.Find(prizeId);
+            if (!string.IsNullOrEmpty(prize.WiningDonor))
+            {
+                return;
+            }
+
+            var donations = context.Donations.Where(d => d.PrizeId.Equals(prize.Id));
+            var names = donations.Select(d => d.Donor).Distinct().ToList();
+            var index = _random.Next(names.Count);
+            prize.WiningDonor = names[index];
+            context.SaveChanges();
         }
     }
 }

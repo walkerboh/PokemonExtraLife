@@ -10,8 +10,8 @@ using PokemonExtraLifeApiCore.EntityFramework;
 namespace PokemonExtraLifeApiCore.Migrations
 {
     [DbContext(typeof(ExtraLifeContext))]
-    [Migration("20191002010238_DonationPrize")]
-    partial class DonationPrize
+    [Migration("20191005223322_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -183,6 +183,8 @@ namespace PokemonExtraLifeApiCore.Migrations
                     b.Property<DateTime?>("StartTime");
 
                     b.Property<string>("Url");
+
+                    b.Property<string>("WiningDonor");
 
                     b.HasKey("Id");
 

@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace PokemonExtraLifeApiCore.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class InitialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -43,6 +43,7 @@ namespace PokemonExtraLifeApiCore.Migrations
                     Time = table.Column<DateTime>(nullable: false),
                     Message = table.Column<string>(nullable: true),
                     Gym = table.Column<int>(nullable: true),
+                    PrizeId = table.Column<int>(nullable: true),
                     Processed = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
@@ -117,6 +118,25 @@ namespace PokemonExtraLifeApiCore.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Pokemon", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Prizes",
+                schema: "public",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    Name = table.Column<string>(nullable: true),
+                    Contributor = table.Column<string>(nullable: true),
+                    Url = table.Column<string>(nullable: true),
+                    StartTime = table.Column<DateTime>(nullable: true),
+                    Duration = table.Column<int>(nullable: true),
+                    WiningDonor = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Prizes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -208,6 +228,10 @@ namespace PokemonExtraLifeApiCore.Migrations
 
             migrationBuilder.DropTable(
                 name: "PokemonOrders",
+                schema: "public");
+
+            migrationBuilder.DropTable(
+                name: "Prizes",
                 schema: "public");
 
             migrationBuilder.DropTable(

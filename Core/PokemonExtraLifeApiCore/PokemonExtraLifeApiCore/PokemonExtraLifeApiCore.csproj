@@ -6,11 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20191002010136_DonationPrize.cs" />
-    <Compile Remove="Migrations\20191002010136_DonationPrize.Designer.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="wwwroot\js\Dashboard\Dashboard.js" />
     <None Include="wwwroot\js\Dashboard\Games.js" />
   </ItemGroup>
