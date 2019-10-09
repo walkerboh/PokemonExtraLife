@@ -25,8 +25,8 @@
                         <option value="@item.Value">@item.Text</option>
                     }
                 </select>
-                <input name="duration" type="number" />
-                <button type="submit" @(Model.ActivePrize == null ? string.Empty : "disabled=\"disabled\"")>Start Selected Prize</button>
+                <label>Duration (minutes): <input name="duration" type="number" /></label>
+                <button type="submit" @(Model.ActivePrize == null && Model.PrizesListItems.Any() ? string.Empty : "disabled=\"disabled\"")>Start Selected Prize</button>
             </form>
         </div>
     </div>
