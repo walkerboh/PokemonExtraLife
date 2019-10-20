@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using PokemonExtraLifeApiCore.Common;
 using PokemonExtraLifeApiCore.EntityFramework;
 using PokemonExtraLifeApiCore.Enum;
 using PokemonExtraLifeApiCore.Models.API;
@@ -132,7 +131,7 @@ namespace PokemonExtraLifeApiCore.Controllers
             });
             _context.GetDisplayStatus().CurrentHostId = 1;
             await _context.PokemonOrders.ForEachAsync(po => po.Activated = false);
-            _context.PokemonOrders.First().Activated = true;
+            _context.PokemonOrders.OrderBy(po=>po.Sequence).First().Activated = true;
             await _context.Prizes.ForEachAsync(p =>
             {
                 p.StartTime = null;

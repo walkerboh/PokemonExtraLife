@@ -260,3 +260,4 @@ paket-files/
 __pycache__/
 *.pyc
 /Core/PokemonExtraLifeApiCore/PokemonExtraLifeApiCore/bower_components/jQuery
+/Core/PokemonExtraLifeApiCore/PokemonExtraLifeApiCore/Properties/PublishProfiles
