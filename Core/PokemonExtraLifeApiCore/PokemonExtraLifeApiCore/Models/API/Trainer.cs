@@ -14,6 +14,7 @@ namespace PokemonExtraLifeApiCore.Models.API
         public bool Leader { get; set; }
 
         public int PokemonLeft => PokemonOrders.Count(po => !po.Done);
+        public int TotalPokemon => PokemonOrders.Count;
         public bool Done => PokemonOrders.All(po => po.Done);
 
         [JsonIgnore]

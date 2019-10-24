@@ -11,7 +11,7 @@ namespace PokemonExtraLifeApiCore.EntityFramework.Initialization
             new Trainer
             {
                 Id = 1,
-                Name = "Falkner",
+                Name = "Faulkner",
                 Gym = Gym.Flying
             },
             new Trainer

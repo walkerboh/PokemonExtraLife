@@ -18,7 +18,7 @@
         </div>
         <div>
             <h3>Start a prize</h3>
-            <form method="post" data-ajax="true" data-ajax-url="/dashboard/startprize" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#PrizeSection">
+            <form method="post" data-ajax="true" asp-controller="Dashboard" asp-action="StartPrize" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#PrizeSection">
                 <select name="prizeId">
                     @foreach (var item in Model.PrizesListItems)
                     {
@@ -42,7 +42,7 @@
                     }
                     else
                     {
-                        <form method="post" data-ajax="true" data-ajax-url="/dashboard/pickwinner" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#PrizeSection">
+                        <form method="post" data-ajax="true" asp-controller="Dashboard" asp-action="PickWinner" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#PrizeSection">
                             <input type="hidden" name="prizeId" value="@prize.Id" />
                             <button type="submit">Pick a winner</button>
                         </form>
