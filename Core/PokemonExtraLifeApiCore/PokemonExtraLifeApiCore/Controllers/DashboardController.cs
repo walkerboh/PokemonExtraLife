@@ -251,6 +251,14 @@ namespace PokemonExtraLifeApiCore.Controllers
 
             var donations = context.Donations.Where(d => d.PrizeId.Equals(prize.Id));
             var names = donations.Select(d => d.Donor).Distinct().ToList();
+            
+            if(names.Count == 0)
+            {
+                prize.WiningDonor = "No donations for prize";
+                context.SaveChanges();
+                return;
+            }
+            
             var index = _random.Next(names.Count);
             prize.WiningDonor = names[index];
             context.SaveChanges();

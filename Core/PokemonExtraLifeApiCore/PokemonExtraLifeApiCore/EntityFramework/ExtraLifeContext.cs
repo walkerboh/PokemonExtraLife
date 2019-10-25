@@ -21,6 +21,7 @@ namespace PokemonExtraLifeApiCore.EntityFramework
         public DbSet<DisplayStatus> DisplayStatus { get; set; }
         public DbSet<Giveaway> Giveaways { get; set; }
         public DbSet<PopupPrize> Prizes { get; set; }
+        public DbSet<Fact> Facts { get; set; }
 
         public Group ActiveGroup => Groups.Include("PokemonOrders.Pokemon").ToList().FirstOrDefault(g => g.Started && !g.Done);
 

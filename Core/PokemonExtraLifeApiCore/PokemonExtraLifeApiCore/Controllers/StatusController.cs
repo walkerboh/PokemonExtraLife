@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PokemonExtraLifeApiCore.EntityFramework;
-using PokemonExtraLifeApiCore.Models.API;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace PokemonExtraLifeApiCore.Controllers
 {
@@ -16,10 +12,12 @@ namespace PokemonExtraLifeApiCore.Controllers
     public class StatusController : Controller
     {
         private readonly ExtraLifeContext _context;
+        private readonly Random _random;
 
-        public StatusController(ExtraLifeContext context)
+        public StatusController(ExtraLifeContext context, Random random)
         {
             _context = context;
+            _random = random;
         }
 
         [HttpGet]
@@ -57,7 +55,7 @@ namespace PokemonExtraLifeApiCore.Controllers
             var latestDonation = donations.OrderByDescending(d => d.Time).First();
             var donationGoal = _context.GetDisplayStatus().DonationGoal;
 
-            return Json(new {numberOfDonations, totalAmountDonated, latestDonation, donationGoal});
+            return Json(new { numberOfDonations, totalAmountDonated, latestDonation, donationGoal });
         }
 
         [HttpGet]
@@ -70,7 +68,25 @@ namespace PokemonExtraLifeApiCore.Controllers
 
             var gym = _context.GetCurrentGym();
 
-            return Json(new {currentPo?.Trainer, currentPo?.Pokemon, gym = gym?.ToString()});
+            return Json(new { currentPo?.Trainer, currentPo?.Pokemon, gym = gym?.ToString() });
+        }
+
+        [HttpGet]
+        [Route("Fact")]
+        public ActionResult Fact(int? id)
+        {
+            var ids = _context.Facts.Select(f => f.Id).ToList();
+
+            if (id.HasValue && ids.Contains(id.Value))
+            {
+                ids.Remove(id.Value);
+            }
+
+            var rand = _random.Next(0, ids.Count);
+
+            var fact = _context.Facts.Find(ids[rand]);
+
+            return Json(new { fact });
         }
     }
 }

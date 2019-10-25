@@ -89,44 +89,23 @@ namespace PokemonExtraLifeApiCore
             context.Database.EnsureCreated();
 
             // DB Initialization
-            foreach (var pokemon in PokemonInitialization.Pokemon.Where(pokemon => context.Pokemon.Find(pokemon.Id) == null))
-            {
-                context.Pokemon.Add(pokemon);
-            }
+            context.Pokemon.AddRange(PokemonInitialization.Pokemon.Where(pokemon => context.Pokemon.Find(pokemon.Id) == null));
 
-            foreach(var trainer in TrainerInitialization.Trainers.Where(trainer => context.Trainers.Find(trainer.Id) == null))
-            {
-                context.Trainers.Add(trainer);
-            }
+            context.Trainers.AddRange(TrainerInitialization.Trainers.Where(trainer => context.Trainers.Find(trainer.Id) == null));
 
-            foreach(var group in GroupInitialization.Groups.Where(group => context.Groups.Find(group.Id) == null))
-            {
-                context.Groups.Add(group);
-            }
+            context.Groups.AddRange(GroupInitialization.Groups.Where(group => context.Groups.Find(group.Id) == null));
 
-            foreach(var host in HostInitialization.Hosts.Where(host=>context.Hosts.Find(host.Id) == null))
-            {
-                context.Hosts.Add(host);
-            }
+            context.Hosts.AddRange(HostInitialization.Hosts.Where(host => context.Hosts.Find(host.Id) == null));
 
-            foreach(var giveaway in GiveawayInitialization.Giveaways.Where(giveaway => context.Giveaways.Find(giveaway.Id) == null))
-            {
-                context.Giveaways.Add(giveaway);
-            }
+            context.Giveaways.AddRange(GiveawayInitialization.Giveaways.Where(giveaway => context.Giveaways.Find(giveaway.Id) == null));
 
             context.SaveChanges();
 
-            foreach(var po in PokemonOrderInitialization.PokemonOrders.Where(po => context.PokemonOrders.Find(po.PokemonId) == null))
-            {
-                context.PokemonOrders.Add(po);
-            }
+            context.PokemonOrders.AddRange(PokemonOrderInitialization.PokemonOrders.Where(po => context.PokemonOrders.Find(po.PokemonId) == null));
 
-            context.SaveChanges();
+            context.Prizes.AddRange(PrizeInitialization.Prizes.Where(p => context.Prizes.Find(p.Id) == null));
 
-            foreach(var prize in PrizeInitialization.Prizes.Where(p => context.Prizes.Find(p.Id) == null))
-            {
-                context.Prizes.Add(prize);
-            }
+            context.Facts.AddRange(FactInitialization.Facts.Where(f => context.Facts.Find(f.Id) == null));
 
             context.SaveChanges();
         }
