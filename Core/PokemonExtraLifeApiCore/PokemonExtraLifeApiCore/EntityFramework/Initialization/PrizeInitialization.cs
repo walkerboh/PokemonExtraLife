@@ -10,21 +10,57 @@ namespace PokemonExtraLifeApiCore.EntityFramework.Initialization
             new PopupPrize
             {
                 Id = 1,
-                Name = "Prize 1",
-                Contributor = "Human"
+                Name = "DedenneCordKeeper",
+                Contributor = "Dystortion"
             },
             new PopupPrize
             {
                 Id = 2,
-                Name = "Prize 2",
-                Contributor = "Robot",
+                Name = "Diglet",
+                Contributor = "Dystortion",
             },
             new PopupPrize
             {
                 Id = 3,
-                Name = "Prize 3",
-                Contributor = "Cat"
-            }
+                Name = "Ditto",
+                Contributor = "Alyssa"
+            },
+            new PopupPrize
+            {
+                Id= 4,
+                Name = "StarmanStoutGlossPaper",
+                Contributor = "Pixels2dio"
+            },
+            new PopupPrize
+            {
+                Id= 5,
+                Name = "MythraPyra",
+                Contributor = "Pixels2dio"
+            },
+            new PopupPrize
+            {
+                Id= 6,
+                Name = "SSBUMural",
+                Contributor = "Pixels2dio"
+            },
+            new PopupPrize
+            {
+                Id= 7,
+                Name = "WindwakerCanvas",
+                Contributor = "Pixels2dio"
+            },
+            new PopupPrize
+            {
+                Id= 8,
+                Name = "LinkClimbing",
+                Contributor = "Pixels2dio"
+            },
+            new PopupPrize
+            {
+                Id= 9,
+                Name = "LinkMotorcycle",
+                Contributor = "Pixels2dio"
+            },
         };
     }
 }

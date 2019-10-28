@@ -88,5 +88,21 @@ namespace PokemonExtraLifeApiCore.Controllers
 
             return Json(new { fact });
         }
+
+        [HttpGet]
+        [Route("Prize")]
+        public ActionResult Prize()
+        {
+            var prizeId = _context.GetCurrentPrizeId();
+
+            if(!prizeId.HasValue)
+            {
+                return Json(null);
+            }
+
+            var activePrize = _context.Prizes.Find(prizeId.Value);
+
+            return Json(activePrize);
+        }
     }
 }

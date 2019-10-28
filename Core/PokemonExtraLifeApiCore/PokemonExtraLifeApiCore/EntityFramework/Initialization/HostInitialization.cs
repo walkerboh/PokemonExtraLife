@@ -35,7 +35,7 @@ namespace PokemonExtraLifeApiCore.EntityFramework.Initialization
             {
                 Id = 5,
                 Name = "Tim",
-                Pokemon = "Mimikyu"
+                Pokemon = "Duskull"
             },
             new Host
             {
@@ -59,7 +59,19 @@ namespace PokemonExtraLifeApiCore.EntityFramework.Initialization
             {
                 Id = 9,
                 Name = "Ethan",
-                Pokemon = "Caracosta"
+                Pokemon = "Carracosta"
+            },
+            new Host
+            {
+                Id = 10,
+                Name="Alyp",
+                Pokemon = "Eevee"
+            },
+            new Host
+            {
+                Id = 11,
+                Name="Alyf",
+                Pokemon = "Umbreon"
             }
         };
     }

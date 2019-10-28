@@ -11,10 +11,18 @@
             <div>
                 @if (Model.ActivePrize != null)
                 {
-                    <span>Remaining time for prize: @((Model.ActivePrize.StartTime.Value.AddMinutes(Model.ActivePrize.Duration.Value) - DateTime.UtcNow).Minutes) minutes</span>
+                    <span>Prize active for: @((int)((DateTime.UtcNow - Model.ActivePrize.StartTime.Value).TotalMinutes)) minutes</span>
                 }
             </div>
             <div>Total donations for prize: @Model.ActivePrizeDonations</div>
+            <div>
+                @if(Model.ActivePrize != null)
+                {
+                    <form method="post" data-ajax="true" asp-controller="Dashboard" asp-action="StopPrize" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#PrizeSection">
+                        <button type="submit">Stop Active Prize</button>
+                    </form>
+                }
+            </div>
         </div>
         <div>
             <h3>Start a prize</h3>
@@ -25,7 +33,6 @@
                         <option value="@item.Value">@item.Text</option>
                     }
                 </select>
-                <label>Duration (minutes): <input name="duration" type="number" /></label>
                 <button type="submit" @(Model.ActivePrize == null && Model.PrizesListItems.Any() ? string.Empty : "disabled=\"disabled\"")>Start Selected Prize</button>
             </form>
         </div>

@@ -58,17 +58,29 @@ namespace PokemonExtraLifeApiCore.Controllers
         {
             UpdateGamesDb(gamesModel);
 
-            //return View("Index", GetDashboardModel());
             return PartialView("Games", GetGamesModel());
         }
 
         [HttpPost]
-        public ActionResult StartPrize(int prizeId, int duration)
+        public ActionResult StartPrize(int prizeId)
         {
-            if (context.GetCurrentPrizeId() != null || duration < 1)
+            if (context.GetCurrentPrizeId() != null)
                 return PartialView("Prizes", GetPrizesModel());
 
-            ActivatePrize(prizeId, duration);
+            ActivatePrize(prizeId);
+
+            return PartialView("Prizes", GetPrizesModel());
+        }
+
+        [HttpPost]
+        public ActionResult StopPrize()
+        {
+            var prizeId = context.GetCurrentPrizeId();
+
+            if (!prizeId.HasValue)
+                return PartialView("Prizes", GetPrizesModel());
+
+            StopPrize(prizeId.Value);
 
             return PartialView("Prizes", GetPrizesModel());
         }
@@ -168,11 +180,17 @@ namespace PokemonExtraLifeApiCore.Controllers
             context.SaveChanges();
         }
 
-        private void ActivatePrize(int prizeId, int duration)
+        private void ActivatePrize(int prizeId)
         {
             var prize = context.Prizes.Find(prizeId);
             prize.StartTime = DateTime.UtcNow;
-            prize.Duration = duration;
+            context.SaveChanges();
+        }
+
+        private void StopPrize(int prizeId)
+        {
+            var prize = context.Prizes.Find(prizeId);
+            prize.EndTime = DateTime.UtcNow;
             context.SaveChanges();
         }
 

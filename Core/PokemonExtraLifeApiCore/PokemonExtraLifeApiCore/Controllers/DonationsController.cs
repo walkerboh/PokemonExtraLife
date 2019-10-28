@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +11,6 @@ using PokemonExtraLifeApiCore.Models.API;
 
 namespace PokemonExtraLifeApiCore.Controllers
 {
-    //[AllowCrossSite]
     [Route("api/[controller]")]
     [ApiController]
     public class DonationsController : Controller
@@ -119,6 +119,22 @@ namespace PokemonExtraLifeApiCore.Controllers
         }
 
         [HttpGet]
+        [Route("prize")]
+        public ActionResult Prize()
+        {
+            var prizeId = _context.GetCurrentPrizeId();
+
+            if (!prizeId.HasValue)
+            {
+                return Json(null);
+            }
+
+            var activePrize = _context.Prizes.Find(prizeId.Value);
+
+            return Json(activePrize);
+        }
+
+        [HttpGet]
         [Route("reset")]
         public async Task<ActionResult> Reset()
         {
@@ -136,6 +152,7 @@ namespace PokemonExtraLifeApiCore.Controllers
             {
                 p.StartTime = null;
                 p.Duration = null;
+                p.WiningDonor = null;
             });
 
             _context.SaveChanges();

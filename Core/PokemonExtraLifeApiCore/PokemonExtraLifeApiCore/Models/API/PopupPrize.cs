@@ -1,5 +1,5 @@
-﻿using System;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using System;
 
 namespace PokemonExtraLifeApiCore.Models.API
 {
@@ -13,22 +13,17 @@ namespace PokemonExtraLifeApiCore.Models.API
         public string Url { get; set; }
         public DateTime? StartTime { get; set; }
         public int? Duration { get; set; }
+        public DateTime? EndTime { get; set; }
         public string WiningDonor { get; set; }
 
         public bool Active()
         {
-            if (StartTime.HasValue && Duration.HasValue)
-            {
-                return StartTime.Value.AddMinutes(Duration.Value) > DateTime.UtcNow;
-            }
-
-            return false;
+            return StartTime.HasValue && !EndTime.HasValue;
         }
 
         public bool Complete()
         {
-            return StartTime.HasValue && Duration.HasValue &&
-                   StartTime.Value.AddMinutes(Duration.Value) < DateTime.UtcNow;
+            return StartTime.HasValue && EndTime.HasValue;
         }
     }
 }
