@@ -194,7 +194,7 @@ namespace PokemonExtraLifeApiCore.EntityFramework.Initialization
             new Pokemon
             {
                 Id = 27,
-                Name = "Magnazone",
+                Name = "Magnezone",
                 StartingHealth = 41,
                 HealthMultiplier = 1
             },

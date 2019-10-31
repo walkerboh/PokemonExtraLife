@@ -52,7 +52,7 @@ namespace PokemonExtraLifeApiCore.Controllers
 
             var numberOfDonations = donations.Count;
             var totalAmountDonated = donations.Sum(d => d.Amount);
-            var latestDonation = donations.OrderByDescending(d => d.Time).First();
+            var latestDonation = donations.OrderByDescending(d => d.Time).FirstOrDefault();
             var donationGoal = _context.GetDisplayStatus().DonationGoal;
 
             return Json(new { numberOfDonations, totalAmountDonated, latestDonation, donationGoal });

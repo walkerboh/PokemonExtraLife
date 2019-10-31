@@ -111,11 +111,12 @@ namespace PokemonExtraLifeApiCore.Controllers
                        {
                            gym = grp.Key,
                            gymName = grp.Key.ToString(),
+                           trainerName = grp.First().Name,
                            started = grp.Any(t => t.PokemonOrders.Any(po => po.Activated)),
                            done = grp.All(t => t.PokemonOrders.All(po => po.Done))
                        };
 
-            return Json(new { grouped = gyms });
+            return Json(gyms);
         }
 
         [HttpGet]
