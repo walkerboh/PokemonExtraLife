@@ -98,6 +98,12 @@ namespace PokemonExtraLifeApiCore.EntityFramework.Initialization
                 Name = "Team Rocket",
                 Gym = Gym.TeamRocket
             },
+            new Trainer
+            {
+                Id = 16,
+                Name = "Red",
+                Gym = Gym.EliteFourRed
+            },
         };
     }
 }

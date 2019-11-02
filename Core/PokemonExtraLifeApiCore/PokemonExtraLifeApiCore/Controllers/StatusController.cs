@@ -66,9 +66,11 @@ namespace PokemonExtraLifeApiCore.Controllers
 
             var currentPo = pokemonOrders.FirstOrDefault(po => po.Activated && !po.Done);
 
+            var pokemonStatus = pokemonOrders.Where(po => po.TrainerId.Equals(currentPo.TrainerId)).Select(po=>new {name = po.Pokemon.Name, alive = po.Pokemon.CurrentHealth > 0}).ToList();
+
             var gym = _context.GetCurrentGym();
 
-            return Json(new { currentPo?.Trainer, currentPo?.Pokemon, gym = gym?.ToString() });
+            return Json(new { currentPo?.Trainer, currentPo?.Pokemon, pokemonStatus, gym = gym?.ToString() });
         }
 
         [HttpGet]

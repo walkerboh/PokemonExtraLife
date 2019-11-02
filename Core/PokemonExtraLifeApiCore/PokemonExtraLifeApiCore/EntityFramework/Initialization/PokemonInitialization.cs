@@ -54,7 +54,7 @@ namespace PokemonExtraLifeApiCore.EntityFramework.Initialization
             new Pokemon
             {
                 Id = 7,
-                Name = "Pincir",
+                Name = "Pinsir",
                 StartingHealth = 63,
                 HealthMultiplier = 1
             },
@@ -285,7 +285,7 @@ namespace PokemonExtraLifeApiCore.EntityFramework.Initialization
             new Pokemon
             {
                 Id = 40,
-                Name = "Gyrados",
+                Name = "Gyarados",
                 StartingHealth = 42,
                 HealthMultiplier = 1
             },
@@ -474,7 +474,7 @@ namespace PokemonExtraLifeApiCore.EntityFramework.Initialization
             new Pokemon
             {
                 Id = 67,
-                Name = "Gyrados",
+                Name = "Gyarados",
                 StartingHealth = 50,
                 HealthMultiplier = 1
             },
@@ -579,8 +579,15 @@ namespace PokemonExtraLifeApiCore.EntityFramework.Initialization
             new Pokemon
             {
                 Id = 82,
-                Name = "Wobuffet",
+                Name = "Wobbuffet",
                 StartingHealth = 25,
+                HealthMultiplier = 1
+            },
+            new Pokemon
+            {
+                Id = 83,
+                Name = "Rattata",
+                StartingHealth = 5000,
                 HealthMultiplier = 1
             }
         };

@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Mvc;
+using PokemonExtraLifeApiCore.EntityFramework;
+using System;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using PokemonExtraLifeApiCore.EntityFramework;
-using PokemonExtraLifeApiCore.Models.API;
 
 namespace PokemonExtraLifeApiCore.Controllers
 {
@@ -27,8 +24,8 @@ namespace PokemonExtraLifeApiCore.Controllers
         [HttpGet]
         public ActionResult HourlyChart()
         {
-            var startTime = new DateTime(2019, 11, 2, 11, 00, 00);
-            var endTime = new DateTime(2019, 11, 3, 11, 00, 00);
+            var startTime = new DateTime(2019, 11, 2, 11, 00, 00, DateTimeKind.Local).ToUniversalTime();
+            var endTime = new DateTime(2019, 11, 3, 11, 00, 00, DateTimeKind.Local).ToUniversalTime();
 
             var donations = _context.Donations;
 

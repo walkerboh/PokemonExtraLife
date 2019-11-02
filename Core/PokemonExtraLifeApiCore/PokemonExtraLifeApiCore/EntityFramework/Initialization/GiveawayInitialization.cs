@@ -11,7 +11,7 @@ namespace PokemonExtraLifeApiCore.EntityFramework.Initialization
             new Giveaway
             {
                 Id= 1,
-                PrizeName = "Pokemon Prize Pack #1",
+                PrizeName = "Pokemon Garden Party",
                 Contributor = "Alyssa, Spicy Doodles, & Dystortion",
                 Url = "Url 1",
                 Gym = Gym.Flying
@@ -19,7 +19,7 @@ namespace PokemonExtraLifeApiCore.EntityFramework.Initialization
             new Giveaway
             {
                 Id= 2,
-                PrizeName = "Mario Bundle",
+                PrizeName = "Mushroom Kingdom Essentials",
                 Contributor = "Alyssa & Pixels2dio",
                 Url = "Url ",
                 Gym = Gym.Bug
@@ -27,7 +27,7 @@ namespace PokemonExtraLifeApiCore.EntityFramework.Initialization
             new Giveaway
             {
                 Id= 3,
-                PrizeName = "SSBU Mural",
+                PrizeName = "Everyone Is Here!",
                 Contributor = "Pixels2dio",
                 Url = "Url 1",
                 Gym = Gym.Normal
@@ -35,7 +35,7 @@ namespace PokemonExtraLifeApiCore.EntityFramework.Initialization
             new Giveaway
             {
                 Id= 4,
-                PrizeName = "Resident Evil 2 Bundle",
+                PrizeName = "X Is Gonna Give It To Ya",
                 Contributor = "Animus Rhythm & Crowsmack",
                 Url = "Url 1",
                 Gym = Gym.Ghost
@@ -43,7 +43,7 @@ namespace PokemonExtraLifeApiCore.EntityFramework.Initialization
             new Giveaway
             {
                 Id= 5,
-                PrizeName = "Pokemon Prize Pack #2",
+                PrizeName = "Let's Go Pikachu",
                 Contributor = "Alyssa, Pixels2dio, & Dystortion",
                 Url = "Url 1",
                 Gym = Gym.Fighting
@@ -51,7 +51,7 @@ namespace PokemonExtraLifeApiCore.EntityFramework.Initialization
             new Giveaway
             {
                 Id= 6,
-                PrizeName = "Fire Emblem Bundle",
+                PrizeName = "Choose Your House",
                 Contributor = "KrazehKai & Naytendo",
                 Url = "Url 1",
                 Gym = Gym.Steel
@@ -59,7 +59,7 @@ namespace PokemonExtraLifeApiCore.EntityFramework.Initialization
             new Giveaway
             {
                 Id= 7,
-                PrizeName = "Final Fantasy Tea Bundle",
+                PrizeName = "Final Fantas-tea",
                 Contributor = "Ivory Monocle Tea & The Sweetie Bee",
                 Url = "Url 1",
                 Gym = Gym.Ice
@@ -67,7 +67,7 @@ namespace PokemonExtraLifeApiCore.EntityFramework.Initialization
             new Giveaway
             {
                 Id= 8,
-                PrizeName = "Zelda Prints",
+                PrizeName = "Courage & Wisdom",
                 Contributor = "Dystortion",
                 Url = "Url 1",
                 Gym = Gym.Dragon
@@ -75,7 +75,7 @@ namespace PokemonExtraLifeApiCore.EntityFramework.Initialization
             new Giveaway
             {
                 Id= 9,
-                PrizeName = "Ghibli Bundle",
+                PrizeName = "Your New Neighbor",
                 Contributor = "Alyssa, Penelope Love Prints, & AmberCurio",
                 Url = "Url 1",
                 Gym = Gym.EliteFourWill
@@ -83,7 +83,7 @@ namespace PokemonExtraLifeApiCore.EntityFramework.Initialization
             new Giveaway
             {
                 Id= 10,
-                PrizeName = "Overwatch Prints",
+                PrizeName = "The World Needs Heroes",
                 Contributor = "Art of Chow",
                 Url = "Url 1",
                 Gym = Gym.EliteFourKoga
@@ -91,7 +91,7 @@ namespace PokemonExtraLifeApiCore.EntityFramework.Initialization
             new Giveaway
             {
                 Id= 11,
-                PrizeName = "Zelda Bundle",
+                PrizeName = "Light of the Hero",
                 Contributor = "Vivid Delights, Pixels2dio, & Friendly Fiends Design",
                 Url = "Url 1",
                 Gym = Gym.EliteFourBruno
@@ -99,7 +99,7 @@ namespace PokemonExtraLifeApiCore.EntityFramework.Initialization
             new Giveaway
             {
                 Id= 12,
-                PrizeName = "Pokemon Prize Pack #3",
+                PrizeName = "Cuteness Overload",
                 Contributor = "Pixels2dio & Dystortion",
                 Url = "Url 1",
                 Gym = Gym.EliteFourKaren
@@ -107,7 +107,7 @@ namespace PokemonExtraLifeApiCore.EntityFramework.Initialization
             new Giveaway
             {
                 Id= 13,
-                PrizeName = "MH Print & Dragonite Figure",
+                PrizeName = "Master of Dragons",
                 Contributor = "Crowsmack & Dystortion",
                 Url = "Url 1",
                 Gym = Gym.EliteFourLance
@@ -115,7 +115,7 @@ namespace PokemonExtraLifeApiCore.EntityFramework.Initialization
             new Giveaway
             {
                 Id= 14,
-                PrizeName = "Pokemon Prize Pack #4",
+                PrizeName = "The Very Best",
                 Contributor = "Alyssa, Pixels2dio, & Dystortion",
                 Url = "Url 1",
                 Gym = Gym.EliteFourRed
@@ -123,7 +123,7 @@ namespace PokemonExtraLifeApiCore.EntityFramework.Initialization
             new Giveaway
             {
                 Id= 15,
-                PrizeName = "Team Rocket Bundle",
+                PrizeName = "Blasting Off Again",
                 Contributor = "Dystortion",
                 Url = "Url 1",
                 Gym = Gym.TeamRocket
