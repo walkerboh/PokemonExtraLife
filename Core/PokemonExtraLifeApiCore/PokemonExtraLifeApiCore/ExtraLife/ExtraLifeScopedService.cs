@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Serilog;
 
 namespace PokemonExtraLifeApiCore.ExtraLife
 {
@@ -21,11 +22,13 @@ namespace PokemonExtraLifeApiCore.ExtraLife
     {
         private readonly ExtraLifeApiSettings _settings;
         private readonly ExtraLifeContext _context;
+        private readonly ILogger _logger;
 
-        public ExtraLifeScopedService(IOptions<ExtraLifeApiSettings> settings, ExtraLifeContext context)
+        public ExtraLifeScopedService(IOptions<ExtraLifeApiSettings> settings, ExtraLifeContext context, ILogger logger)
         {
             _settings = settings.Value;
             _context = context;
+            _logger = logger;
         }
 
         public async Task DoWork()
@@ -36,6 +39,8 @@ namespace PokemonExtraLifeApiCore.ExtraLife
             {
                 try
                 {
+                    //client.Timeout = new TimeSpan(0, 0, 1, 0);
+
                     client.BaseAddress = new Uri(_settings.DonationUrl);
 
                     HttpResponseMessage response = await client.GetAsync(_settings.DonationUrl);
@@ -44,7 +49,7 @@ namespace PokemonExtraLifeApiCore.ExtraLife
                 }
                 catch (Exception ex)
                 {
-                    // Bury it, don't care for now
+                    _logger.Error(ex, "Fuck this API");
                 }
             }
 

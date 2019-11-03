@@ -16,6 +16,7 @@ using PokemonExtraLifeApiCore.EntityFramework;
 using PokemonExtraLifeApiCore.EntityFramework.Initialization;
 using PokemonExtraLifeApiCore.ExtraLife;
 using PokemonExtraLifeApiCore.Models.API;
+using Serilog;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
 namespace PokemonExtraLifeApiCore
@@ -57,6 +58,9 @@ namespace PokemonExtraLifeApiCore
             {
                 options.AddDefaultPolicy(builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             });
+
+            services.AddSingleton((ILogger) new LoggerConfiguration().MinimumLevel.Debug().WriteTo.File("logs.log")
+                .CreateLogger());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
