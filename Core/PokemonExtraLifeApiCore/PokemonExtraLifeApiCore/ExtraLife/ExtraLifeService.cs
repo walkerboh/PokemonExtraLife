@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
-using PokemonExtraLifeApiCore.Common;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,30 +9,37 @@ namespace PokemonExtraLifeApiCore.ExtraLife
 {
     public class ExtraLifeService : BackgroundService
     {
-        private readonly ExtraLifeApiSettings _settings;
         private readonly IServiceProvider _provider;
+        private readonly ILogger _logger;
 
-        public ExtraLifeService(IOptions<ExtraLifeApiSettings> settings, IServiceProvider provider)
+        public ExtraLifeService(IServiceProvider provider, ILogger logger)
         {
-            _settings = settings.Value;
             _provider = provider;
+            _logger = logger;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            while(!stoppingToken.IsCancellationRequested)
-            {
-                using(var scope = _provider.CreateScope())
-                {
-                    var scopedService = scope.ServiceProvider.GetRequiredService<IScopedProcessingService>();
+            _logger.LogInformation("ExtraLife service is starting.");
 
-                    await scopedService.DoWork();
-                }
-
-                await Task.Delay(_settings.RequestDelay, stoppingToken);
-            }
+            await DoWork(stoppingToken);
         }
 
-        
+        private async Task DoWork(CancellationToken stoppingToken)
+        {
+            _logger.LogInformation("ExtraLife service is working");
+
+            using var scope = _provider.CreateScope();
+            var scopedProcessingService = scope.ServiceProvider.GetRequiredService<IScopedProcessingService>();
+
+            await scopedProcessingService.DoWork(stoppingToken);
+        }
+
+        public override async Task StopAsync(CancellationToken stoppingToken)
+        {
+            _logger.LogInformation("ExtraLife service is stopping");
+
+            await base.StopAsync(stoppingToken);
+        }
     }
 }

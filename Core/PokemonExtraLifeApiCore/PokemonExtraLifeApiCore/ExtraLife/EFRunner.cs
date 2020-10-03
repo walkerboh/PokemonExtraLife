@@ -49,7 +49,7 @@ namespace PokemonExtraLifeApiCore.ExtraLife
 
                     if (response.IsSuccessStatusCode) json = await response.Content.ReadAsStringAsync();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     // Bury it, don't care for now
                 }

@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PokemonExtraLifeApiCore.EntityFramework;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace PokemonExtraLifeApiCore.Controllers

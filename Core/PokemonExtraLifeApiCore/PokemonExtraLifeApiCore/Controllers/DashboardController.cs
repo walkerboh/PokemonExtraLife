@@ -1,12 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PokemonExtraLifeApiCore.EntityFramework;
-using PokemonExtraLifeApiCore.Models.API;
 using PokemonExtraLifeApiCore.Models.Dashboard;
+using System;
+using System.Linq;
 
 namespace PokemonExtraLifeApiCore.Controllers
 {
@@ -108,12 +105,12 @@ namespace PokemonExtraLifeApiCore.Controllers
 
         private SummaryModel GetSummaryModel()
         {
-            List<Donation> donations = context.Donations.ToList();
-            DisplayStatus displayStatus = context.GetDisplayStatus();
+            var donations = context.Donations.ToList();
+            var displayStatus = context.GetDisplayStatus();
 
-            Host currentHost = context.Hosts.First(h => h.Id == displayStatus.CurrentHostId);
+            var currentHost = context.Hosts.First(h => h.Id == displayStatus.CurrentHostId);
 
-            Pokemon activePokemon = context.PokemonOrders.Include(po => po.Pokemon).ToList()
+            var activePokemon = context.PokemonOrders.Include(po => po.Pokemon).ToList()
                 .FirstOrDefault(po => po.Activated && !po.Done)?.Pokemon;
 
             return new SummaryModel
@@ -130,7 +127,7 @@ namespace PokemonExtraLifeApiCore.Controllers
 
         private void UpdateDisplayStatus(SummaryModel model)
         {
-            DisplayStatus displayStatus = context.GetDisplayStatus();
+            var displayStatus = context.GetDisplayStatus();
 
             displayStatus.TrackDonations = model.TrackDonations;
             displayStatus.DonationGoal = model.DonationGoal;
@@ -150,7 +147,7 @@ namespace PokemonExtraLifeApiCore.Controllers
 
         private GroupModel GetGroupModel()
         {
-            List<Group> groups = context.Groups.ToList();
+            var groups = context.Groups.ToList();
 
             return new GroupModel
             {
@@ -162,16 +159,16 @@ namespace PokemonExtraLifeApiCore.Controllers
 
         private void ActivateGroup(int groupId)
         {
-            Group group = context.Groups.First(g => g.Id == groupId);
+            var group = context.Groups.First(g => g.Id == groupId);
             group.Started = true;
             context.SaveChanges();
         }
 
         private void ForceStopGroup()
         {
-            IQueryable<Group> groups = context.Groups.Where(g => g.Started).Include("PokemonOrders.Pokemon");
+            var groups = context.Groups.Where(g => g.Started).Include("PokemonOrders.Pokemon");
 
-            foreach (Group group in groups)
+            foreach (var group in groups)
             {
                 if (!group.Done)
                     group.ForceComplete = true;
@@ -196,7 +193,7 @@ namespace PokemonExtraLifeApiCore.Controllers
 
         private GamesModel GetGamesModel()
         {
-            DisplayStatus displayStatus = context.GetDisplayStatus();
+            var displayStatus = context.GetDisplayStatus();
 
             return new GamesModel
             {
@@ -208,7 +205,7 @@ namespace PokemonExtraLifeApiCore.Controllers
 
         private void UpdateGamesDb(GamesModel model)
         {
-            DisplayStatus displayStatus = context.GetDisplayStatus();
+            var displayStatus = context.GetDisplayStatus();
 
             displayStatus.CurrentGame = model.CurrentGame;
             displayStatus.NextGame = model.NextGame;
@@ -227,7 +224,7 @@ namespace PokemonExtraLifeApiCore.Controllers
 
         private PokemonStatusModel GetPokemonStatusModel()
         {
-            PokemonOrder currentPo = context.PokemonOrders.Include("Pokemon").Include("Trainer").ToList()
+            var currentPo = context.PokemonOrders.Include("Pokemon").Include("Trainer").ToList()
                 .FirstOrDefault(po => po.Activated && !po.Done);
 
             if (currentPo != null)

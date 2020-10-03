@@ -1,23 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PokemonExtraLifeApiCore.Common;
 using PokemonExtraLifeApiCore.EntityFramework;
-using PokemonExtraLifeApiCore.EntityFramework.Initialization;
 using PokemonExtraLifeApiCore.ExtraLife;
-using PokemonExtraLifeApiCore.Models.API;
 using Serilog;
-using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
+using System;
 
 namespace PokemonExtraLifeApiCore
 {
@@ -45,13 +37,13 @@ namespace PokemonExtraLifeApiCore
             services.AddDbContext<ExtraLifeContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("ExtraLifeDatabase")));
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddControllersWithViews();
 
             services.Configure<ExtraLifeApiSettings>(Configuration.GetSection("ExtraLifeSettings"));
 
-            services.AddTransient<DonationProcessor>();
-            services.AddTransient<IScopedProcessingService, ExtraLifeScopedService>();
-            services.AddSingleton<IHostedService, ExtraLifeService>();
+            services.AddTransient<IDonationProcessor, DonationProcessor>();
+            services.AddHostedService<ExtraLifeService>();
+            services.AddScoped<IScopedProcessingService, ExtraLifeScopedService>();
             services.AddTransient<Random>();
 
             services.AddCors(options =>
@@ -64,7 +56,7 @@ namespace PokemonExtraLifeApiCore
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ExtraLifeContext context)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ExtraLifeContext context)
         {
             if (env.IsDevelopment())
             {
@@ -83,35 +75,37 @@ namespace PokemonExtraLifeApiCore
             app.UseCookiePolicy();
             app.UseCors();
 
-            app.UseMvc(routes =>
+            app.UseRouting();
+
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapRoute(
+                endpoints.MapControllerRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
             });
 
             context.Database.EnsureCreated();
 
             // DB Initialization
-            context.Pokemon.AddRange(PokemonInitialization.Pokemon.Where(pokemon => context.Pokemon.Find(pokemon.Id) == null));
+            //context.Pokemon.AddRange(PokemonInitialization.Pokemon.Where(pokemon => context.Pokemon.Find(pokemon.Id) == null));
 
-            context.Trainers.AddRange(TrainerInitialization.Trainers.Where(trainer => context.Trainers.Find(trainer.Id) == null));
+            //context.Trainers.AddRange(TrainerInitialization.Trainers.Where(trainer => context.Trainers.Find(trainer.Id) == null));
 
-            context.Groups.AddRange(GroupInitialization.Groups.Where(group => context.Groups.Find(group.Id) == null));
+            //context.Groups.AddRange(GroupInitialization.Groups.Where(group => context.Groups.Find(group.Id) == null));
 
-            context.Hosts.AddRange(HostInitialization.Hosts.Where(host => context.Hosts.Find(host.Id) == null));
+            //context.Hosts.AddRange(HostInitialization.Hosts.Where(host => context.Hosts.Find(host.Id) == null));
 
-            context.Giveaways.AddRange(GiveawayInitialization.Giveaways.Where(giveaway => context.Giveaways.Find(giveaway.Id) == null));
+            //context.Giveaways.AddRange(GiveawayInitialization.Giveaways.Where(giveaway => context.Giveaways.Find(giveaway.Id) == null));
 
-            context.SaveChanges();
+            //context.SaveChanges();
 
-            context.PokemonOrders.AddRange(PokemonOrderInitialization.PokemonOrders.Where(po => context.PokemonOrders.Find(po.PokemonId) == null));
+            //context.PokemonOrders.AddRange(PokemonOrderInitialization.PokemonOrders.Where(po => context.PokemonOrders.Find(po.PokemonId) == null));
 
-            context.Prizes.AddRange(PrizeInitialization.Prizes.Where(p => context.Prizes.Find(p.Id) == null));
+            //context.Prizes.AddRange(PrizeInitialization.Prizes.Where(p => context.Prizes.Find(p.Id) == null));
 
-            context.Facts.AddRange(FactInitialization.Facts.Where(f => context.Facts.Find(f.Id) == null));
+            //context.Facts.AddRange(FactInitialization.Facts.Where(f => context.Facts.Find(f.Id) == null));
 
-            context.SaveChanges();
+            //context.SaveChanges();
         }
     }
 }

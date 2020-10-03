@@ -25,7 +25,7 @@ namespace PokemonExtraLifeApiCore.ExtraLife
         [JsonProperty("message")]
         public string Message { get; set; }
 
-        public Donation ToDbDonation(Gym? gym)
+        public Donation ToDbDonation(Gym? gym, bool processed = false)
         {
             return new Donation
             {

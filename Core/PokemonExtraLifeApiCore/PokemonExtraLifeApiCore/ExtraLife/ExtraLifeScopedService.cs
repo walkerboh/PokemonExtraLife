@@ -1,23 +1,17 @@
-﻿using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
-using PokemonExtraLifeApiCore.Common;
+﻿using Microsoft.Extensions.Logging;
 using PokemonExtraLifeApiCore.EntityFramework;
-using PokemonExtraLifeApiCore.Enum;
-using PokemonExtraLifeApiCore.Models.API;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
-using Serilog;
+using Microsoft.Extensions.Options;
+using PokemonExtraLifeApiCore.Common;
+using PokemonExtraLifeApiCore.Extensions;
 
 namespace PokemonExtraLifeApiCore.ExtraLife
 {
-    internal interface IScopedProcessingService
-    {
-        Task DoWork();
-    }
-
     public class ExtraLifeScopedService : IScopedProcessingService
     {
         private readonly ExtraLifeApiSettings _settings;
@@ -31,67 +25,61 @@ namespace PokemonExtraLifeApiCore.ExtraLife
             _logger = logger;
         }
 
-        public async Task DoWork()
+        public async Task DoWork(CancellationToken stoppingToken)
         {
-            string json = string.Empty;
-
-            using (var client = new HttpClient())
+            while(!stoppingToken.IsCancellationRequested)
             {
-                try
+                await Run();
+
+                await Task.Delay(_settings.RequestDelay, stoppingToken);
+            }
+        }
+
+        public async Task Run()
+        {
+            List<EFDonation> donations;
+
+            try
+            {
+                using var client = new HttpClient();
+                var response = await client.GetAsync(_settings.DonationUrl);
+
+                if (!response.IsSuccessStatusCode)
                 {
-                    //client.Timeout = new TimeSpan(0, 0, 1, 0);
-
-                    client.BaseAddress = new Uri(_settings.DonationUrl);
-
-                    HttpResponseMessage response = await client.GetAsync(_settings.DonationUrl);
-
-                    if (response.IsSuccessStatusCode) json = await response.Content.ReadAsStringAsync();
+                    _logger.LogError($"Response from ExtraLife API not successful {response.StatusCode}");
+                    return;
                 }
-                catch (Exception ex)
-                {
-                    _logger.Error(ex, "Fuck this API");
-                }
+
+                donations = await response.Content.ReadAsAsync<List<EFDonation>>();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Bad ExtraLife API Things");
+                return;
             }
 
-            List<EFDonation> donations = JsonConvert.DeserializeObject<List<EFDonation>>(json);
-
-            if (donations == null)
+            if (donations == null || !donations.Any())
+            {
                 return;
+            }
 
             donations.ForEach(d => d.RoundCreatedTime());
 
-            DateTime mostRecentDonation = DateTime.MinValue;
+            var mostRecentDonation = DateTime.MinValue;
 
-            if (_context.Donations.Any()) mostRecentDonation = DateTime.SpecifyKind(_context.Donations.Max(d => d.Time), DateTimeKind.Utc);
+            if(_context.Donations.Any())
+            {
+                mostRecentDonation = DateTime.SpecifyKind(_context.Donations.Max(d => d.Time), DateTimeKind.Utc);
+            }
 
             donations = donations.Where(d => d.CreatedDateUtc > mostRecentDonation).ToList();
 
-            DisplayStatus displayStatus = _context.GetDisplayStatus();
+            var displayStatus = _context.GetDisplayStatus();
 
-            IEnumerable<Donation> dbDonations;
+            var dbDonations = donations.Select(d => d.ToDbDonation(null, !displayStatus.TrackDonations));
 
-            if (displayStatus.TrackDonations)
-            {
-                Gym? currentGym = _context.GetCurrentGym();
-                dbDonations = donations.Select(d => d.ToDbDonation(currentGym)).ToList();
-                var prizeId = _context.GetCurrentPrizeId();
-                foreach(var d in dbDonations)
-                {
-                    d.PrizeId = prizeId;
-                }
-            }
-            else
-            {
-                dbDonations = donations.Select(d => d.ToDbDonation(null)).ToList();
-                foreach (var d in dbDonations)
-                {
-                    d.Processed = true;
-                }
-            }
-
-            _context.Donations.AddRange(dbDonations);
-
-            _context.SaveChanges();
+            await _context.Donations.AddRangeAsync(dbDonations);
+            await _context.SaveChangesAsync();
         }
     }
 }

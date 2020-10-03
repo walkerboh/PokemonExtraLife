@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using PokemonExtraLifeApiCore.EntityFramework;
 using PokemonExtraLifeApiCore.Enum;
-using PokemonExtraLifeApiCore.Models.API;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace PokemonExtraLifeApiCore.Controllers
 {
@@ -15,15 +13,15 @@ namespace PokemonExtraLifeApiCore.Controllers
     [ApiController]
     public class DonationsController : Controller
     {
-        private readonly JsonSerializerSettings settings = new JsonSerializerSettings
+        private readonly JsonSerializerSettings _settings = new JsonSerializerSettings
         {
             ReferenceLoopHandling = ReferenceLoopHandling.Ignore
         };
 
         private readonly ExtraLifeContext _context;
-        private readonly DonationProcessor _donationProcessor;
+        private readonly IDonationProcessor _donationProcessor;
 
-        public DonationsController(ExtraLifeContext context, DonationProcessor processor)
+        public DonationsController(ExtraLifeContext context, IDonationProcessor processor)
         {
             _context = context;
             _donationProcessor = processor;
@@ -33,22 +31,20 @@ namespace PokemonExtraLifeApiCore.Controllers
         [Route("nextdonation")]
         public ActionResult NextDonation()
         {
-            (Donation donation, Pokemon currentPokemon, Pokemon nextPokemon, Trainer currentTrainer, Trainer nextTrainer, Host currentHost, Host nextHost) = _donationProcessor.GetNextDonation();
+            var donationModel = _donationProcessor.GetNextDonation();
 
-            var done = _context.Trainers.Include("PokemonOrders.Pokemon").ToList().All(t => t.PokemonOrders.All(po => po.Done));
-
-            return Json(new {donation, currentPokemon, nextPokemon, currentTrainer, nextTrainer, currentHost, nextHost, done}, settings);
+            return Json(donationModel, _settings);
         }
 
         [HttpGet]
         [Route("currentstatus")]
         public ActionResult CurrentStatus()
         {
-            List<PokemonOrder> pokemonOrders = _context.PokemonOrders.Include("Pokemon").Include("Trainer").ToList();
+            var pokemonOrders = _context.PokemonOrders.Include("Pokemon").Include("Trainer").ToList();
 
-            PokemonOrder currentPo = pokemonOrders.FirstOrDefault(po => po.Activated && !po.Done);
+            var currentPo = pokemonOrders.FirstOrDefault(po => po.Activated && !po.Done);
 
-            bool done = pokemonOrders.All(po => po.Done);
+            var done = pokemonOrders.All(po => po.Done);
 
             return Json(new { currentPo?.Trainer, currentPo?.Pokemon, done });
         }
@@ -57,21 +53,21 @@ namespace PokemonExtraLifeApiCore.Controllers
         [Route("games")]
         public ActionResult Games()
         {
-            DisplayStatus displayStatus = _context.GetDisplayStatus();
+            var displayStatus = _context.GetDisplayStatus();
 
             return Json(new
             {
                 displayStatus.CurrentGame,
                 displayStatus.NextGame,
                 displayStatus.FollowingGame
-            }, settings);
+            }, _settings);
         }
 
         [HttpGet]
         [Route("summary")]
         public ActionResult Summary()
         {
-            DisplayStatus displayStatus = _context.GetDisplayStatus();
+            var displayStatus = _context.GetDisplayStatus();
 
             return Json(new
             {
@@ -85,9 +81,9 @@ namespace PokemonExtraLifeApiCore.Controllers
         [Route("giveaways")]
         public ActionResult Giveaways()
         {
-            Gym? currentGym = _context.GetCurrentGym();
+            var currentGym = _context.GetCurrentGym();
 
-            Giveaway giveaway = currentGym.HasValue ? _context.Giveaways.ToList().Single(g => g.Gym.Equals(currentGym.Value)) : null;
+            var giveaway = currentGym.HasValue ? _context.Giveaways.ToList().Single(g => g.Gym.Equals(currentGym.Value)) : null;
 
             return Json(new
             {
@@ -156,7 +152,7 @@ namespace PokemonExtraLifeApiCore.Controllers
                 p.WiningDonor = null;
             });
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return Json("OK");
         }
