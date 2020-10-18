@@ -13,5 +13,7 @@ namespace PokemonExtraLifeApiCore.Models.Dashboard
         public PokemonStatusModel PokemonStatusModel { get; set; }
 
         public PrizesModel PrizesModel { get; set; }
+
+        public PlayersModel PlayersModel { get; set; }
     }
 }

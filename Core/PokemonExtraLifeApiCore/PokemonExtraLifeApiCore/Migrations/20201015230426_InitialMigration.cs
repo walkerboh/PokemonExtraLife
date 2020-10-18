@@ -17,14 +17,15 @@ namespace PokemonExtraLifeApiCore.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                    CurrentHostId = table.Column<int>(nullable: false),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    CurrentHostId = table.Column<int>(nullable: true),
                     CurrentGame = table.Column<string>(nullable: true),
                     NextGame = table.Column<string>(nullable: true),
                     FollowingGame = table.Column<string>(nullable: true),
                     DonationGoal = table.Column<decimal>(nullable: false),
                     TrackDonations = table.Column<bool>(nullable: false),
-                    HealthMultiplier = table.Column<decimal>(nullable: false)
+                    HealthMultiplier = table.Column<decimal>(nullable: false),
+                    DonationBlock = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -32,23 +33,17 @@ namespace PokemonExtraLifeApiCore.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Donations",
+                name: "Facts",
                 schema: "public",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                    Donor = table.Column<string>(nullable: true),
-                    Amount = table.Column<decimal>(nullable: false),
-                    Time = table.Column<DateTime>(nullable: false),
-                    Message = table.Column<string>(nullable: true),
-                    Gym = table.Column<int>(nullable: true),
-                    PrizeId = table.Column<int>(nullable: true),
-                    Processed = table.Column<bool>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Text = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Donations", x => x.Id);
+                    table.PrimaryKey("PK_Facts", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -57,7 +52,7 @@ namespace PokemonExtraLifeApiCore.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     PrizeName = table.Column<string>(nullable: true),
                     Contributor = table.Column<string>(nullable: true),
                     Url = table.Column<string>(nullable: true),
@@ -74,7 +69,7 @@ namespace PokemonExtraLifeApiCore.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(nullable: true),
                     Gym = table.Column<int>(nullable: false),
                     Started = table.Column<bool>(nullable: false),
@@ -93,7 +88,7 @@ namespace PokemonExtraLifeApiCore.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(nullable: true),
                     Pokemon = table.Column<string>(nullable: true)
                 },
@@ -103,12 +98,27 @@ namespace PokemonExtraLifeApiCore.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Players",
+                schema: "public",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(nullable: true),
+                    Color = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Players", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Pokemon",
                 schema: "public",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(nullable: true),
                     Icon = table.Column<string>(nullable: true),
                     StartingHealth = table.Column<decimal>(nullable: false),
@@ -126,12 +136,13 @@ namespace PokemonExtraLifeApiCore.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(nullable: true),
                     Contributor = table.Column<string>(nullable: true),
                     Url = table.Column<string>(nullable: true),
                     StartTime = table.Column<DateTime>(nullable: true),
                     Duration = table.Column<int>(nullable: true),
+                    EndTime = table.Column<DateTime>(nullable: true),
                     WiningDonor = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -140,12 +151,31 @@ namespace PokemonExtraLifeApiCore.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "TargetPrizes",
+                schema: "public",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(nullable: true),
+                    Contributor = table.Column<string>(nullable: true),
+                    Url = table.Column<string>(nullable: true),
+                    Target = table.Column<decimal>(nullable: false),
+                    Activated = table.Column<bool>(nullable: false),
+                    DonationId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TargetPrizes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Trainers",
                 schema: "public",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(nullable: true),
                     Icon = table.Column<string>(nullable: true),
                     Gym = table.Column<int>(nullable: true),
@@ -154,6 +184,34 @@ namespace PokemonExtraLifeApiCore.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Trainers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Donations",
+                schema: "public",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Donor = table.Column<string>(nullable: true),
+                    Amount = table.Column<decimal>(nullable: false),
+                    Time = table.Column<DateTime>(nullable: false),
+                    Message = table.Column<string>(nullable: true),
+                    Gym = table.Column<int>(nullable: true),
+                    PrizeId = table.Column<int>(nullable: true),
+                    TargetPrizeId = table.Column<int>(nullable: true),
+                    Processed = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Donations", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Donations_TargetPrizes_TargetPrizeId",
+                        column: x => x.TargetPrizeId,
+                        principalSchema: "public",
+                        principalTable: "TargetPrizes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -196,6 +254,13 @@ namespace PokemonExtraLifeApiCore.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Donations_TargetPrizeId",
+                schema: "public",
+                table: "Donations",
+                column: "TargetPrizeId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_PokemonOrders_GroupId",
                 schema: "public",
                 table: "PokemonOrders",
@@ -219,6 +284,10 @@ namespace PokemonExtraLifeApiCore.Migrations
                 schema: "public");
 
             migrationBuilder.DropTable(
+                name: "Facts",
+                schema: "public");
+
+            migrationBuilder.DropTable(
                 name: "Giveaways",
                 schema: "public");
 
@@ -227,11 +296,19 @@ namespace PokemonExtraLifeApiCore.Migrations
                 schema: "public");
 
             migrationBuilder.DropTable(
+                name: "Players",
+                schema: "public");
+
+            migrationBuilder.DropTable(
                 name: "PokemonOrders",
                 schema: "public");
 
             migrationBuilder.DropTable(
                 name: "Prizes",
+                schema: "public");
+
+            migrationBuilder.DropTable(
+                name: "TargetPrizes",
                 schema: "public");
 
             migrationBuilder.DropTable(

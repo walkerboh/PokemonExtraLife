@@ -16,6 +16,13 @@ namespace PokemonExtraLifeApiCore.EntityFramework
         {
             var nextDonation = _context.Donations.OrderBy(d => d.Time).FirstOrDefault(d => !d.Processed);
 
+            if(nextDonation != null)
+            {
+                nextDonation.Processed = true;
+
+                _context.SaveChanges();
+            }
+
             return new DonationDisplayModel
             {
                 Donation = nextDonation

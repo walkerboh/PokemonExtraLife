@@ -1,0 +1,28 @@
+﻿@model PokemonExtraLifeApiCore.Models.Dashboard.PlayersModel
+
+<div style="display: flex; flex-direction: column" id="PlayersSection">
+    <h3>Players</h3>
+    <form method="post" asp-controller="Dashboard" asp-action="Players" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#PlayersSection">
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Color</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (var i = 0; i < Model.Players.Count; i++)
+                {
+                    <tr>
+                        <td>
+                            <input type="hidden" value="@Model.Players[i].Id" name="Players[@i].Id" />
+                            <input asp-for="Players[i].Name" name="Players[@i].Name" />
+                        </td>
+                        <td><input asp-for="Players[i].Color" name="Players[@i].Color" /></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <input type="submit" />
+    </form>
+</div>

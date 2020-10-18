@@ -33,7 +33,8 @@ namespace PokemonExtraLifeApiCore.ExtraLife
                 Donor = DisplayName,
                 Message = Message,
                 Time = CreatedDateUtc,
-                Gym = gym
+                Gym = gym,
+                Processed = processed
             };
         }
 

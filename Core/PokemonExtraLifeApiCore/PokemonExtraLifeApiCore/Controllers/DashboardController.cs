@@ -90,6 +90,14 @@ namespace PokemonExtraLifeApiCore.Controllers
             return PartialView("Prizes", GetPrizesModel());
         }
 
+        [HttpPost]
+        public ActionResult Players(PlayersModel model)
+        {
+            UpdatePlayers(model);
+
+            return PartialView("Players", GetPlayersModel());
+        }
+
         private DashboardModel GetDashboardModel()
         {
             return new DashboardModel
@@ -99,7 +107,8 @@ namespace PokemonExtraLifeApiCore.Controllers
                 GamesModel = GetGamesModel(),
                 DonationsModel = GetDonationsModel(),
                 PokemonStatusModel = GetPokemonStatusModel(),
-                PrizesModel = GetPrizesModel()
+                PrizesModel = GetPrizesModel(),
+                PlayersModel = GetPlayersModel()
             };
         }
 
@@ -108,7 +117,7 @@ namespace PokemonExtraLifeApiCore.Controllers
             var donations = context.Donations.ToList();
             var displayStatus = context.GetDisplayStatus();
 
-            var currentHost = context.Hosts.First(h => h.Id == displayStatus.CurrentHostId);
+            var currentHost = context.Hosts.FirstOrDefault(h => h.Id == displayStatus.CurrentHostId);
 
             var activePokemon = context.PokemonOrders.Include(po => po.Pokemon).ToList()
                 .FirstOrDefault(po => po.Activated && !po.Done)?.Pokemon;
@@ -266,17 +275,82 @@ namespace PokemonExtraLifeApiCore.Controllers
 
             var donations = context.Donations.Where(d => d.PrizeId.Equals(prize.Id));
             var names = donations.Select(d => d.Donor).Distinct().ToList();
-            
-            if(names.Count == 0)
+
+            if (names.Count == 0)
             {
                 prize.WiningDonor = "No donations for prize";
                 context.SaveChanges();
                 return;
             }
-            
+
             var index = _random.Next(names.Count);
             prize.WiningDonor = names[index];
             context.SaveChanges();
         }
+
+        private PlayersModel GetPlayersModel()
+        {
+            return new PlayersModel
+            {
+                Players = context.Players.OrderBy(p => p.Id).ToList()
+            };
+        }
+
+        private void UpdatePlayers(PlayersModel model)
+        {
+            foreach (var player in model.Players)
+            {
+                var dbPlayer = context.Players.Single(p => p.Id == player.Id);
+                if (!string.IsNullOrEmpty(player.Name) && !player.Name.Equals(dbPlayer.Name))
+                {
+                    dbPlayer.Name = player.Name;
+                }
+                if (!string.IsNullOrEmpty(player.Color) && !player.Color.Equals(dbPlayer.Color))
+                {
+                    dbPlayer.Color = player.Color;
+                }
+            }
+
+            context.SaveChanges();
+        }
+
+        //private PlayersModel GetPlayersModel()
+        //{
+        //    var players = context.Players.ToList();
+
+        //    return new PlayersModel
+        //    {
+        //        Player1 = players.SingleOrDefault(p => p.Id == 1),
+        //        Player2 = players.SingleOrDefault(p => p.Id == 2),
+        //        Player3 = players.SingleOrDefault(p => p.Id == 3),
+        //        Player4 = players.SingleOrDefault(p => p.Id == 4),
+        //        Player5 = players.SingleOrDefault(p => p.Id == 5),
+        //        Player6 = players.SingleOrDefault(p => p.Id == 6),
+        //        Player7 = players.SingleOrDefault(p => p.Id == 7),
+        //        Player8 = players.SingleOrDefault(p => p.Id == 8),
+        //        Player9 = players.SingleOrDefault(p => p.Id == 9),
+        //        Player10 = players.SingleOrDefault(p => p.Id == 10)
+        //    };
+        //}
+
+        //private void UpdatePlayers(PlayersModel model)
+        //{
+        //    var players = model.AsList;
+
+        //    foreach(var player in players)
+        //    {
+        //        var dbPlayer = context.Players.Single(p => p.Id == player.Id);
+        //        if(!player.Name.Equals(dbPlayer.Name))
+        //        {
+        //            dbPlayer.Name = player.Name;
+        //        }
+        //        if(!player.Color.Equals(dbPlayer.Color))
+        //        {
+        //            dbPlayer.Color = player.Color;
+        //        }
+        //    }
+
+        //    context.SaveChanges();
+        //}
     }
 }

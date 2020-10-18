@@ -10,6 +10,8 @@ using PokemonExtraLifeApiCore.EntityFramework;
 using PokemonExtraLifeApiCore.ExtraLife;
 using Serilog;
 using System;
+using System.Linq;
+using PokemonExtraLifeApiCore.EntityFramework.Initialization;
 
 namespace PokemonExtraLifeApiCore
 {
@@ -37,7 +39,7 @@ namespace PokemonExtraLifeApiCore
             services.AddDbContext<ExtraLifeContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("ExtraLifeDatabase")));
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews().AddNewtonsoftJson();
 
             services.Configure<ExtraLifeApiSettings>(Configuration.GetSection("ExtraLifeSettings"));
 
@@ -87,6 +89,9 @@ namespace PokemonExtraLifeApiCore
             context.Database.EnsureCreated();
 
             // DB Initialization
+
+            context.Players.AddRange(PlayerInitialization.Players.Where(player => context.Players.Find(player.Id) == null));
+
             //context.Pokemon.AddRange(PokemonInitialization.Pokemon.Where(pokemon => context.Pokemon.Find(pokemon.Id) == null));
 
             //context.Trainers.AddRange(TrainerInitialization.Trainers.Where(trainer => context.Trainers.Find(trainer.Id) == null));
@@ -105,7 +110,7 @@ namespace PokemonExtraLifeApiCore
 
             //context.Facts.AddRange(FactInitialization.Facts.Where(f => context.Facts.Find(f.Id) == null));
 
-            //context.SaveChanges();
+            context.SaveChanges();
         }
     }
 }

@@ -22,8 +22,13 @@ namespace PokemonExtraLifeApiCore.EntityFramework
         public DbSet<Giveaway> Giveaways { get; set; }
         public DbSet<PopupPrize> Prizes { get; set; }
         public DbSet<Fact> Facts { get; set; }
+        public DbSet<TargetPrize> TargetPrizes { get; set; }
+        public DbSet<Player> Players { get; set; }
 
         public Group ActiveGroup => Groups.Include("PokemonOrders.Pokemon").ToList().FirstOrDefault(g => g.Started && !g.Done);
+
+        public IEnumerable<TargetPrize> ActiveTargetPrizes =>
+            TargetPrizes.Where(p => p.Activated && !p.DonationId.HasValue);
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -46,18 +51,18 @@ namespace PokemonExtraLifeApiCore.EntityFramework
 
         public int? GetCurrentPrizeId()
         {
-            return Prizes.SingleOrDefault(p => p.Active())?.Id;
+            return Prizes.ToList().SingleOrDefault(p => p.Active())?.Id;
         }
 
         public DisplayStatus GetDisplayStatus()
         {
-            DisplayStatus displayStatus = DisplayStatus.FirstOrDefault();
+            var displayStatus = DisplayStatus.FirstOrDefault();
 
             if (displayStatus == null)
             {
                 displayStatus = new DisplayStatus
                 {
-                    CurrentHostId = Hosts.First().Id,
+                    CurrentHostId = Hosts.FirstOrDefault()?.Id,
                     HealthMultiplier = 1
                 };
                 DisplayStatus.Add(displayStatus);

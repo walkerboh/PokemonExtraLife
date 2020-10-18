@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-using PokemonExtraLifeApiCore.EntityFramework;
+﻿using PokemonExtraLifeApiCore.EntityFramework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using PokemonExtraLifeApiCore.Common;
 using PokemonExtraLifeApiCore.Extensions;
+using Serilog;
 
 namespace PokemonExtraLifeApiCore.ExtraLife
 {
@@ -46,7 +46,7 @@ namespace PokemonExtraLifeApiCore.ExtraLife
 
                 if (!response.IsSuccessStatusCode)
                 {
-                    _logger.LogError($"Response from ExtraLife API not successful {response.StatusCode}");
+                    _logger.Error($"Response from ExtraLife API not successful {response.StatusCode}");
                     return;
                 }
 
@@ -54,7 +54,7 @@ namespace PokemonExtraLifeApiCore.ExtraLife
             }
             catch (Exception e)
             {
-                _logger.LogError(e, "Bad ExtraLife API Things");
+                _logger.Error(e, "Bad ExtraLife API Things");
                 return;
             }
 
@@ -76,7 +76,22 @@ namespace PokemonExtraLifeApiCore.ExtraLife
 
             var displayStatus = _context.GetDisplayStatus();
 
-            var dbDonations = donations.Select(d => d.ToDbDonation(null, !displayStatus.TrackDonations));
+            var dbDonations = donations.Select(d => d.ToDbDonation(null, !displayStatus.TrackDonations)).ToList();
+
+            if(displayStatus.TrackDonations)
+            {
+                foreach(var donation in dbDonations)
+                {
+                    var activeTargets = _context.ActiveTargetPrizes;
+
+                    var match = activeTargets.FirstOrDefault(p => p.Target.Equals(donation.Amount));
+
+                    if (match != null && match.Donation == null)
+                    {
+                        match.Donation = donation;
+                    }
+                }
+            }
 
             await _context.Donations.AddRangeAsync(dbDonations);
             await _context.SaveChangesAsync();

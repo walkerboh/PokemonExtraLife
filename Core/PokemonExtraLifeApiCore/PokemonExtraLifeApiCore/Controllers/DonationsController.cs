@@ -5,6 +5,7 @@ using PokemonExtraLifeApiCore.EntityFramework;
 using PokemonExtraLifeApiCore.Enum;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace PokemonExtraLifeApiCore.Controllers
@@ -61,6 +62,12 @@ namespace PokemonExtraLifeApiCore.Controllers
                 displayStatus.NextGame,
                 displayStatus.FollowingGame
             }, _settings);
+        }
+
+        [HttpGet("players")]
+        public async Task<ActionResult> Players()
+        {
+            return Json(await _context.Players.Where(p => !string.IsNullOrEmpty(p.Name)).ToListAsync());
         }
 
         [HttpGet]
@@ -136,21 +143,31 @@ namespace PokemonExtraLifeApiCore.Controllers
         public async Task<ActionResult> Reset()
         {
             await _context.Donations.ForEachAsync(d => d.Processed = false);
-            await _context.Pokemon.ForEachAsync(p => p.Damage = 0);
-            await _context.Groups.ForEachAsync(g =>
-            {
-                g.Started = false;
-                g.StartTime = null;
-            });
-            _context.GetDisplayStatus().CurrentHostId = 1;
-            await _context.PokemonOrders.ForEachAsync(po => po.Activated = false);
-            _context.PokemonOrders.OrderBy(po=>po.Sequence).First().Activated = true;
+            //await _context.Pokemon.ForEachAsync(p => p.Damage = 0);
+            //await _context.Groups.ForEachAsync(g =>
+            //{
+            //    g.Started = false;
+            //    g.StartTime = null;
+            //});
+            //_context.GetDisplayStatus().CurrentHostId = 1;
+            //await _context.PokemonOrders.ForEachAsync(po => po.Activated = false);
+            //_context.PokemonOrders.OrderBy(po=>po.Sequence).First().Activated = true;
             await _context.Prizes.ForEachAsync(p =>
             {
                 p.StartTime = null;
                 p.Duration = null;
                 p.WiningDonor = null;
             });
+
+            await _context.SaveChangesAsync();
+
+            return Json("OK");
+        }
+
+        [HttpGet("resethard")]
+        public async Task<ActionResult> ResetHard()
+        {
+            _context.Donations.RemoveRange(_context.Donations);
 
             await _context.SaveChangesAsync();
 

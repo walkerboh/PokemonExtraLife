@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Serilog;
 
 namespace PokemonExtraLifeApiCore.ExtraLife
 {
@@ -20,14 +20,14 @@ namespace PokemonExtraLifeApiCore.ExtraLife
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            _logger.LogInformation("ExtraLife service is starting.");
+            _logger.Information("ExtraLife service is starting.");
 
             await DoWork(stoppingToken);
         }
 
         private async Task DoWork(CancellationToken stoppingToken)
         {
-            _logger.LogInformation("ExtraLife service is working");
+            _logger.Information("ExtraLife service is working");
 
             using var scope = _provider.CreateScope();
             var scopedProcessingService = scope.ServiceProvider.GetRequiredService<IScopedProcessingService>();
@@ -37,7 +37,7 @@ namespace PokemonExtraLifeApiCore.ExtraLife
 
         public override async Task StopAsync(CancellationToken stoppingToken)
         {
-            _logger.LogInformation("ExtraLife service is stopping");
+            _logger.Information("ExtraLife service is stopping");
 
             await base.StopAsync(stoppingToken);
         }

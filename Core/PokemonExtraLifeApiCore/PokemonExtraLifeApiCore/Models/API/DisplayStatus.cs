@@ -4,7 +4,7 @@ namespace PokemonExtraLifeApiCore.Models.API
     {
         public int Id { get; set; }
 
-        public int CurrentHostId { get; set; }
+        public int? CurrentHostId { get; set; }
 
         public string CurrentGame { get; set; }
 
@@ -17,5 +17,7 @@ namespace PokemonExtraLifeApiCore.Models.API
         public bool TrackDonations { get; set; }
 
         public decimal HealthMultiplier { get; set; } = 1;
+
+        public string DonationBlock { get; set; }
     }
 }
