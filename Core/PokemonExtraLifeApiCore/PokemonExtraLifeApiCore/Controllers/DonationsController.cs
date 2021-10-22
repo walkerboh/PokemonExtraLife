@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Serialization;
 
 namespace PokemonExtraLifeApiCore.Controllers
 {
@@ -16,7 +17,11 @@ namespace PokemonExtraLifeApiCore.Controllers
     {
         private readonly JsonSerializerSettings _settings = new JsonSerializerSettings
         {
-            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+            ContractResolver = new DefaultContractResolver
+            {
+                NamingStrategy = new CamelCaseNamingStrategy()
+            }
         };
 
         private readonly ExtraLifeContext _context;
@@ -47,7 +52,7 @@ namespace PokemonExtraLifeApiCore.Controllers
 
             var done = pokemonOrders.All(po => po.Done);
 
-            return Json(new { currentPo?.Trainer, currentPo?.Pokemon, done });
+            return Json(new { currentPo?.Trainer, currentPo?.Pokemon, done }, _settings);
         }
 
         [HttpGet]
@@ -67,7 +72,7 @@ namespace PokemonExtraLifeApiCore.Controllers
         [HttpGet("players")]
         public async Task<ActionResult> Players()
         {
-            return Json(await _context.Players.Where(p => !string.IsNullOrEmpty(p.Name)).ToListAsync());
+            return Json(await _context.Players.Where(p => !string.IsNullOrEmpty(p.Name)).ToListAsync(), _settings);
         }
 
         [HttpGet]
@@ -75,13 +80,17 @@ namespace PokemonExtraLifeApiCore.Controllers
         public ActionResult Summary()
         {
             var displayStatus = _context.GetDisplayStatus();
+            var donations = _context.Donations.OrderByDescending(d=>d.Time).ToList();
 
             return Json(new
             {
                 numberOfDonations = _context.Donations.Count(),
                 totalDonationAmount = _context.Donations.Sum(d => d.Amount),
-                donationGoal = displayStatus.DonationGoal
-            });
+                donationGoal = displayStatus.DonationGoal,
+                donationBlock = displayStatus.DonationBlock,
+                mostRecentDonation = donations.FirstOrDefault()?.Amount,
+                highestDonation = donations.Max(d => d.Amount)
+            }, _settings);
         }
 
         [HttpGet]
@@ -95,7 +104,7 @@ namespace PokemonExtraLifeApiCore.Controllers
             return Json(new
             {
                 giveaway
-            });
+            }, _settings);
         }
 
         [HttpGet]
@@ -119,7 +128,7 @@ namespace PokemonExtraLifeApiCore.Controllers
                            done = grp.All(t => t.PokemonOrders.All(po => po.Done))
                        };
 
-            return Json(gyms);
+            return Json(gyms, _settings);
         }
 
         [HttpGet]
@@ -135,7 +144,7 @@ namespace PokemonExtraLifeApiCore.Controllers
 
             var activePrize = _context.Prizes.Find(prizeId.Value);
 
-            return Json(activePrize);
+            return Json(activePrize, _settings);
         }
 
         [HttpGet]
@@ -167,6 +176,7 @@ namespace PokemonExtraLifeApiCore.Controllers
         [HttpGet("resethard")]
         public async Task<ActionResult> ResetHard()
         {
+            await _context.TargetPrizes.ForEachAsync(tp => tp.DonationId = null);
             _context.Donations.RemoveRange(_context.Donations);
 
             await _context.SaveChangesAsync();

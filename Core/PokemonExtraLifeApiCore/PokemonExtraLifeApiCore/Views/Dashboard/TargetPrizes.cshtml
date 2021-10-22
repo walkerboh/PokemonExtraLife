@@ -1,0 +1,19 @@
+﻿@model PokemonExtraLifeApiCore.Models.Dashboard.TargetPrizesModel
+
+    <div id="TargetPrizesSection">
+        <h2>Target Prizes</h2>
+        <div>
+            @foreach (var prize in Model.TargetPrizes)
+            {
+                <div style="border-bottom: 1px black solid">
+                    <div>@prize.Name</div>
+                    <div>Claimed: @prize.Claimed</div>
+                    <form method="post" asp-controller="Dashboard" asp-action="ClaimPrize" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#TargetPrizesSection">
+                        <input type="hidden" name="id" value="@prize.Id"/>
+                        <input type="hidden" name="claim" value="@(prize.Claimed ? "false" : "true")"/>
+                        <input type="submit" value="@(prize.Claimed ? "Unclaim" : "Claim")"/>
+                    </form>
+                </div>
+            }
+        </div>
+    </div>

@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using PokemonExtraLifeApiCore.Models.API;
 
 namespace PokemonExtraLifeApiCore.Models.Dashboard
@@ -17,5 +18,8 @@ namespace PokemonExtraLifeApiCore.Models.Dashboard
         public bool TrackDonations { get; set; }
 
         public decimal HealthMultiplier { get; set; }
+
+        [DisplayName("Donation Block")]
+        public string DonationBlock { get; set; }
     }
 }

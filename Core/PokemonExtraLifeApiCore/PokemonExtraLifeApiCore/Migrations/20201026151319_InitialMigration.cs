@@ -33,6 +33,26 @@ namespace PokemonExtraLifeApiCore.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Donations",
+                schema: "public",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Donor = table.Column<string>(nullable: true),
+                    Amount = table.Column<decimal>(nullable: false),
+                    Time = table.Column<DateTime>(nullable: false),
+                    Message = table.Column<string>(nullable: true),
+                    Gym = table.Column<int>(nullable: true),
+                    PrizeId = table.Column<int>(nullable: true),
+                    Processed = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Donations", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Facts",
                 schema: "public",
                 columns: table => new
@@ -151,25 +171,6 @@ namespace PokemonExtraLifeApiCore.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "TargetPrizes",
-                schema: "public",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(nullable: true),
-                    Contributor = table.Column<string>(nullable: true),
-                    Url = table.Column<string>(nullable: true),
-                    Target = table.Column<decimal>(nullable: false),
-                    Activated = table.Column<bool>(nullable: false),
-                    DonationId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TargetPrizes", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Trainers",
                 schema: "public",
                 columns: table => new
@@ -187,29 +188,27 @@ namespace PokemonExtraLifeApiCore.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Donations",
+                name: "TargetPrizes",
                 schema: "public",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Donor = table.Column<string>(nullable: true),
-                    Amount = table.Column<decimal>(nullable: false),
-                    Time = table.Column<DateTime>(nullable: false),
-                    Message = table.Column<string>(nullable: true),
-                    Gym = table.Column<int>(nullable: true),
-                    PrizeId = table.Column<int>(nullable: true),
-                    TargetPrizeId = table.Column<int>(nullable: true),
-                    Processed = table.Column<bool>(nullable: false)
+                    Name = table.Column<string>(nullable: true),
+                    Contributor = table.Column<string>(nullable: true),
+                    Url = table.Column<string>(nullable: true),
+                    Target = table.Column<decimal>(nullable: false),
+                    Activated = table.Column<bool>(nullable: false),
+                    DonationId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Donations", x => x.Id);
+                    table.PrimaryKey("PK_TargetPrizes", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Donations_TargetPrizes_TargetPrizeId",
-                        column: x => x.TargetPrizeId,
+                        name: "FK_TargetPrizes_Donations_DonationId",
+                        column: x => x.DonationId,
                         principalSchema: "public",
-                        principalTable: "TargetPrizes",
+                        principalTable: "Donations",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -254,13 +253,6 @@ namespace PokemonExtraLifeApiCore.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Donations_TargetPrizeId",
-                schema: "public",
-                table: "Donations",
-                column: "TargetPrizeId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_PokemonOrders_GroupId",
                 schema: "public",
                 table: "PokemonOrders",
@@ -271,16 +263,19 @@ namespace PokemonExtraLifeApiCore.Migrations
                 schema: "public",
                 table: "PokemonOrders",
                 column: "TrainerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TargetPrizes_DonationId",
+                schema: "public",
+                table: "TargetPrizes",
+                column: "DonationId",
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
                 name: "DisplayStatus",
-                schema: "public");
-
-            migrationBuilder.DropTable(
-                name: "Donations",
                 schema: "public");
 
             migrationBuilder.DropTable(
@@ -321,6 +316,10 @@ namespace PokemonExtraLifeApiCore.Migrations
 
             migrationBuilder.DropTable(
                 name: "Trainers",
+                schema: "public");
+
+            migrationBuilder.DropTable(
+                name: "Donations",
                 schema: "public");
         }
     }

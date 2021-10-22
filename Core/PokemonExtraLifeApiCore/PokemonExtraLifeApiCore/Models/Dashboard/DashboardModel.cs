@@ -15,5 +15,7 @@ namespace PokemonExtraLifeApiCore.Models.Dashboard
         public PrizesModel PrizesModel { get; set; }
 
         public PlayersModel PlayersModel { get; set; }
+
+        public TargetPrizesModel TargetPrizesModel { get; set; }
     }
 }

@@ -10,8 +10,8 @@ using PokemonExtraLifeApiCore.EntityFramework;
 namespace PokemonExtraLifeApiCore.Migrations
 {
     [DbContext(typeof(ExtraLifeContext))]
-    [Migration("20201015230426_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20201106010357_Claim")]
+    partial class Claim
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -68,7 +68,13 @@ namespace PokemonExtraLifeApiCore.Migrations
                     b.Property<decimal>("Amount")
                         .HasColumnType("numeric");
 
+                    b.Property<string>("Block")
+                        .HasColumnType("text");
+
                     b.Property<string>("Donor")
+                        .HasColumnType("text");
+
+                    b.Property<string>("DonorIdentifier")
                         .HasColumnType("text");
 
                     b.Property<int?>("Gym")
@@ -83,16 +89,10 @@ namespace PokemonExtraLifeApiCore.Migrations
                     b.Property<bool>("Processed")
                         .HasColumnType("boolean");
 
-                    b.Property<int?>("TargetPrizeId")
-                        .HasColumnType("integer");
-
                     b.Property<DateTime>("Time")
                         .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("TargetPrizeId")
-                        .IsUnique();
 
                     b.ToTable("Donations");
                 });
@@ -304,6 +304,9 @@ namespace PokemonExtraLifeApiCore.Migrations
                     b.Property<bool>("Activated")
                         .HasColumnType("boolean");
 
+                    b.Property<bool>("Claimed")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("Contributor")
                         .HasColumnType("text");
 
@@ -320,6 +323,9 @@ namespace PokemonExtraLifeApiCore.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DonationId")
+                        .IsUnique();
 
                     b.ToTable("TargetPrizes");
                 });
@@ -348,11 +354,28 @@ namespace PokemonExtraLifeApiCore.Migrations
                     b.ToTable("Trainers");
                 });
 
-            modelBuilder.Entity("PokemonExtraLifeApiCore.Models.API.Donation", b =>
+            modelBuilder.Entity("PokemonExtraLifeApiCore.Models.API.TwitchChannel", b =>
                 {
-                    b.HasOne("PokemonExtraLifeApiCore.Models.API.TargetPrize", "TargetPrize")
-                        .WithOne("Donation")
-                        .HasForeignKey("PokemonExtraLifeApiCore.Models.API.Donation", "TargetPrizeId");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("Game")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("Live")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Url")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TwitchChannels");
                 });
 
             modelBuilder.Entity("PokemonExtraLifeApiCore.Models.API.PokemonOrder", b =>
@@ -370,6 +393,13 @@ namespace PokemonExtraLifeApiCore.Migrations
                     b.HasOne("PokemonExtraLifeApiCore.Models.API.Trainer", "Trainer")
                         .WithMany("PokemonOrders")
                         .HasForeignKey("TrainerId");
+                });
+
+            modelBuilder.Entity("PokemonExtraLifeApiCore.Models.API.TargetPrize", b =>
+                {
+                    b.HasOne("PokemonExtraLifeApiCore.Models.API.Donation", "Donation")
+                        .WithOne("TargetPrize")
+                        .HasForeignKey("PokemonExtraLifeApiCore.Models.API.TargetPrize", "DonationId");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations.Schema;
 using Newtonsoft.Json;
 using PokemonExtraLifeApiCore.Enum;
 
@@ -9,14 +8,13 @@ namespace PokemonExtraLifeApiCore.Models.API
     {
         public int Id { get; set; }
         public string Donor { get; set; }
+        public string DonorIdentifier { get; set; }
         public decimal Amount { get; set; }
         public DateTime Time { get; set; }
         public string Message { get; set; }
         public Gym? Gym { get; set; }
         public int? PrizeId { get; set; }
-
-        [ForeignKey("TargetPrize")]
-        public int? TargetPrizeId { get; set; }
+        public string Block { get; set; }
 
         [JsonIgnore]
         public virtual TargetPrize TargetPrize { get; set; }

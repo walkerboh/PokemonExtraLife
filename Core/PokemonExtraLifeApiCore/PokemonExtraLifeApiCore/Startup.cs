@@ -42,10 +42,11 @@ namespace PokemonExtraLifeApiCore
             services.AddControllersWithViews().AddNewtonsoftJson();
 
             services.Configure<ExtraLifeApiSettings>(Configuration.GetSection("ExtraLifeSettings"));
+            services.Configure<TwitchApiSettings>(Configuration.GetSection("TwitchApiSettings"));
 
             services.AddTransient<IDonationProcessor, DonationProcessor>();
             services.AddHostedService<ExtraLifeService>();
-            services.AddScoped<IScopedProcessingService, ExtraLifeScopedService>();
+            services.AddTransient<IScopedProcessingService, ExtraLifeScopedService>();
             services.AddTransient<Random>();
 
             services.AddCors(options =>
@@ -91,6 +92,12 @@ namespace PokemonExtraLifeApiCore
             // DB Initialization
 
             context.Players.AddRange(PlayerInitialization.Players.Where(player => context.Players.Find(player.Id) == null));
+
+            context.TargetPrizes.AddRange(
+                TargetPrizeInitialization.TargetPrizes.Where(tp => context.TargetPrizes.Find(tp.Id) == null));
+
+            context.TwitchChannels.AddRange(
+                TwitchChannelInitialization.TwitchChannels.Where(tc => context.TwitchChannels.Find(tc.Id) == null));
 
             //context.Pokemon.AddRange(PokemonInitialization.Pokemon.Where(pokemon => context.Pokemon.Find(pokemon.Id) == null));
 

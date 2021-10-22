@@ -34,7 +34,8 @@ namespace PokemonExtraLifeApiCore.ExtraLife
                 Message = Message,
                 Time = CreatedDateUtc,
                 Gym = gym,
-                Processed = processed
+                Processed = processed,
+                DonorIdentifier = DonorId
             };
         }
 

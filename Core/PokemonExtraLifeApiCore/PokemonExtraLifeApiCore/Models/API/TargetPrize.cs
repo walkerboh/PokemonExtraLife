@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using Newtonsoft.Json;
 
 namespace PokemonExtraLifeApiCore.Models.API
 {
@@ -12,6 +13,9 @@ namespace PokemonExtraLifeApiCore.Models.API
         public string Url { get; set; }
         public decimal Target { get; set; }
         public bool Activated { get; set; } = true;
+        public bool Claimed { get; set; }
+
+        [ForeignKey("Donation")]
         public int? DonationId { get; set; }
 
         public virtual Donation Donation { get; set; }

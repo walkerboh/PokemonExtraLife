@@ -3,6 +3,7 @@ using Microsoft.Extensions.Hosting;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+
 using Serilog;
 
 namespace PokemonExtraLifeApiCore.ExtraLife
@@ -31,6 +32,8 @@ namespace PokemonExtraLifeApiCore.ExtraLife
 
             using var scope = _provider.CreateScope();
             var scopedProcessingService = scope.ServiceProvider.GetRequiredService<IScopedProcessingService>();
+
+            //var scopedProcessingService = _provider.GetRequiredService<IScopedProcessingService>();
 
             await scopedProcessingService.DoWork(stoppingToken);
         }

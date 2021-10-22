@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PokemonExtraLifeApiCore.EntityFramework;
@@ -9,9 +10,10 @@ using PokemonExtraLifeApiCore.EntityFramework;
 namespace PokemonExtraLifeApiCore.Migrations
 {
     [DbContext(typeof(ExtraLifeContext))]
-    partial class ExtraLifeContextModelSnapshot : ModelSnapshot
+    [Migration("20201026151319_InitialMigration")]
+    partial class InitialMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -66,13 +68,7 @@ namespace PokemonExtraLifeApiCore.Migrations
                     b.Property<decimal>("Amount")
                         .HasColumnType("numeric");
 
-                    b.Property<string>("Block")
-                        .HasColumnType("text");
-
                     b.Property<string>("Donor")
-                        .HasColumnType("text");
-
-                    b.Property<string>("DonorIdentifier")
                         .HasColumnType("text");
 
                     b.Property<int?>("Gym")
@@ -302,9 +298,6 @@ namespace PokemonExtraLifeApiCore.Migrations
                     b.Property<bool>("Activated")
                         .HasColumnType("boolean");
 
-                    b.Property<bool>("Claimed")
-                        .HasColumnType("boolean");
-
                     b.Property<string>("Contributor")
                         .HasColumnType("text");
 
@@ -350,30 +343,6 @@ namespace PokemonExtraLifeApiCore.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Trainers");
-                });
-
-            modelBuilder.Entity("PokemonExtraLifeApiCore.Models.API.TwitchChannel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<string>("Game")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("Live")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Url")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("TwitchChannels");
                 });
 
             modelBuilder.Entity("PokemonExtraLifeApiCore.Models.API.PokemonOrder", b =>

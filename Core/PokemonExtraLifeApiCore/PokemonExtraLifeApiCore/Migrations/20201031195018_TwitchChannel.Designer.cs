@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PokemonExtraLifeApiCore.EntityFramework;
@@ -9,9 +10,10 @@ using PokemonExtraLifeApiCore.EntityFramework;
 namespace PokemonExtraLifeApiCore.Migrations
 {
     [DbContext(typeof(ExtraLifeContext))]
-    partial class ExtraLifeContextModelSnapshot : ModelSnapshot
+    [Migration("20201031195018_TwitchChannel")]
+    partial class TwitchChannel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -70,9 +72,6 @@ namespace PokemonExtraLifeApiCore.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Donor")
-                        .HasColumnType("text");
-
-                    b.Property<string>("DonorIdentifier")
                         .HasColumnType("text");
 
                     b.Property<int?>("Gym")
@@ -300,9 +299,6 @@ namespace PokemonExtraLifeApiCore.Migrations
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<bool>("Activated")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("Claimed")
                         .HasColumnType("boolean");
 
                     b.Property<string>("Contributor")

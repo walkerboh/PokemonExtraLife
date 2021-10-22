@@ -24,6 +24,7 @@ namespace PokemonExtraLifeApiCore.EntityFramework
         public DbSet<Fact> Facts { get; set; }
         public DbSet<TargetPrize> TargetPrizes { get; set; }
         public DbSet<Player> Players { get; set; }
+        public DbSet<TwitchChannel> TwitchChannels { get; set; }
 
         public Group ActiveGroup => Groups.Include("PokemonOrders.Pokemon").ToList().FirstOrDefault(g => g.Started && !g.Done);
 

@@ -4,6 +4,7 @@ using PokemonExtraLifeApiCore.EntityFramework;
 using PokemonExtraLifeApiCore.Models.Dashboard;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace PokemonExtraLifeApiCore.Controllers
 {
@@ -98,6 +99,24 @@ namespace PokemonExtraLifeApiCore.Controllers
             return PartialView("Players", GetPlayersModel());
         }
 
+        [HttpPost]
+        public ActionResult ResetPlayers()
+        {
+            UpdatePlayers(PlayersModel.Empty);
+
+            return PartialView("Players", GetPlayersModel());
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> ClaimPrize(int id, bool claim)
+        {
+            var prize = context.TargetPrizes.Find(id);
+            prize.Claimed = claim;
+            await context.SaveChangesAsync();
+
+            return PartialView("TargetPrizes", GetTargetPrizesModel());
+        }
+
         private DashboardModel GetDashboardModel()
         {
             return new DashboardModel
@@ -108,7 +127,8 @@ namespace PokemonExtraLifeApiCore.Controllers
                 DonationsModel = GetDonationsModel(),
                 PokemonStatusModel = GetPokemonStatusModel(),
                 PrizesModel = GetPrizesModel(),
-                PlayersModel = GetPlayersModel()
+                PlayersModel = GetPlayersModel(),
+                TargetPrizesModel = GetTargetPrizesModel()
             };
         }
 
@@ -130,7 +150,8 @@ namespace PokemonExtraLifeApiCore.Controllers
                 TotalDonationAmount = donations.Sum(d => d.Amount),
                 DonationGoal = displayStatus.DonationGoal,
                 TrackDonations = displayStatus.TrackDonations,
-                HealthMultiplier = displayStatus.HealthMultiplier
+                HealthMultiplier = displayStatus.HealthMultiplier,
+                DonationBlock = displayStatus.DonationBlock
             };
         }
 
@@ -140,6 +161,7 @@ namespace PokemonExtraLifeApiCore.Controllers
 
             displayStatus.TrackDonations = model.TrackDonations;
             displayStatus.DonationGoal = model.DonationGoal;
+            displayStatus.DonationBlock = model.DonationBlock;
 
             if (displayStatus.HealthMultiplier != model.HealthMultiplier)
             {
@@ -301,17 +323,19 @@ namespace PokemonExtraLifeApiCore.Controllers
             foreach (var player in model.Players)
             {
                 var dbPlayer = context.Players.Single(p => p.Id == player.Id);
-                if (!string.IsNullOrEmpty(player.Name) && !player.Name.Equals(dbPlayer.Name))
-                {
-                    dbPlayer.Name = player.Name;
-                }
-                if (!string.IsNullOrEmpty(player.Color) && !player.Color.Equals(dbPlayer.Color))
-                {
-                    dbPlayer.Color = player.Color;
-                }
+                dbPlayer.Name = player.Name;
+                dbPlayer.Color = player.Color;
             }
 
             context.SaveChanges();
+        }
+
+        private TargetPrizesModel GetTargetPrizesModel()
+        {
+            return new TargetPrizesModel
+            {
+                TargetPrizes = context.TargetPrizes.Include(tp => tp.Donation).ToList()
+            };
         }
 
         //private PlayersModel GetPlayersModel()
